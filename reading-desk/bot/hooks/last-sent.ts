@@ -7,7 +7,7 @@ import {
   readDecision,
   readLastSent,
   sameLastSent,
-  indiaDate,
+  todayInIndia,
 } from "../lib/desk-memory.js";
 
 export default defineHook({
@@ -26,7 +26,7 @@ export default defineHook({
           : new Date();
       const next = {
         pieceIds,
-        date: indiaDate(instant),
+        date: todayInIndia(instant),
         decisionSentence: decision?.sentence ?? null,
       };
       const current = readLastSent(await ctx.host.kv.get(keys.lastSent));

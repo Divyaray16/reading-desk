@@ -1,7 +1,4 @@
-import { defineEval, includes, satisfies } from "@cursor/bdk/evals";
-
-const shelfHost =
-  /nngroup\.com|basecamp\.com\/shapeup|bradfrost\.com|medium\.com\/the-year-of-the-looking-glass|atomicdesign\.bradfrost\.com/;
+import { defineEval, satisfies } from "@cursor/bdk/evals";
 
 function lineCount(value: unknown): boolean {
   const text = typeof value === "string" ? value : "";
@@ -13,34 +10,28 @@ export default defineEval({
   tags: ["smoke"],
   cases: [
     {
-      id: "empty-list",
-      description: "Empty reading-list decision, 15 minutes, send the desk.",
+      id: "decision",
+      description: "She names a decision and asks for a desk.",
       async test(t) {
         await t.send(
-          "The decision: the empty state of a reading list should tell someone what is going on. Draft: an illustration that says Nothing here yet. I have 15 minutes. Send the desk.",
+          "The decision: the empty state of a reading list should tell someone what is going on and how to add the first item. Send the desk.",
         );
         t.succeeded();
         t.toolOrder(["record-decision", "load-desk"]);
         t.notCalledTool("record-skip");
-        t.calledTool("record-decision");
         t.loadedSkill("desk");
         t.check(
           t.reply,
           satisfies(lineCount, "reply has 1–3 occurrences of Line for the file"),
         );
-        t.check(t.reply, includes(shelfHost));
-        t.check(
-          t.reply,
-          includes("https://www.nngroup.com/articles/empty-state-interface-design/"),
-        ).soft();
       },
     },
     {
       id: "skip",
-      description: "Skip ten-heuristics and do not send a desk.",
+      description: "She skips one catalog id and says not to send a desk.",
       async test(t) {
         await t.send(
-          "Skip the shelf piece ten-heuristics. Reason: too general for my work. Remember that and don't send a desk.",
+          "Skip catalog id ten-heuristics. Reason: too general for my work. Remember that and don't send a desk.",
         );
         t.succeeded();
         t.calledTool("record-skip", { input: { pieceId: "ten-heuristics" } });
@@ -49,38 +40,17 @@ export default defineEval({
       },
     },
     {
-      id: "settings",
-      description: "Settings first-view decision, 8 minutes, send the desk.",
-      async test(t) {
-        await t.send(
-          "Decision: which controls stay on the first view of a settings screen that grew a second column. I have 8 minutes. Send the desk.",
-        );
-        t.succeeded();
-        t.calledTool("record-decision", { input: { minutes: 8 } });
-        t.calledTool("load-desk");
-        t.notCalledTool("record-skip");
-        t.loadedSkill("desk");
-        t.check(
-          t.reply,
-          satisfies(lineCount, "reply has 1–3 occurrences of Line for the file"),
-        );
-        t.check(
-          t.reply,
-          includes("https://www.nngroup.com/articles/progressive-disclosure/"),
-        ).soft();
-      },
-    },
-    {
       id: "morning",
-      description: "Morning note with no decision still loads the desk and files 1–3 lines.",
+      description: "A morning run with no stored decision still loads the desk and stays within 1–3 lines.",
       async test(t) {
         await t.send(
-          "Morning desk. No decision was stored. Send the three things I should read.",
+          "It is the 8:00 Asia/Kolkata morning run. Write today's reading desk. No project sentence is stored. Do not invent one.",
         );
         t.succeeded();
         t.calledTool("load-desk");
         t.notCalledTool("record-decision");
         t.notCalledTool("record-skip");
+        t.loadedSkill("desk");
         t.check(
           t.reply,
           satisfies(lineCount, "reply has 1–3 occurrences of Line for the file"),

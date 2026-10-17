@@ -168,7 +168,7 @@ export function sameLastSent(a: LastSentRecord, b: LastSentRecord): boolean {
 }
 
 /** Calendar date in Asia/Kolkata, which does not observe daylight saving. YYYY-MM-DD. */
-export function indiaDate(now: Date): string {
+export function todayInIndia(now: Date): string {
   return new Intl.DateTimeFormat("en-CA", {
     timeZone: "Asia/Kolkata",
     year: "numeric",

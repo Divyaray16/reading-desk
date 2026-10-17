@@ -12,7 +12,7 @@ export const publications: Publication[] = [
   { id: "ux-planet", name: "UX Planet", url: "https://uxplanet.org", hosts: ["uxplanet.org"] },
   {
     id: "looking-glass",
-    name: "The Looking Glass",
+    name: "Julie Zhuo, The Looking Glass",
     url: "https://medium.com/the-year-of-the-looking-glass",
     hosts: ["medium.com"],
   },
@@ -32,12 +32,7 @@ export const publications: Publication[] = [
   { id: "intercom", name: "Intercom blog", url: "https://www.intercom.com/blog", hosts: ["intercom.com"] },
   { id: "figma", name: "Figma blog", url: "https://www.figma.com/blog/", hosts: ["figma.com"] },
   { id: "linear", name: "Linear blog", url: "https://linear.app/blog", hosts: ["linear.app"] },
-  {
-    id: "bradfrost",
-    name: "Brad Frost",
-    url: "https://bradfrost.com/blog/",
-    hosts: ["bradfrost.com", "atomicdesign.bradfrost.com"],
-  },
+  { id: "bradfrost", name: "Brad Frost", url: "https://bradfrost.com/blog/", hosts: ["bradfrost.com"] },
   { id: "shape-up", name: "Shape Up", url: "https://basecamp.com/shapeup", hosts: ["basecamp.com"] },
 ];
 
