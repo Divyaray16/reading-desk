@@ -2,66 +2,29 @@
 
 Divya's reading desk is one assistant with two habits.
 
-Every morning at 8:00 Asia/Kolkata she gets three UX pieces worth reading. Two or one is fine when fewer pieces actually fit. India does not use daylight saving, so 8:00 IST is 02:30 UTC every day.
+Every morning at 8:00 IST she gets three UX reads. Two or one is fine when fewer pieces fit. The schedule cron is `30 2 * * *`, which is 02:30 UTC, and that is 08:00 in Asia/Kolkata. India does not use daylight saving.
 
-The rest of the day she can ask anything else: a critique, an empty state, a handoff, or "find me something on settings." The desk answers that question. It sends a reading list only when she asked for reads, or when the morning run fires.
+The rest of the time she can ask something else. The desk answers that question. It sends a reading list only when she asked what to read, or when the morning run fires.
 
 The project lives in [`reading-desk/`](reading-desk/).
 
-## What the morning note contains
+## Where she sees the articles
 
-Each piece says why it is there, a line she can paste on the work, what to skip inside the piece, and the real URL. The desk does not invent a title, author, or URL.
+She sees the morning note in the playground session, not on her phone. On this machine that session is at [http://127.0.0.1:43123/playground](http://127.0.0.1:43123/playground), under the schedule named `morning`. The links in the note open the real sites. Slack is not connected. Nothing is texted or emailed.
 
-If a current project sentence is stored, the three fit that work and the note says which decision they are for. If none is stored, she still gets strong pieces, with variety, and one sentence that no specific project was on file. The desk does not invent a project.
+## How to add or drop a blog
 
-When a famous general essay was close but would not change her decision, the note names that held-back piece.
+She can say "add Built for Mars" or "stop sending Smashing." Adding a blog needs its real homepage. Dropping one works by name or id, such as Smashing or `smashing`. The desk does not invent a homepage or an article URL.
 
-The desk remembers the piece ids and the Asia/Kolkata date it sent them. The next morning does not repeat those pieces unless her decision changed or nothing else qualifies.
-
-## Where she reads it
-
-The morning note is the reply in the agent's scheduled session, `morning-reads`. On this machine that session shows up in the playground at [http://127.0.0.1:43123/playground](http://127.0.0.1:43123/playground).
-
-It is not a phone text. Slack is not connected. Nothing is emailed.
-
-## Publications
-
-The desk only recommends posts from this map, plus blogs she adds:
-
-- Stripe blog — https://stripe.com/blog
-- UX Collective — https://uxdesign.cc
-- UX Planet — https://uxplanet.org
-- Julie Zhuo, The Looking Glass — https://medium.com/the-year-of-the-looking-glass
-- Nielsen Norman Group — https://www.nngroup.com/articles/
-- Smashing Magazine — https://www.smashingmagazine.com
-- A List Apart — https://alistapart.com
-- Intercom blog — https://www.intercom.com/blog
-- Figma blog — https://www.figma.com/blog/
-- Linear blog — https://linear.app/blog
-- Brad Frost — https://bradfrost.com/blog/
-- Shape Up — https://basecamp.com/shapeup
-
-She can say "add Built for Mars" or "stop sending Smashing." Adding a blog needs its real homepage. The confirmed articles are the shelf until a live fetch exists. A publication with no confirmed article stays on the map and does not get an invented post.
-
-The list of articles is [`reading-desk/bot/lib/shelf.ts`](reading-desk/bot/lib/shelf.ts). Ranking is [`reading-desk/bot/skills/desk.md`](reading-desk/bot/skills/desk.md).
+The publication map is [`reading-desk/bot/lib/publications.ts`](reading-desk/bot/lib/publications.ts): Stripe blog, UX Collective, UX Planet, The Looking Glass, Nielsen Norman Group, Smashing Magazine, A List Apart, Intercom blog, Figma blog, Linear blog, Brad Frost, and Shape Up. Confirmed articles are [`reading-desk/bot/lib/shelf.ts`](reading-desk/bot/lib/shelf.ts). UX Collective, UX Planet, Intercom, and Linear stay on the map with no article until a real page is confirmed.
 
 ## Dev schedules do not auto-fire
 
-`serve --dev` does not fire schedules on the clock. The package docs say to dispatch by hand:
+`serve --dev` does not fire the schedule on the clock. Trigger the morning run by hand:
 
 ```bash
-curl -X POST http://127.0.0.1:3000/<slug>/v1/dev/schedules/heartbeat
-# {"scheduleId":"heartbeat","sessionIds":["ses_…"]}
+curl -X POST http://127.0.0.1:43123/v1/dev/schedules/morning
 ```
-
-This desk is served with `--mode single` on port 43123, so there is no slug in the path. The schedule id is `morning-reads`, and the cron is `30 2 * * *` (02:30 UTC, 08:00 IST):
-
-```bash
-curl -X POST http://127.0.0.1:43123/v1/dev/schedules/morning-reads
-# {"scheduleId":"morning-reads","sessionIds":["ses_…"]}
-```
-
-The playground can dispatch that schedule in dev mode too.
 
 ## Check and serve
 
