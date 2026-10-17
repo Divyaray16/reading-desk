@@ -24,6 +24,20 @@ The morning note is the reply in the agent's scheduled session, `morning-reads`.
 
 It is not a phone text. Slack is not connected. Nothing is emailed.
 
+## A page with no login
+
+The browser page is separate from the agent. Divya can open it with no Cursor login. It shows three pieces from the same shelf, ranked in the browser. It does not call a model.
+
+From `web/`:
+
+```bash
+npm run dev
+```
+
+Then open [http://127.0.0.1:47231](http://127.0.0.1:47231).
+
+The BDK agent in `reading-desk/` is still the assistant. Chat with that agent needs a Cursor credential: `CURSOR_API_KEY`, or `CURSOR_API_KEY_FILE`, or `CURSOR_SERVICE_ACCOUNT_KEY`.
+
 ## Publications
 
 The desk only recommends posts from this map, plus blogs she adds:
