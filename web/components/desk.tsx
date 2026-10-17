@@ -78,7 +78,7 @@ export function Desk({ dateLabel }: { dateLabel: string }) {
         <p className="mt-4 text-sm text-muted-foreground">{dateLabel}</p>
       </header>
 
-      <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+      <div className="mt-8">
         <div className="flex flex-wrap gap-2" role="group" aria-label="Work in front of you">
           {views.map((item) => (
             <Button
@@ -92,7 +92,7 @@ export function Desk({ dateLabel }: { dateLabel: string }) {
             </Button>
           ))}
         </div>
-        <div className="flex flex-wrap gap-2">
+        <div className="mt-3 flex flex-wrap gap-2">
           {hiddenCount > 0 ? (
             <Button type="button" variant="ghost" size="sm" onClick={restore}>
               Restore skipped
@@ -180,6 +180,7 @@ export function Desk({ dateLabel }: { dateLabel: string }) {
                     <div className="mt-4 flex items-center justify-between gap-3">
                       <Button
                         variant="link"
+                        nativeButton={false}
                         className="h-auto px-0"
                         render={<a href={piece.url} target="_blank" rel="noopener noreferrer" />}
                       >

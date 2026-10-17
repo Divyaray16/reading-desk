@@ -153,8 +153,8 @@ export function shelfNote(total: number, available: number, shown: number): stri
 export function selectDesk(view: DeskView, skippedIds: readonly string[], page: number) {
   const skipped = new Set(skippedIds);
   const matching = pieces.filter((piece) => matches(piece, view));
-  const available = matching.filter((piece) => !skipped.has(piece.id));
-  const ordered = orderPieces(available, view);
+  const ordered = orderPieces(matching, view).filter((piece) => !skipped.has(piece.id));
+  const available = ordered;
   const shown = pageOf(ordered, page);
   return {
     shown,

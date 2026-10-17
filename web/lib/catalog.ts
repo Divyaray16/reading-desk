@@ -61,7 +61,7 @@ export const pieces: Piece[] = [
     general: false,
     why: "An empty panel should say the system status, teach what belongs there, and offer a path to fill it.",
     leaveOut:
-      "Leave out an empty panel that does not say the status, what belongs there, and a path to fill it.",
+      "An empty panel that does not say the status, what belongs there, and a path to fill it.",
   },
   {
     id: "progressive-disclosure",
@@ -78,7 +78,7 @@ export const pieces: Piece[] = [
     general: false,
     why: "Show the few options people use often, and put rare ones behind a control whose label says what is behind it.",
     leaveOut:
-      "Leave out rare options on the first view. They belong behind a control whose label says what is behind it.",
+      "Rare options on the first view. They belong behind a control whose label says what is behind it.",
   },
   {
     id: "training-wheels",
@@ -92,7 +92,7 @@ export const pieces: Piece[] = [
     gives: "A line that starts with the core set and holds the rest back.",
     general: false,
     why: "A new person gets the core controls first, and the rest waits until that set is working.",
-    leaveOut: "Leave out the rest of the controls until the core set is working.",
+    leaveOut: "The rest of the controls, until the core set is working.",
   },
   {
     id: "ten-heuristics",
@@ -106,7 +106,7 @@ export const pieces: Piece[] = [
     gives: "A checklist that applies to many products and does not decide this screen.",
     general: true,
     why: "Ten broad rules of thumb that do not choose what one screen should do.",
-    leaveOut: "Leave out the ten rules. They do not choose what this screen should do.",
+    leaveOut: "The ten rules. They do not choose what this screen should do.",
   },
   {
     id: "set-boundaries",
@@ -120,7 +120,7 @@ export const pieces: Piece[] = [
     gives: "A line that names the appetite and the narrow problem this work will solve.",
     general: false,
     why: "Shaping starts by fixing the appetite and narrowing the problem before anyone designs a solution.",
-    leaveOut: "Leave out a solution drawn before the appetite and the narrow problem are fixed.",
+    leaveOut: "A solution drawn before the appetite and the narrow problem are fixed.",
   },
   {
     id: "write-the-pitch",
@@ -134,7 +134,7 @@ export const pieces: Piece[] = [
     gives: "A line that writes the problem, appetite, solution, rabbit holes, and no-gos.",
     general: false,
     why: "A pitch states the problem, the appetite, the solution, the rabbit holes, and the no-gos.",
-    leaveOut: "Leave out a pitch that skips the problem, the appetite, the rabbit holes, or the no-gos.",
+    leaveOut: "A pitch that skips the problem, the appetite, the rabbit holes, or the no-gos.",
   },
   {
     id: "no-crap",
@@ -148,7 +148,7 @@ export const pieces: Piece[] = [
     gives: "A line that keeps a one-off as a recipe instead of a system component.",
     general: false,
     why: "Product-specific work stays a recipe and does not enter the design system.",
-    leaveOut: "Leave out product-specific work. It stays a recipe and does not enter the design system.",
+    leaveOut: "Product-specific work. It stays a recipe and does not enter the design system.",
   },
   {
     id: "governance-conversation",
@@ -162,7 +162,7 @@ export const pieces: Piece[] = [
     gives: "A line that asks whether this belongs before anyone adds it.",
     general: false,
     why: "Governance starts by asking whether the thing belongs in the system at all.",
-    leaveOut: "Leave out the addition until someone has asked whether it belongs in the system.",
+    leaveOut: "The addition, until someone has asked whether it belongs in the system.",
   },
   {
     id: "governance-process",
@@ -177,7 +177,7 @@ export const pieces: Piece[] = [
     general: false,
     why: "Incoming system work is a bug, a discrepancy, a feature, or a recipe.",
     leaveOut:
-      "Leave out a request that has not been sorted as a bug, a discrepancy, a feature, or a recipe.",
+      "A request that has not been sorted as a bug, a discrepancy, a feature, or a recipe.",
   },
   {
     id: "atomic-design",
@@ -192,7 +192,7 @@ export const pieces: Piece[] = [
     general: true,
     why: "A book that names interface parts as atoms, molecules, organisms, templates, and pages.",
     leaveOut:
-      "Leave out the vocabulary of atoms and pages. It does not choose which parts this decision needs.",
+      "The vocabulary of atoms and pages. It does not choose which parts this decision needs.",
   },
   {
     id: "product-critique",
@@ -208,7 +208,7 @@ export const pieces: Piece[] = [
     general: false,
     why: "Walk the product as the user, name blockers in ordinary language, and order them by impact.",
     leaveOut:
-      "Leave out a critique that does not walk the product, name blockers in ordinary language, and order them by impact.",
+      "A critique that does not walk the product, name blockers in ordinary language, and order them by impact.",
   },
   {
     id: "stripe-payments-apis",
@@ -224,7 +224,7 @@ export const pieces: Piece[] = [
     general: false,
     why: "How Stripe's payments API grew past a few lines of code, and why adding parameters became product debt.",
     leaveOut:
-      "Leave out another parameter. Name the complexity being hidden, and the migration the user should not have to redo.",
+      "Another parameter. Name the complexity being hidden, and the migration the user should not have to redo.",
   },
   {
     id: "stripe-color",
@@ -238,7 +238,7 @@ export const pieces: Piece[] = [
     gives: "A line that checks contrast and visual weight before a palette is called done.",
     general: false,
     why: "A palette can stay vivid and still pass contrast when lightness is judged the way people see it.",
-    leaveOut: "Leave out a palette that has not been checked for contrast and visual weight.",
+    leaveOut: "A palette that has not been checked for contrast and visual weight.",
   },
   {
     id: "smashing-empty",
@@ -252,7 +252,7 @@ export const pieces: Piece[] = [
     gives: "A line that treats the empty screen as the first step, with short copy and one action.",
     general: false,
     why: "A first-use empty screen is part of onboarding: it says what will show up and how to fill it.",
-    leaveOut: "Leave out an empty screen that does not say what will show up and how to fill it.",
+    leaveOut: "An empty screen that does not say what will show up and how to fill it.",
   },
   {
     id: "smashing-microcopy",
@@ -267,7 +267,7 @@ export const pieces: Piece[] = [
     gives: "A line of empty-state copy that says what to do next, not that the screen is empty.",
     general: false,
     why: "Empty-state copy should give a way out, put the important fact first, and use one idea per line.",
-    leaveOut: "Leave out a line that only says the screen is empty.",
+    leaveOut: "A line that only says the screen is empty.",
   },
   {
     id: "ala-modular",
@@ -281,7 +281,7 @@ export const pieces: Piece[] = [
     gives: "A line that names the module by what it does, in words the team already agreed.",
     general: false,
     why: "Modules only stay reusable when the team shares names for them before they are built.",
-    leaveOut: "Leave out a module the team has not named by what it does.",
+    leaveOut: "A module the team has not named by what it does.",
   },
   {
     id: "ala-interaction",
@@ -295,7 +295,7 @@ export const pieces: Piece[] = [
     gives: "A line that keeps a familiar control and puts feedback next in the reading order.",
     general: false,
     why: "People do better with controls they already know, in an order they can follow with a keyboard.",
-    leaveOut: "Leave out a novel control, and feedback that is not next in the reading order.",
+    leaveOut: "A novel control, and feedback that is not next in the reading order.",
   },
   {
     id: "intercom-dribbblisation",
@@ -311,7 +311,7 @@ export const pieces: Piece[] = [
     general: false,
     why: "Work that looks finished in a gallery can still miss the problem, the tradeoff, and the business.",
     leaveOut:
-      "Leave out a discussion of how the screen looks before anyone has said what problem it solves.",
+      "A discussion of how the screen looks before anyone has said what problem it solves.",
   },
   {
     id: "figma-ds-101",
@@ -325,7 +325,7 @@ export const pieces: Piece[] = [
     gives: "A line that names the system as shared blocks and standards.",
     general: false,
     why: "A design system is the shared blocks and standards a product reuses, not a sticker sheet.",
-    leaveOut: "Leave out the sticker sheet. A design system is the shared blocks and standards a product reuses.",
+    leaveOut: "The sticker sheet. A design system is the shared blocks and standards a product reuses.",
   },
   {
     id: "figma-handoff",
@@ -340,7 +340,7 @@ export const pieces: Piece[] = [
     gives: "A line that names the system part used, or why this screen left it.",
     general: false,
     why: "Handoff works when the file uses the system on purpose and a deviation says why it left the system.",
-    leaveOut: "Leave out a deviation that does not say why it left the system.",
+    leaveOut: "A deviation that does not say why it left the system.",
   },
   {
     id: "figma-content",
@@ -354,7 +354,7 @@ export const pieces: Piece[] = [
     gives: "A line of interface copy written in the file, with the decision noted beside it.",
     general: false,
     why: "Write the words in the same file as the layout, and put guidance on the component itself.",
-    leaveOut: "Leave out words written outside the file, and guidance that is not on the component.",
+    leaveOut: "Words written outside the file, and guidance that is not on the component.",
   },
   {
     id: "linear-settings",
@@ -369,7 +369,7 @@ export const pieces: Piece[] = [
     gives: "A line that separates a preference someone should set from a default the product should choose.",
     general: false,
     why: "Some settings are preferences people want, and they are not proof the product failed to decide.",
-    leaveOut: "Leave out the claim that a setting is proof the product failed to decide.",
+    leaveOut: "The claim that a setting is proof the product failed to decide.",
   },
   {
     id: "linear-design-reset",
@@ -384,7 +384,7 @@ export const pieces: Piece[] = [
     gives: "A line that says which new job the current screen can no longer hold.",
     general: false,
     why: "Small ships add design debt, and a reset is justified when the product's job has widened and the chrome no longer fits.",
-    leaveOut: "Leave out a reset that does not name the new job the current screen can no longer hold.",
+    leaveOut: "A reset that does not name the new job the current screen can no longer hold.",
   },
   {
     id: "uxcollective-empty-types",
@@ -399,7 +399,7 @@ export const pieces: Piece[] = [
     gives: "A line that names which empty-state type this screen is, and the words that type needs.",
     general: false,
     why: "First use, waiting, come back later, done, upgrade, and two kinds of no-results each need different words.",
-    leaveOut: "Leave out one generic empty message. Name which type this screen is, and the words that type needs.",
+    leaveOut: "One generic empty message. Name which type this screen is, and the words that type needs.",
   },
   {
     id: "uxplanet-empty-guide",
@@ -414,7 +414,7 @@ export const pieces: Piece[] = [
     general: false,
     why: "An empty state should say what is happening, why, and what the person can do next.",
     leaveOut:
-      "Leave out an empty state that does not say what is happening, why, and what the person can do next.",
+      "An empty state that does not say what is happening, why, and what the person can do next.",
   },
 ];
 

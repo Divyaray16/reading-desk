@@ -48,9 +48,10 @@ test("empty screen, controls, and design system each cap at three", () => {
 
 test("a skip hides that piece and the next one fills the desk", () => {
   const desk = selectDesk("best", ["set-boundaries"], 0);
-  assert.equal(desk.shown.length, 3);
-  assert.equal(desk.shown.some((piece) => piece.id === "set-boundaries"), false);
-  assert.equal(desk.shown[0]?.id, "uxcollective-empty-types");
+  assert.deepEqual(
+    desk.shown.map((piece) => piece.id),
+    ["uxcollective-empty-types", "stripe-color", "empty-states"],
+  );
 });
 
 test("skipping a short topic can empty the desk without inventing a piece", () => {
