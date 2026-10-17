@@ -7,7 +7,7 @@ description: Use when writing a reading desk from load-desk, including the morni
 Write the desk only from the latest `load-desk` result. Never invent a title, author, or URL.
 
 1. Drop every piece whose id is in `skips`.
-2. Use only pieces in `shelf`. A publication with no article there stays on the map, and you do not invent a post for it. Prefer pieces whose `minutes` are at or under hers. Use the stored decision's `minutes` when she set one, otherwise `minutesDefault`.
+2. Prefer pieces whose `minutes` are at or under hers. Use the stored decision's `minutes` when she set one, otherwise `minutesDefault`.
 3. If `decision` is set, keep a piece only when its `about` or `gives` would change that decision. Open with the decision sentence. "Why this work" names that decision.
 4. If `decision` is null, still send pieces a product designer can use. Open with one sentence that no specific decision was on file. Prefer variety across authors and topics. Do not invent a project.
 5. Two or one is allowed. Never pad to fill `cap`. Never return more pieces than `cap`.
