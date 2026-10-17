@@ -1,52 +1,67 @@
 # Reading desk
 
-Every morning at 8:00 America/Los_Angeles, Divya gets a short note: the things she should read, at most three. Two or one is allowed when fewer pieces actually fit. The note does not wait for her to open a chat.
+Divya's reading desk is one assistant with two habits.
+
+Every morning at 8:00 Asia/Kolkata she gets three UX pieces worth reading. Two or one is fine when fewer pieces actually fit. India does not use daylight saving, so 8:00 IST is 02:30 UTC every day.
+
+The rest of the day she can ask anything else: a critique, an empty state, a handoff, or "find me something on settings." The desk answers that question. It sends a reading list only when she asked for reads, or when the morning run fires.
 
 The project lives in [`reading-desk/`](reading-desk/).
 
 ## What the morning note contains
 
-Each piece has why it is there, a line she can put in the file, what to leave out, and the real URL from the shelf. The desk does not invent a title, author, or URL.
+Each piece says why it is there, a line she can paste on the work, what to skip inside the piece, and the real URL. The desk does not invent a title, author, or URL.
 
-If a decision sentence is on file, the note is ranked for that decision and opens with it. She can tell the chat a new decision any time. That replaces the sentence the next morning uses. A changed decision may bring a piece back. The same decision does not get the same three pieces again the next morning, unless the shelf cannot justify different ones.
+If a current project sentence is stored, the three fit that work and the note says which decision they are for. If none is stored, she still gets strong pieces, with variety, and one sentence that no specific project was on file. The desk does not invent a project.
 
-If no decision is on file, she still gets pieces a product designer can use, with variety across the shelf. The note says in one sentence that no specific decision was on file. It does not invent a project.
+When a famous general essay was close but would not change her decision, the note names that held-back piece.
 
-When Ten Usability Heuristics or Atomic Design was the tempting general essay and was left off, the note adds one held-back line.
-
-The desk stores the piece ids and the America/Los_Angeles date it sent. The next morning reads that memory before it chooses.
+The desk remembers the piece ids and the Asia/Kolkata date it sent them. The next morning does not repeat those pieces unless her decision changed or nothing else qualifies.
 
 ## Where she reads it
 
-The note is the reply in the scheduled session named `morning`. On this machine that session shows up in the playground at [http://127.0.0.1:43123/playground](http://127.0.0.1:43123/playground). Open the session titled "Schedule morning".
+The morning note is the reply in the agent's scheduled session, `morning-reads`. On this machine that session shows up in the playground at [http://127.0.0.1:43123/playground](http://127.0.0.1:43123/playground).
 
-It does not push to her phone, and Slack is not connected. Nothing is texted or emailed.
+It is not a phone text. Slack is not connected. Nothing is emailed.
 
-BDK runs the schedule as UTC cron `0 15 * * *` (15:00 UTC). That is 8:00 in America/Los_Angeles while Pacific Daylight Time is in effect. During Pacific Standard Time the same cron is 7:00 America/Los_Angeles, because schedules have no timezone field. To keep 8:00 through the winter, change that cron to `0 16 * * *` on the first Sunday in November, and change it back on the second Sunday in March. The file is [`reading-desk/bot/schedules/morning.md`](reading-desk/bot/schedules/morning.md).
+## Publications
+
+The desk only recommends posts from this map, plus blogs she adds:
+
+- Stripe blog — https://stripe.com/blog
+- UX Collective — https://uxdesign.cc
+- UX Planet — https://uxplanet.org
+- Julie Zhuo, The Looking Glass — https://medium.com/the-year-of-the-looking-glass
+- Nielsen Norman Group — https://www.nngroup.com/articles/
+- Smashing Magazine — https://www.smashingmagazine.com
+- A List Apart — https://alistapart.com
+- Intercom blog — https://www.intercom.com/blog
+- Figma blog — https://www.figma.com/blog/
+- Linear blog — https://linear.app/blog
+- Brad Frost — https://bradfrost.com/blog/
+- Shape Up — https://basecamp.com/shapeup
+
+She can say "add Built for Mars" or "stop sending Smashing." Adding a blog needs its real homepage. The confirmed articles are the shelf until a live fetch exists. A publication with no confirmed article stays on the map and does not get an invented post.
+
+The list of articles is [`reading-desk/bot/lib/shelf.ts`](reading-desk/bot/lib/shelf.ts). Ranking is [`reading-desk/bot/skills/desk.md`](reading-desk/bot/skills/desk.md).
 
 ## Dev schedules do not auto-fire
 
-`serve --dev` does not fire schedules or reminders on the clock. Dispatch by hand through the same path production uses. The docs show:
+`serve --dev` does not fire schedules on the clock. The package docs say to dispatch by hand:
 
 ```bash
 curl -X POST http://127.0.0.1:3000/<slug>/v1/dev/schedules/heartbeat
 # {"scheduleId":"heartbeat","sessionIds":["ses_…"]}
 ```
 
-This desk is served with `--mode single` on port 43123, so there is no slug prefix and the schedule id is `morning`:
+This desk is served with `--mode single` on port 43123, so there is no slug in the path. The schedule id is `morning-reads`, and the cron is `30 2 * * *` (02:30 UTC, 08:00 IST):
 
 ```bash
-curl -X POST http://127.0.0.1:43123/v1/dev/schedules/morning
-# {"scheduleId":"morning","sessionIds":["ses_…"]}
+curl -X POST http://127.0.0.1:43123/v1/dev/schedules/morning-reads
+# {"scheduleId":"morning-reads","sessionIds":["ses_…"]}
 ```
 
-The playground can dispatch schedules in dev mode too.
-
-## Edit the shelf
-
-Change pieces in [`reading-desk/bot/lib/shelf.ts`](reading-desk/bot/lib/shelf.ts). Each entry has `id`, `title`, `by`, `source`, `year`, `minutes`, `url`, `about`, and `gives`. Year is null when the piece has no year. There is no tool that adds a piece.
-
-Ranking stays in [`reading-desk/bot/skills/desk.md`](reading-desk/bot/skills/desk.md).
+The playground can dispatch that schedule in dev mode too.
 
 ## Check and serve
 
@@ -60,4 +75,4 @@ npx tsc --noEmit -p reading-desk
 npx --yes "@cursor/bdk@0.2.27" serve --dir reading-desk --mode single --dev --port 43123 --host 127.0.0.1
 ```
 
-`validate`, `info`, `call`, and bringing the server up do not need a Cursor login. A real model turn (`run`, `eval`, or a message in the playground) needs a Cursor credential: `CURSOR_API_KEY`, or `CURSOR_API_KEY_FILE`, or `CURSOR_SERVICE_ACCOUNT_KEY`.
+`validate`, `info`, `call`, and bringing the server up do not need a Cursor login. A model turn (`run`, `eval`, or a message in the playground) needs a Cursor credential: `CURSOR_API_KEY`, or `CURSOR_API_KEY_FILE`, or `CURSOR_SERVICE_ACCOUNT_KEY`.

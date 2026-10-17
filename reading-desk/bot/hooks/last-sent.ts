@@ -1,13 +1,13 @@
 // After a desk is written, remember which piece ids went out and the
-// America/Los_Angeles date. The next morning reads this from load-desk.
+// Asia/Kolkata date. The next morning reads this from load-desk.
 import { defineHook } from "@cursor/bdk/hooks";
 import {
   deskKeys,
-  losAngelesDate,
   pieceIdsInDesk,
   readDecision,
   readLastSent,
   sameLastSent,
+  todayInIndia,
 } from "../lib/desk-memory.js";
 
 export default defineHook({
@@ -26,7 +26,7 @@ export default defineHook({
           : new Date();
       const next = {
         pieceIds,
-        date: losAngelesDate(instant),
+        date: todayInIndia(instant),
         decisionSentence: decision?.sentence ?? null,
       };
       const current = readLastSent(await ctx.host.kv.get(keys.lastSent));
