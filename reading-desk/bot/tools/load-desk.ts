@@ -9,11 +9,11 @@ import {
   readPublications,
 } from "../lib/desk-memory.js";
 import { urlAllowed } from "../lib/publications.js";
-import { shelf } from "../lib/shelf.js";
+import { shelf as catalog } from "../lib/shelf.js";
 
 export default defineTool({
   description:
-    "Read publications, allowed hosts, the confirmed catalog, the stored decision, skips, and last sent. The catalog is the shelf until a fetch exists. It is not a live search. Every URL you recommend must be one returned here, and its host must be in allowedHosts.",
+    "Read publications, allowed hosts, the filtered shelf, the stored decision, skips, and last sent. Pieces whose publication was dropped are omitted. Call it before any reading list, including the 8:00 IST morning note. Every URL you recommend must be one returned here.",
   effect: "read",
   inputSchema: z.object({}),
   async execute(_input, ctx) {
@@ -24,22 +24,20 @@ export default defineTool({
     const publications = activePublications(publicationRecord);
     const hosts = allowedHosts(publications);
     const openIds = new Set(publications.map((publication) => publication.id));
-    const catalog = shelf
+    const pieces = catalog
       .filter((piece) => openIds.has(piece.publicationId) && urlAllowed(piece.url, hosts))
       .map((piece) => ({ ...piece, topics: [...piece.topics] }));
     return {
       cap: 3,
+      minutesDefault: 20,
       morning: "08:00 Asia/Kolkata",
       publications,
-      dropped: publicationRecord.dropped,
       allowedHosts: hosts,
-      hostRule:
-        "A URL is allowed only when its host equals an allowedHosts entry, or is a subdomain of one. A leading www does not count. Every recommended URL must also appear in catalog.",
-      catalog,
+      shelf: pieces,
       decision,
       skips,
       lastSent: readLastSent(await ctx.host.kv.get(keys.lastSent)),
-      note: "The catalog is the shelf until a fetch exists. It is not today's internet. Do not invent a title, author, or URL. A publication with no catalog piece stays on the map.",
+      note: "The shelf is confirmed pages from publications that have not been dropped. Do not invent a URL. Publications with no article in shelf are still on the map.",
     };
   },
 });

@@ -15,7 +15,7 @@ function snapshot(record: PublicationRecord) {
 
 export default defineTool({
   description:
-    "Add or drop a publication by name. Use add when she says to include a blog, and pass its real homepage. Use drop when she says to stop sending one, such as Smashing. Do not invent a homepage.",
+    "Add or drop a publication by name or id. Use add when she says to include a blog, and pass its real homepage. Use drop when she says to stop sending one, such as Smashing. Do not invent a homepage.",
   effect: "write",
   inputSchema: z.object({
     action: z.enum(["add", "drop"]),
