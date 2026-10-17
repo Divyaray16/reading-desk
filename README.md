@@ -1,24 +1,30 @@
 # Reading desk
 
-A small [BDK](https://cursor.com/docs/bdk) agent for Divya. She names one design decision in a sentence. The agent returns at most three published pieces that would change that decision, each with a reason, a line she can put in the file, what to leave out, and the real URL.
+Divya's UX reading assistant. Every morning at 8:00 IST it sends three things to read. The rest of the day she can ask it something else, and it answers that instead of forcing another list.
 
 The project lives in [`reading-desk/`](reading-desk/).
 
-## Contract
+## What she gets
 
-- Channels are the playground and HTTP. Slack, GitHub, MCP, and a Monday schedule are not wired.
-- The shelf is fixed. The agent does not invent a title, author, or URL.
-- When a message names or changes a decision, the agent records it before it loads the shelf.
-- A skip is recorded only when she skips, dismisses, or already knows a piece. A request that only remembers a decision or a skip does not load the shelf.
-- If she has not named a decision and none is stored, the agent asks for one sentence.
-- The reply is the decision sentence, then one to three pieces (`Why this work`, `Line for the file`, `Leave out`, URL), then one held-back piece when a famous general essay was the tempting wrong choice.
-- The decision and skips are stored in `ctx.host.kv`. Live sessions share `desk:live:decision` and `desk:live:skips`. Eval sessions prefix those keys with the session id so parallel cases do not clobber each other.
+- A morning note at 8:00 India time. If she has named what she is working on, the three pieces fit that. If she has not, it still sends three and says no project was on file.
+- A normal answer when she asks about a critique, an empty screen, a handoff, or anything that is not a request for reading.
+- At most three pieces. Each one has a reason, a line she can put on the work, what to skip inside the piece, and a real URL from the shelf.
 
-## Edit the shelf
+## Where the articles come from
 
-Change pieces in [`reading-desk/bot/lib/shelf.ts`](reading-desk/bot/lib/shelf.ts). Each entry has `id`, `title`, `by`, `source`, `year`, `minutes`, `url`, `about`, and `gives`. There is no tool that adds a piece.
+A publication map in [`reading-desk/bot/lib/publications.ts`](reading-desk/bot/lib/publications.ts): Stripe, UX Collective, UX Planet, The Looking Glass, Nielsen Norman Group, Smashing Magazine, A List Apart, Intercom, Figma, Linear, Brad Frost, and Shape Up.
 
-Ranking stays in [`reading-desk/bot/skills/desk.md`](reading-desk/bot/skills/desk.md). The model drops skipped ids, prefers pieces at or under her minutes, and keeps a piece only when its `about` or `gives` would change this decision.
+Confirmed articles live in [`reading-desk/bot/lib/shelf.ts`](reading-desk/bot/lib/shelf.ts). The agent does not invent a URL. UX Collective, UX Planet, Intercom, and Linear are on the map, and a piece is added there only when its page is confirmed. She can say “add Built for Mars” with a homepage, or “stop sending Smashing,” and that is stored for next time.
+
+## Where the morning note shows up
+
+The schedule starts a session and the reply in that session is the note. It does not text a phone or post to Slack.
+
+The clock is 02:30 UTC, which is 08:00 IST. Dev mode does not fire the schedule on its own. With the playground running:
+
+```bash
+curl -X POST http://127.0.0.1:43123/v1/dev/schedules/morning
+```
 
 ## Check and serve
 
@@ -35,5 +41,3 @@ npx --yes "@cursor/bdk@0.2.27" serve --dir reading-desk --mode single --dev --po
 Playground: [http://127.0.0.1:43123/playground](http://127.0.0.1:43123/playground)
 
 `validate`, `info`, `call`, and `tsc` do not need a Cursor login. A model turn (`run`, `eval`, or a message in the playground) needs a Cursor credential: `CURSOR_API_KEY`, or `CURSOR_API_KEY_FILE`, or `CURSOR_SERVICE_ACCOUNT_KEY`.
-
-A Monday schedule is intentionally not wired yet.

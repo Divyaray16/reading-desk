@@ -70,5 +70,22 @@ export default defineEval({
         ).soft();
       },
     },
+    {
+      id: "morning",
+      description: "Morning note with no decision still loads the desk and files 1–3 lines.",
+      async test(t) {
+        await t.send(
+          "Morning desk. No decision was stored. Send the three things I should read.",
+        );
+        t.succeeded();
+        t.calledTool("load-desk");
+        t.notCalledTool("record-decision");
+        t.notCalledTool("record-skip");
+        t.check(
+          t.reply,
+          satisfies(lineCount, "reply has 1–3 occurrences of Line for the file"),
+        );
+      },
+    },
   ],
 });
