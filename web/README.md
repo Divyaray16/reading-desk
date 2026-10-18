@@ -1,6 +1,6 @@
 # Reading desk
 
-A browser page of three UX pieces from the confirmed shelf. It does not sign in to Cursor.
+A browser page of three UX pieces from the confirmed shelf. Divya asks on this same page. It does not sign in to Cursor and it does not call a model.
 
 From this directory:
 
@@ -10,4 +10,4 @@ npm run dev
 
 Open http://127.0.0.1:47231
 
-The BDK agent lives in `../reading-desk` and is separate. Chat with that agent still needs a Cursor credential.
+The question box is on this page. Answers come from the shelf copied into `lib/catalog.ts`.
