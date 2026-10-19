@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { ask, type AskResult } from "@/lib/ask";
 import { categories, DEFAULT_CATEGORY, type CategoryId } from "@/lib/categories";
@@ -79,7 +79,9 @@ export function Desk() {
   const [day, setDay] = useState<DayCache | null>(null);
   const [ready, setReady] = useState(false);
   const [draft, setDraft] = useState("");
+  const [asked, setAsked] = useState("");
   const [answer, setAnswer] = useState<AskResult | null>(null);
+  const topics = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const today = kolkataDay();
@@ -127,6 +129,12 @@ export function Desk() {
 
   function choose(next: CategoryId) {
     setView(next);
+    setAnswer(null);
+    setAsked("");
+  }
+
+  function slideTopics(direction: number) {
+    topics.current?.scrollBy({ left: direction * 220, behavior: "smooth" });
   }
 
   function skip(id: string) {
@@ -162,6 +170,7 @@ export function Desk() {
     event.preventDefault();
     const question = draft.trim();
     if (!question) return;
+    setAsked(question);
     setAnswer(ask(question));
   }
 
@@ -204,12 +213,21 @@ export function Desk() {
             </Button>
           </div>
         </form>
-        {answer ? <Answer answer={answer} /> : null}
       </section>
 
       <div className="mt-8">
         <div className="desk-filter">
-          <div className="desk-topics" role="group" aria-label="Categories">
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            className="h-8 w-8 shrink-0 rounded-full px-0 text-base text-ember"
+            aria-label="Scroll categories back"
+            onClick={() => slideTopics(-1)}
+          >
+            ‹
+          </Button>
+          <div ref={topics} className="desk-topics" role="group" aria-label="Categories">
             {categories.map((item) => (
               <Button
                 key={item.id}
@@ -228,6 +246,16 @@ export function Desk() {
               </Button>
             ))}
           </div>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            className="h-8 w-8 shrink-0 rounded-full px-0 text-base text-ember"
+            aria-label="Scroll categories forward"
+            onClick={() => slideTopics(1)}
+          >
+            ›
+          </Button>
           <Button type="button" variant="ghost" size="sm" className="h-8 shrink-0 rounded-full px-2.5 text-xs text-muted-foreground" onClick={refresh}>
             Refresh
           </Button>
@@ -239,38 +267,68 @@ export function Desk() {
         ) : null}
       </div>
 
-      <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{viewLine}</p>
+      {answer ? (
+        <div className="mt-4 flex items-baseline justify-between gap-3">
+          <p className="text-sm leading-relaxed text-muted-foreground">Matches for “{asked}”</p>
+          <button
+            type="button"
+            className="shrink-0 text-xs text-ember underline-offset-4 hover:underline"
+            onClick={() => {
+              setAnswer(null);
+              setAsked("");
+            }}
+          >
+            Back to the desk
+          </button>
+        </div>
+      ) : (
+        <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{viewLine}</p>
+      )}
 
-      <div aria-live="polite" data-blog-count={shown.length} data-category={view} data-day={today}>
-        {!ready ? <EmptyState kicker="Loading" title="Choosing three reads." body="The desk is lining up today’s articles." /> : null}
-        {ready && shown.length === 0 && hiddenHere > 0 ? (
-          <EmptyState
-            kicker="Skipped"
-            title="Nothing left on this desk."
-            body="You skipped the articles for this category. Restore them, or refresh for the next set."
-          />
+      <div aria-live="polite" data-blog-count={answer?.kind === "reads" ? answer.articles.length : shown.length} data-category={view} data-day={today}>
+        {answer?.kind === "none" ? (
+          <EmptyState kicker="No match" title="Nothing in the library fits." body={answer.text} />
         ) : null}
-        {ready && shown.length === 0 && hiddenHere === 0 ? (
-          <EmptyState
-            kicker="Empty"
-            title="No article is ready for this category."
-            body="Refresh the desk. Nothing is invented to fill a gap."
-          />
-        ) : null}
-        {ready && shown.length > 0 ? (
+        {answer?.kind === "reads" ? (
           <ol className="mt-4 flex list-none flex-col gap-4 p-0">
-            {shown.map((article, index) => (
-              <ArticleItem
-                key={article.id}
-                article={article}
-                number={String(index + 1).padStart(2, "0")}
-                primary={index === 0}
-                useful={usefulIds.includes(article.id)}
-                onSkip={() => skip(article.id)}
-                onUseful={() => markUseful(article.id)}
-              />
+            {answer.articles.map((article, index) => (
+              <ArticleItem key={article.id} article={article} number={String(index + 1).padStart(2, "0")} primary={index === 0} />
             ))}
           </ol>
+        ) : null}
+        {!answer ? (
+          <>
+            {!ready ? <EmptyState kicker="Loading" title="Choosing three reads." body="The desk is lining up today’s articles." /> : null}
+            {ready && shown.length === 0 && hiddenHere > 0 ? (
+              <EmptyState
+                kicker="Skipped"
+                title="Nothing left on this desk."
+                body="You skipped the articles for this category. Restore them, or refresh for the next set."
+              />
+            ) : null}
+            {ready && shown.length === 0 && hiddenHere === 0 ? (
+              <EmptyState
+                kicker="Empty"
+                title="No article is ready for this category."
+                body="Refresh the desk. Nothing is invented to fill a gap."
+              />
+            ) : null}
+            {ready && shown.length > 0 ? (
+              <ol className="mt-4 flex list-none flex-col gap-4 p-0">
+                {shown.map((article, index) => (
+                  <ArticleItem
+                    key={article.id}
+                    article={article}
+                    number={String(index + 1).padStart(2, "0")}
+                    primary={index === 0}
+                    useful={usefulIds.includes(article.id)}
+                    onSkip={() => skip(article.id)}
+                    onUseful={() => markUseful(article.id)}
+                  />
+                ))}
+              </ol>
+            ) : null}
+          </>
         ) : null}
       </div>
 
@@ -291,25 +349,11 @@ function EmptyState({ kicker, title, body }: { kicker: string; title: string; bo
   );
 }
 
-function Answer({ answer }: { answer: AskResult }) {
-  if (answer.kind === "none") {
-    return (
-      <div data-ask-answer="none" aria-live="polite">
-        <EmptyState kicker="No match" title="Nothing in the library fits." body={answer.text} />
-      </div>
-    );
-  }
-
-  return (
-    <div className="mt-5" data-ask-answer="reads" aria-live="polite">
-      <p className="text-[0.68rem] font-medium tracking-[0.18em] text-muted-foreground uppercase">From the library</p>
-      <ol className="mt-4 flex list-none flex-col gap-4 p-0">
-        {answer.articles.map((article, index) => (
-          <ArticleItem key={article.id} article={article} number={String(index + 1).padStart(2, "0")} primary={index === 0} />
-        ))}
-      </ol>
-    </div>
-  );
+function readableAuthor(author: string): string {
+  const named = author.match(/\(([^)]+)\)/);
+  if (named?.[1] && !named[1].includes("@")) return named[1].trim();
+  if (author.includes("@")) return "";
+  return author.trim();
 }
 
 function ArticleItem({
@@ -327,7 +371,7 @@ function ArticleItem({
   onSkip?: () => void;
   onUseful?: () => void;
 }) {
-  const byline = [article.author, article.date].filter(Boolean).join(" · ");
+  const byline = [readableAuthor(article.author), article.date].filter(Boolean).join(" · ");
   return (
     <li className="min-w-0 list-none" data-blog-id={article.id}>
       <article className={primary ? "desk-card desk-card-lead min-w-0 px-5 py-6 sm:px-7 sm:py-7" : "desk-card min-w-0 px-5 py-6 sm:px-7 sm:py-7"}>
