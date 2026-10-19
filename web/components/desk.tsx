@@ -3,8 +3,8 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { ask, type AskResult } from "@/lib/ask";
-import { pieces, publicationName, type Piece } from "@/lib/catalog";
-import { matches, selectDesk, views, type DeskView } from "@/lib/desk";
+import { categories, type BlogCard, type CategoryId } from "@/lib/catalog";
+import { DEFAULT_CATEGORY, matchesCategory, selectDesk } from "@/lib/desk";
 import { visitorLocalLabel } from "@/lib/local-time";
 
 const SKIP_KEY = "reading-desk-skips";
@@ -53,8 +53,7 @@ function VisitorClock() {
 }
 
 export function Desk() {
-  const [view, setView] = useState<DeskView>("best");
-  const [page, setPage] = useState(0);
+  const [view, setView] = useState<CategoryId>(DEFAULT_CATEGORY);
   const [skipped, setSkipped] = useState<string[] | null>(null);
   const [draft, setDraft] = useState("");
   const [answer, setAnswer] = useState<AskResult | null>(null);
@@ -69,16 +68,12 @@ export function Desk() {
   }, [skipped]);
 
   const skipIds = skipped ?? [];
-  const desk = selectDesk(view, skipIds, page);
-  const viewLine = views.find((item) => item.id === view)?.line ?? "";
-  const hiddenCount = skipIds.filter((id) => {
-    const piece = pieces.find((item) => item.id === id);
-    return piece ? matches(piece, view) : false;
-  }).length;
+  const desk = selectDesk(view, skipIds);
+  const viewLine = categories.find((item) => item.id === view)?.line ?? "";
+  const hiddenCount = skipIds.filter((id) => matchesCategory(id, view)).length;
 
-  function choose(next: DeskView) {
+  function choose(next: CategoryId) {
     setView(next);
-    setPage(0);
   }
 
   function skip(id: string) {
@@ -92,10 +87,7 @@ export function Desk() {
   function restore() {
     setSkipped((current) => {
       const base = current ?? readSkips();
-      return base.filter((id) => {
-        const piece = pieces.find((item) => item.id === id);
-        return piece ? !matches(piece, view) : true;
-      });
+      return base.filter((id) => !matchesCategory(id, view));
     });
   }
 
@@ -114,7 +106,7 @@ export function Desk() {
           Reading desk
         </h1>
         <p className="mt-4 max-w-[34rem] font-serif text-xl leading-snug text-pretty text-foreground/90 sm:text-[1.65rem]">
-          Three pieces for the work in front of you.
+          Three blogs for the work in front of you.
         </p>
         <VisitorClock />
       </header>
@@ -149,8 +141,8 @@ export function Desk() {
       </section>
 
       <div className="mt-10">
-        <div className="desk-topics" role="group" aria-label="Work in front of you">
-          {views.map((item) => (
+        <div className="desk-topics" role="group" aria-label="Categories">
+          {categories.map((item) => (
             <Button
               key={item.id}
               type="button"
@@ -159,57 +151,45 @@ export function Desk() {
               onClick={() => choose(item.id)}
               className={
                 item.id === view
-                  ? "h-11 rounded-[0.7rem] px-3.5 text-sm shadow-none"
-                  : "h-11 rounded-[0.7rem] px-3.5 text-sm text-muted-foreground shadow-none hover:bg-foreground/8 hover:text-foreground"
+                  ? "h-auto min-h-11 rounded-[0.7rem] px-3.5 py-2 text-sm leading-snug whitespace-normal shadow-none"
+                  : "h-auto min-h-11 rounded-[0.7rem] px-3.5 py-2 text-sm leading-snug whitespace-normal text-muted-foreground shadow-none hover:bg-foreground/8 hover:text-foreground"
               }
             >
               {item.label}
             </Button>
           ))}
         </div>
-        <div className="mt-3 flex flex-wrap items-center gap-2">
-          {hiddenCount > 0 ? (
+        {hiddenCount > 0 ? (
+          <div className="mt-3 flex flex-wrap items-center gap-2">
             <Button type="button" variant="ghost" size="sm" className="h-11 rounded-xl px-3 text-muted-foreground" onClick={restore}>
               Restore skipped
             </Button>
-          ) : null}
-          <Button
-            type="button"
-            variant="outline"
-            className="h-11 rounded-xl border-border bg-card px-4 shadow-none hover:bg-foreground/8"
-            onClick={() => setPage((current) => current + 1)}
-          >
-            Next three
-          </Button>
-        </div>
+          </div>
+        ) : null}
       </div>
 
       <p className="mt-5 text-sm leading-relaxed text-muted-foreground">{viewLine}</p>
 
-      <div aria-live="polite" data-piece-count={desk.shown.length}>
+      <div aria-live="polite" data-blog-count={desk.shown.length} data-category={view}>
         {desk.note ? <p className="mt-5 max-w-[36rem] text-base leading-relaxed text-foreground">{desk.note}</p> : null}
 
         {desk.shown.length > 0 ? (
           <ol className="mt-5 flex list-none flex-col gap-4 p-0">
-            {desk.shown.map((piece, index) => {
-              const primary = index === 0;
-              const number = String((page % desk.pages) * 3 + index + 1).padStart(2, "0");
-              return (
-                <PieceItem
-                  key={piece.id}
-                  piece={piece}
-                  number={number}
-                  primary={primary}
-                  onSkip={() => skip(piece.id)}
-                />
-              );
-            })}
+            {desk.shown.map((blog, index) => (
+              <BlogItem
+                key={blog.id}
+                blog={blog}
+                number={String(index + 1).padStart(2, "0")}
+                primary={index === 0}
+                onSkip={() => skip(blog.id)}
+              />
+            ))}
           </ol>
         ) : null}
       </div>
 
       <p className="mt-14 border-t border-border pt-5 text-xs leading-relaxed text-muted-foreground">
-        This page reads the shelf in the browser. Ask on this page. It does not sign in to Cursor.
+        This page reads the catalog in the browser. Ask on this page. It does not sign in to Cursor.
       </p>
     </main>
   );
@@ -224,61 +204,31 @@ function Answer({ answer }: { answer: AskResult }) {
     );
   }
 
-  if (answer.kind === "advice") {
-    return (
-      <div className="mt-5" data-ask-answer="advice" aria-live="polite">
-        <p className="max-w-[36rem] font-serif text-lg leading-snug text-pretty text-foreground sm:text-xl">{answer.text}</p>
-        <div className="desk-card mt-4 space-y-4 px-5 py-4">
-          {answer.pieces.map((piece) => (
-            <div key={piece.id} className="min-w-0 border-t border-border pt-4 first:border-t-0 first:pt-0">
-              <p>
-                <a
-                  href={piece.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-serif text-lg leading-snug text-foreground underline-offset-[0.14em] hover:underline focus-visible:underline"
-                >
-                  {piece.title}
-                </a>
-              </p>
-              <p className="mt-2 text-xs break-all text-muted-foreground">{piece.url}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="mt-5" data-ask-answer="reads" aria-live="polite">
-      <p className="text-[0.68rem] font-medium tracking-[0.18em] text-muted-foreground uppercase">From the shelf</p>
+      <p className="text-[0.68rem] font-medium tracking-[0.18em] text-muted-foreground uppercase">From the catalog</p>
       <ol className="mt-4 flex list-none flex-col gap-4 p-0">
-        {answer.pieces.map((piece, index) => (
-          <PieceItem
-            key={piece.id}
-            piece={piece}
-            number={String(index + 1).padStart(2, "0")}
-            primary={index === 0}
-          />
+        {answer.sources.map((blog, index) => (
+          <BlogItem key={blog.id} blog={blog} number={String(index + 1).padStart(2, "0")} primary={index === 0} />
         ))}
       </ol>
     </div>
   );
 }
 
-function PieceItem({
-  piece,
+function BlogItem({
+  blog,
   number,
   primary,
   onSkip,
 }: {
-  piece: Piece;
+  blog: BlogCard;
   number: string;
   primary: boolean;
   onSkip?: () => void;
 }) {
   return (
-    <li className="min-w-0 list-none" data-piece-id={piece.id}>
+    <li className="min-w-0 list-none" data-blog-id={blog.id}>
       <article className={primary ? "desk-card desk-card-lead min-w-0 px-5 py-6 sm:px-7 sm:py-7" : "desk-card min-w-0 px-5 py-6 sm:px-7 sm:py-7"}>
         <p
           className={
@@ -297,62 +247,30 @@ function PieceItem({
           }
         >
           <a
-            href={piece.url}
+            href={blog.url}
             target="_blank"
-            rel="noopener noreferrer"
+            rel="noreferrer"
             className="underline-offset-[0.14em] hover:underline focus-visible:underline"
           >
-            {piece.title}
+            {blog.name}
           </a>
         </h2>
-        <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-          {piece.by}
-          <span aria-hidden="true"> · </span>
-          <span>{publicationName(piece.publicationId)}</span>
-          <span aria-hidden="true"> · </span>
-          <span>{piece.minutes} min</span>
+        <p
+          className={
+            primary
+              ? "mt-4 max-w-[36rem] font-serif text-lg leading-snug text-pretty text-foreground sm:text-xl"
+              : "mt-3 max-w-[36rem] text-base leading-relaxed text-pretty text-foreground"
+          }
+        >
+          {blog.line}
         </p>
-
-        <div className={primary ? "mt-6 space-y-5" : "mt-5 space-y-4"}>
-          <div>
-            <h3 className="text-[0.68rem] font-medium tracking-[0.16em] text-muted-foreground uppercase">Why it is here</h3>
-            <p
-              className={
-                primary
-                  ? "mt-2 font-serif text-lg leading-snug text-pretty text-foreground sm:text-xl"
-                  : "mt-2 text-base leading-relaxed text-pretty text-foreground"
-              }
-            >
-              {piece.why}
-            </p>
-          </div>
-          <div>
-            <h3 className="text-[0.68rem] font-medium tracking-[0.16em] text-muted-foreground uppercase">Line for the file</h3>
-            <p className="mt-2 text-base leading-relaxed text-pretty text-foreground">{piece.gives}</p>
-          </div>
-          <div>
-            <h3 className="text-[0.68rem] font-medium tracking-[0.16em] text-muted-foreground uppercase">Leave out</h3>
-            <p className="mt-2 text-base leading-relaxed text-pretty text-foreground">{piece.leaveOut}</p>
-          </div>
-        </div>
-
-        <p className="mt-4 text-xs leading-relaxed break-all text-muted-foreground">{piece.url}</p>
-
-        <div className="mt-5 flex items-center justify-between gap-3 border-t border-border pt-4">
-          <Button
-            variant="link"
-            nativeButton={false}
-            className="h-auto px-0 text-[0.95rem] text-foreground"
-            render={<a href={piece.url} target="_blank" rel="noopener noreferrer" />}
-          >
-            Open the piece
-          </Button>
-          {onSkip ? (
+        {onSkip ? (
+          <div className="mt-5 flex items-center justify-end gap-3 border-t border-border pt-4">
             <Button type="button" variant="ghost" size="sm" className="h-10 rounded-xl px-3 text-muted-foreground" onClick={onSkip}>
               Skip
             </Button>
-          ) : null}
-        </div>
+          </div>
+        ) : null}
       </article>
     </li>
   );

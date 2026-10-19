@@ -15,7 +15,7 @@ const newsreader = Newsreader({
 
 export const metadata: Metadata = {
   title: "Reading desk",
-  description: "Three UX pieces for the work in front of you. No Cursor login.",
+  description: "Three blogs for the work in front of you. No Cursor login.",
 };
 
 export default function RootLayout({

@@ -1,137 +1,104 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { ask, adviceText, NO_MATCH } from "./ask.ts";
-import { pieces } from "./catalog.ts";
+import { ask, NO_MATCH } from "./ask.ts";
+import { categories, sources } from "./catalog.ts";
 
-const urls = new Set(pieces.map((piece) => piece.url));
-const titles = new Set(pieces.map((piece) => piece.title));
-
-function sentenceCount(text: string): number {
-  return text
-    .split(/(?<=[.!?])\s+/)
-    .map((part) => part.trim())
-    .filter(Boolean).length;
+const urls = new Set<string>();
+for (const source of sources) {
+  urls.add(source.url);
+  for (const url of Object.values(source.categoryUrls ?? {})) urls.add(url);
 }
 
-function piecesOf(result: ReturnType<typeof ask>) {
-  if (result.kind === "reads" || result.kind === "advice") return result.pieces;
-  return [];
+function blogsOf(result: ReturnType<typeof ask>) {
+  return result.kind === "reads" ? result.sources : [];
 }
 
-function assertOnShelf(result: ReturnType<typeof ask>) {
-  const list = piecesOf(result);
-  for (const piece of list) {
-    assert.equal(urls.has(piece.url), true);
-    assert.equal(titles.has(piece.title), true);
-    const source = pieces.find((item) => item.id === piece.id);
-    assert.ok(source);
-    assert.equal(piece.url, source.url);
-    assert.equal(piece.title, source.title);
-  }
-}
-
-test("a reading question returns the matching shelf pieces, at most three", () => {
+test("an AI UX question returns that category's three blogs", () => {
   const result = ask("give me an AI UX blog");
   assert.equal(result.kind, "reads");
   if (result.kind !== "reads") return;
   assert.deepEqual(
-    result.pieces.map((piece) => piece.id),
-    ["figma-content", "smashing-microcopy"],
+    result.sources.map((blog) => blog.id),
+    ["pair", "hax", "anthropic"],
   );
-  assertOnShelf(result);
-  assert.equal(
-    result.pieces[0]?.title,
-    "How to do content design / UX writing in Figma",
-  );
-  assert.equal(
-    result.pieces[0]?.url,
-    "https://www.figma.com/blog/how-to-do-content-design-ux-writing-in-figma/",
-  );
-});
-
-test("an empty-screen question returns the matching essays and one advice sentence", () => {
-  const result = ask("what should the empty screen say");
-  assert.equal(result.kind, "advice");
-  if (result.kind !== "advice") return;
   assert.deepEqual(
-    result.pieces.map((piece) => piece.id),
-    ["empty-states", "uxplanet-empty-guide", "smashing-empty"],
+    result.sources.map((blog) => blog.name),
+    [
+      "Google People + AI Research (PAIR)",
+      "Microsoft HAX Toolkit",
+      "Anthropic Research",
+    ],
   );
-  const lead = result.pieces[0];
-  assert.ok(lead);
-  assert.equal(result.text.includes(lead.about), true);
-  assert.equal(result.text.includes(lead.gives), true);
-  assert.equal(result.text.includes(lead.title), true);
-  const count = sentenceCount(result.text);
-  assert.ok(count >= 2 && count <= 4);
-  assert.equal(adviceText(lead), result.text);
-  assert.equal(new Set(result.pieces.map((piece) => piece.id)).size, result.pieces.length);
-  assertOnShelf(result);
+  assert.equal(result.sources.length, 3);
+  for (const blog of result.sources) {
+    assert.equal(urls.has(blog.url), true);
+    assert.equal(blog.url.includes("utm_source"), false);
+  }
 });
 
-test("color and accessibility match the color-system piece and do not pad", () => {
-  const result = ask("give me an article on color and accessibility");
+test("ask can return a source that is not one of the three on a category desk", () => {
+  const baymard = ask("baymard checkout");
+  assert.equal(baymard.kind, "reads");
+  if (baymard.kind !== "reads") return;
+  assert.deepEqual(
+    baymard.sources.map((blog) => blog.id),
+    ["baymard"],
+  );
+  assert.equal(baymard.sources[0]?.url, "https://baymard.com/blog");
+  assert.equal(
+    categories.some((category) => category.featured.includes("baymard")),
+    false,
+  );
+
+  const nvidia = ask("nvidia");
+  assert.equal(nvidia.kind, "reads");
+  if (nvidia.kind !== "reads") return;
+  assert.equal(nvidia.sources[0]?.name, "NVIDIA Developer Blog");
+  assert.equal(nvidia.sources[0]?.url, "https://developer.nvidia.com/blog/");
+  assert.equal(
+    categories.some((category) => category.featured.includes("nvidia")),
+    false,
+  );
+});
+
+test("a design-systems question includes Brad Frost, who is not on the product desk", () => {
+  const result = ask("design systems");
   assert.equal(result.kind, "reads");
   if (result.kind !== "reads") return;
-  assert.deepEqual(
-    result.pieces.map((piece) => piece.id),
-    ["stripe-color"],
+  assert.ok(result.sources.length <= 3);
+  assert.equal(
+    result.sources.some((blog) => blog.id === "bradfrost"),
+    true,
   );
-  assert.equal(result.pieces[0]?.url, "https://stripe.com/blog/accessible-color-systems");
-  assertOnShelf(result);
+  assert.equal(
+    categories.find((category) => category.id === "product")?.featured.includes("bradfrost"),
+    false,
+  );
 });
 
-test("critique, controls, and design system use those topic tags", () => {
-  const critique = ask("give me a critique");
-  assert.equal(critique.kind, "reads");
-  if (critique.kind === "reads") {
+test("ask never returns more than three, and a vague read falls back to general UX", () => {
+  const vague = ask("give me a blog");
+  assert.equal(vague.kind, "reads");
+  if (vague.kind === "reads") {
     assert.deepEqual(
-      critique.pieces.map((piece) => piece.id),
-      ["product-critique", "intercom-dribbblisation"],
+      vague.sources.map((blog) => blog.id),
+      ["nng", "smashing", "ux-collective"],
+    );
+    assert.equal(
+      vague.sources.find((blog) => blog.id === "smashing")?.url,
+      "https://www.smashingmagazine.com/category/ux/",
     );
   }
 
-  const controls = ask("what should I do about too many controls");
-  assert.equal(controls.kind, "advice");
-  if (controls.kind === "advice") {
-    assert.deepEqual(
-      controls.pieces.map((piece) => piece.id),
-      ["progressive-disclosure", "ala-interaction", "training-wheels"],
-    );
-    assert.ok(controls.pieces.every((piece) => piece.topics.includes("complexity")));
-    assert.equal(adviceText(controls.pieces[0]!), controls.text);
-    assert.ok(sentenceCount(controls.text) >= 2 && sentenceCount(controls.text) <= 4);
-  }
-
-  const system = ask("give me a design system article");
-  assert.equal(system.kind, "reads");
-  if (system.kind === "reads") {
-    assert.equal(system.pieces.length, 3);
-    assert.ok(system.pieces.every((piece) => piece.topics.includes("design systems")));
+  for (const question of ["ux", "ai", "design", "research", "enterprise workflow", "give me an AI UX blog"]) {
+    const result = ask(question);
+    assert.ok(blogsOf(result).length <= 3);
   }
 });
 
-test("a design question returns three essays and keeps the short advice", () => {
-  const result = ask("ai in design");
-  assert.equal(result.kind, "advice");
-  if (result.kind !== "advice") return;
-  assert.deepEqual(
-    result.pieces.map((piece) => piece.id),
-    ["linear-design-reset", "no-crap", "figma-ds-101"],
-  );
-  assert.equal(result.text, adviceText(result.pieces[0]!));
-  assert.equal(sentenceCount(result.text) <= 4, true);
-  for (const piece of result.pieces) {
-    const haystack = `${piece.title} ${piece.about} ${piece.topics.join(" ")}`.toLowerCase();
-    assert.equal(haystack.includes("design"), true);
-    assert.equal(piece.url.startsWith("https://"), true);
-  }
-  assertOnShelf(result);
-});
-
-test("an unknown question is one sentence and invents nothing", () => {
-  const result = ask("quantum origami for a submarine");
-  assert.deepEqual(result, { kind: "none", text: NO_MATCH });
-  assert.equal(sentenceCount(NO_MATCH), 1);
+test("shape up and an unknown question invent nothing", () => {
+  assert.deepEqual(ask("shape up"), { kind: "none", text: NO_MATCH });
+  assert.deepEqual(ask("quantum origami for a submarine"), { kind: "none", text: NO_MATCH });
   assert.equal(NO_MATCH.includes("http"), false);
+  assert.equal(sources.some((source) => /shape up/i.test(source.name)), false);
 });

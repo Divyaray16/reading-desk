@@ -1,20 +1,24 @@
 /**
- * Answers a question from the shelf already copied into catalog.ts.
- * No model call. Titles and URLs are the piece's own.
+ * Answers a question from the catalog in this browser.
+ * No network search and no API key. Titles are publication names, not invented essays.
  */
 
-import { pieces, publicationName, type Piece } from "./catalog.ts";
-import { CAP, score, selectDesk } from "./desk.ts";
+import {
+  CAP,
+  categories,
+  hrefForAsk,
+  sources,
+  toBlogCard,
+  type BlogCard,
+  type CategoryId,
+  type Source,
+} from "./catalog.ts";
 
-export const NO_MATCH = "Nothing on the shelf matches that.";
+export const NO_MATCH = "Nothing in the catalog matches that.";
 
-export type AskResult =
-  | { kind: "reads"; pieces: Piece[] }
-  | { kind: "advice"; pieces: Piece[]; text: string }
-  | { kind: "none"; text: string };
+export type AskResult = { kind: "reads"; sources: BlogCard[] } | { kind: "none"; text: string };
 
-const READING =
-  /\b(give me|blogs?|articles?|reads?|reading|links?)\b/i;
+const READING = /\b(give me|blogs?|articles?|reads?|reading|links?)\b/i;
 
 const STOP = new Set([
   "a",
@@ -94,55 +98,50 @@ const STOP = new Set([
   "only",
 ]);
 
-/** Format words. They ask for a read, and they are weak matches on their own. */
 const WEAK = new Set(["blog", "article", "read", "reading", "link"]);
 
+/** Common words. They do not match a source on their own. A two-word phrase still can. */
+const GENERIC = new Set([
+  "design",
+  "product",
+  "research",
+  "ux",
+  "ai",
+  "user",
+  "interface",
+  "writing",
+  "team",
+  "practice",
+  "system",
+  "human",
+  "technology",
+  "interaction",
+  "work",
+  "notes",
+  "published",
+  "practical",
+  "essay",
+  "think",
+  "people",
+  "complex",
+  "emerging",
+]);
+
 const STEM: Record<string, string> = {
-  accessibility: "access",
-  accessible: "access",
-  colors: "color",
-  colour: "color",
-  colours: "color",
-  controls: "control",
-  control: "control",
+  assistants: "assistant",
+  assistant: "assistant",
+  workflows: "workflow",
+  workflow: "workflow",
+  trends: "trend",
+  trend: "trend",
   systems: "system",
   system: "system",
-  screens: "screen",
-  screen: "screen",
-  states: "state",
-  state: "state",
   blogs: "blog",
   articles: "article",
-  critiques: "critique",
-  reads: "read",
-  links: "link",
+  essays: "essay",
 };
 
-/** Words for the topic tags she actually asks with, including the desk labels. */
-const TOPIC_WORDS: Record<Piece["topics"][number], string[]> = {
-  "empty states": ["empty", "state", "screen"],
-  critique: ["critique"],
-  "design systems": ["design", "system"],
-  complexity: ["complexity", "control"],
-  craft: ["craft"],
-  "product writing": ["product", "writing", "copy"],
-};
-
-type Field = "title" | "publication" | "about" | "gives" | "topic";
-
-const FIELD_WEIGHT: Record<Field, number> = {
-  title: 4,
-  topic: 4,
-  about: 2,
-  gives: 2,
-  publication: 2,
-};
-
-function stem(word: string): string {
-  return STEM[word] ?? word;
-}
-
-function tokensOf(text: string): string[] {
+function stemPhrase(text: string): string {
   return text
     .toLowerCase()
     .replace(/['’]/g, "")
@@ -150,8 +149,14 @@ function tokensOf(text: string): string[] {
     .replace(/[^a-z0-9]+/g, " ")
     .trim()
     .split(/\s+/)
-    .filter(Boolean)
-    .map(stem);
+    .filter((token) => token.length > 1)
+    .map((token) => STEM[token] ?? token)
+    .join(" ");
+}
+
+function tokensOf(text: string): string[] {
+  const phrase = stemPhrase(text);
+  return phrase ? phrase.split(" ") : [];
 }
 
 function contentTokens(question: string): { strong: string[]; weak: string[] } {
@@ -165,92 +170,138 @@ function contentTokens(question: string): { strong: string[]; weak: string[] } {
   return { strong, weak };
 }
 
-function indexPiece(piece: Piece): Map<string, Set<Field>> {
-  const map = new Map<string, Set<Field>>();
-  function add(field: Field, text: string) {
-    for (const token of tokensOf(text)) {
-      const set = map.get(token) ?? new Set<Field>();
-      set.add(field);
-      map.set(token, set);
-    }
-  }
-  add("title", piece.title);
-  add("publication", publicationName(piece.publicationId));
-  add("about", piece.about);
-  add("gives", piece.gives);
-  for (const topic of piece.topics) {
-    add("topic", topic);
-    add("topic", TOPIC_WORDS[topic].join(" "));
-  }
-  return map;
+function categoryScores(question: string, tokens: string[]): Map<CategoryId, number> {
+  const phrase = stemPhrase(question);
+  const has = (word: string) => tokens.includes(word);
+  const scores = new Map<CategoryId, number>();
+  const add = (id: CategoryId, points: number) => {
+    if (points <= 0) return;
+    scores.set(id, (scores.get(id) ?? 0) + points);
+  };
+
+  if (phrase.includes("general ux")) add("general-ux", 2);
+  if (has("usability")) add("general-ux", 2);
+  if (has("ux") && !has("ai")) add("general-ux", 1);
+
+  if (phrase.includes("ai ux") || (has("ai") && has("ux"))) add("ai-ux", 3);
+  if (phrase.includes("human ai")) add("ai-ux", 2);
+
+  if (has("agentic") || has("agent") || phrase.includes("ai agent")) add("agentic", 3);
+
+  if (phrase.includes("design system")) add("product", 3);
+  if (phrase.includes("product design")) add("product", 2);
+
+  if (has("conversational") || has("assistant")) add("conversational", 3);
+
+  if (has("enterprise") || has("workflow")) add("enterprise", 3);
+
+  if (has("strategy") || phrase.includes("design thinking")) add("strategy", 3);
+
+  if (has("emerging") || has("trend") || phrase.includes("ai technology")) add("ai-technology", 3);
+  else if (has("technology")) add("ai-technology", 1);
+
+  const specificAi =
+    has("ux") ||
+    has("agent") ||
+    has("agentic") ||
+    has("assistant") ||
+    has("technology") ||
+    has("emerging") ||
+    has("trend");
+  if (has("ai") && !specificAi) add("ai-ux", 2);
+
+  return scores;
 }
 
-const indexed = pieces.map((piece) => ({ piece, fields: indexPiece(piece) }));
-const shelfIndex = new Map(pieces.map((piece, index) => [piece.id, index]));
-
-function weightOf(fields: Set<Field> | undefined, weak: boolean): number {
-  if (!fields || fields.size === 0) return 0;
-  let weight = 0;
-  for (const field of fields) weight += FIELD_WEIGHT[field];
-  return weak ? Math.min(weight, 2) : weight;
+function matchedCategories(question: string, tokens: string[]): CategoryId[] {
+  const scores = categoryScores(question, tokens);
+  let best = 0;
+  for (const value of scores.values()) best = Math.max(best, value);
+  if (best === 0) return [];
+  return categories.filter((category) => scores.get(category.id) === best).map((category) => category.id);
 }
 
-/** A publication name alone is not the piece's own words. */
-function matchesInPiece(fields: Set<Field> | undefined): boolean {
-  if (!fields) return false;
-  for (const field of fields) {
-    if (field !== "publication") return true;
+function nameBonus(question: string, source: Source): number {
+  const phrase = stemPhrase(question);
+  for (const candidate of [source.name, ...source.aliases]) {
+    const stemmed = stemPhrase(candidate);
+    if (stemmed.length < 4) continue;
+    if (phrase.includes(stemmed)) return 12;
   }
-  return false;
+  return 0;
 }
 
-type Ranked = { piece: Piece; strongHits: number; contentHits: number; weight: number };
+function pairBonus(tokens: string[], line: string): number {
+  const stemmedLine = stemPhrase(line);
+  for (let i = 0; i < tokens.length - 1; i += 1) {
+    const pair = `${tokens[i]} ${tokens[i + 1]}`;
+    if (stemmedLine.includes(pair)) return 9;
+  }
+  return 0;
+}
 
-function rank(question: string): Ranked[] {
-  const { strong, weak } = contentTokens(question);
+function tokenScore(source: Source, tokens: string[]): number {
+  const nameTokens = new Set(tokensOf(`${source.name} ${source.aliases.join(" ")}`));
+  const lineTokens = new Set(tokensOf(source.line));
+  let score = 0;
+  for (const token of tokens) {
+    if (GENERIC.has(token)) continue;
+    if (nameTokens.has(token)) score += 8;
+    else if (lineTokens.has(token)) score += 4;
+  }
+  return score;
+}
+
+function featuredIndex(sourceId: string, matched: readonly CategoryId[]): number {
+  let best = Number.POSITIVE_INFINITY;
+  for (const categoryId of matched) {
+    const category = categories.find((item) => item.id === categoryId);
+    const index = category?.featured.indexOf(sourceId) ?? -1;
+    if (index >= 0 && index < best) best = index;
+  }
+  return best;
+}
+
+type Ranked = { source: Source; score: number; index: number; featuredAt: number };
+
+function rank(question: string, tokens: string[]): { ranked: Ranked[]; matched: CategoryId[] } {
+  const matched = matchedCategories(question, tokens);
+  const matchedSet = new Set(matched);
   const ranked: Ranked[] = [];
-  for (const entry of indexed) {
-    let strongHits = 0;
-    let contentHits = 0;
-    let weight = 0;
-    for (const token of strong) {
-      const fields = entry.fields.get(token);
-      const tokenWeight = weightOf(fields, false);
-      if (tokenWeight > 0) {
-        strongHits += 1;
-        weight += tokenWeight;
-        if (matchesInPiece(fields)) contentHits += 1;
+  sources.forEach((source, index) => {
+    let score = nameBonus(question, source) + pairBonus(tokens, source.line) + tokenScore(source, tokens);
+    if (matchedSet.size > 0) {
+      for (const categoryId of matched) {
+        const category = categories.find((item) => item.id === categoryId);
+        if (!category) continue;
+        if (category.featured.includes(source.id)) score += 10;
+        else if (category.extras.includes(source.id)) score += 4;
       }
     }
-    for (const token of weak) {
-      weight += weightOf(entry.fields.get(token), true);
-    }
-    const usable = strong.length > 0 ? strongHits > 0 : weight > 0;
-    if (!usable) continue;
-    ranked.push({ piece: entry.piece, strongHits, contentHits, weight });
-  }
-  ranked.sort((a, b) => {
-    if (b.strongHits !== a.strongHits) return b.strongHits - a.strongHits;
-    if (b.weight !== a.weight) return b.weight - a.weight;
-    const scoreGap = score(b.piece) - score(a.piece);
-    if (scoreGap !== 0) return scoreGap;
-    return (shelfIndex.get(a.piece.id) ?? 0) - (shelfIndex.get(b.piece.id) ?? 0);
+    if (score <= 0) return;
+    ranked.push({
+      source,
+      score,
+      index,
+      featuredAt: featuredIndex(source.id, matched),
+    });
   });
-  return ranked;
+  ranked.sort((a, b) => {
+    if (b.score !== a.score) return b.score - a.score;
+    if (a.featuredAt !== b.featuredAt) return a.featuredAt - b.featuredAt;
+    return a.index - b.index;
+  });
+  return { ranked, matched };
 }
 
-function splitSentences(text: string): string[] {
-  return text
-    .split(/(?<=[.!?])\s+/)
-    .map((part) => part.trim())
-    .filter(Boolean);
-}
-
-export function adviceText(piece: Piece): string {
-  const named = `That is from ${piece.title}.`;
-  const body = [...splitSentences(piece.about), ...splitSentences(piece.gives)].slice(0, 3);
-  const used = body.length > 0 ? body : [piece.about];
-  return [...used, named].join(" ");
+function cardsFor(categoryId: CategoryId): BlogCard[] {
+  const category = categories.find((item) => item.id === categoryId);
+  if (!category) return [];
+  return category.featured.slice(0, CAP).map((id) => {
+    const source = sources.find((item) => item.id === id);
+    if (!source) throw new Error(`Unknown source: ${id}`);
+    return toBlogCard(source, hrefForAsk(source, [categoryId]));
+  });
 }
 
 export function asksForReads(question: string): boolean {
@@ -261,24 +312,16 @@ export function ask(question: string): AskResult {
   const trimmed = question.trim();
   if (!trimmed) return { kind: "none", text: NO_MATCH };
 
-  const reading = asksForReads(trimmed);
   const { strong, weak } = contentTokens(trimmed);
-  if (strong.length === 0 && weak.length === 0) {
-    if (reading) return { kind: "reads", pieces: selectDesk("best", [], 0).shown };
+  if (strong.length === 0) {
+    if (weak.length > 0 || asksForReads(trimmed)) {
+      return { kind: "reads", sources: cardsFor("general-ux") };
+    }
     return { kind: "none", text: NO_MATCH };
   }
 
-  const ranked = rank(trimmed);
-  const inThePiece = ranked.filter((item) => item.contentHits > 0);
-  // A publication-name overlap does not fill a remaining slot.
-  const pool = inThePiece.length > 0 ? inThePiece : ranked;
-  const matches = pool.slice(0, CAP);
-  if (matches.length === 0) return { kind: "none", text: NO_MATCH };
-
-  const found = matches.map((item) => item.piece);
-  if (reading) return { kind: "reads", pieces: found };
-
-  const best = found[0];
-  if (!best) return { kind: "none", text: NO_MATCH };
-  return { kind: "advice", pieces: found, text: adviceText(best) };
+  const { ranked, matched } = rank(trimmed, strong);
+  const found = ranked.slice(0, CAP).map((item) => toBlogCard(item.source, hrefForAsk(item.source, matched)));
+  if (found.length === 0) return { kind: "none", text: NO_MATCH };
+  return { kind: "reads", sources: found };
 }

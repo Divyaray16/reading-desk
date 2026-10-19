@@ -133,10 +133,14 @@
     @apply font-sans;
     background-color: var(--background);
     color-scheme: dark;
+    max-width: 100%;
+    overflow-x: clip;
   }
   body {
     @apply bg-background text-foreground;
     min-height: 100%;
+    max-width: 100%;
+    overflow-x: clip;
     background-image:
       radial-gradient(ellipse 85% 52% at 100% -10%, rgba(154, 74, 36, 0.34), transparent 58%),
       radial-gradient(ellipse 68% 48% at -14% 108%, rgba(48, 64, 102, 0.28), transparent 60%);
@@ -171,8 +175,11 @@
 .desk-topics {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.25rem;
-  padding: 0.25rem;
+  gap: 0.35rem;
+  max-width: 100%;
+  padding: 0.35rem;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
   border: 1px solid var(--border);
   border-radius: 0.95rem;
   background: rgba(8, 6, 5, 0.42);
@@ -180,12 +187,14 @@
 }
 
 .desk-topics > [data-slot="button"] {
-  flex: 0 0 auto;
+  flex: 1 1 10.5rem;
+  min-width: 0;
   max-width: 100%;
   height: auto;
   min-height: 2.75rem;
   white-space: normal;
   text-align: center;
+  line-height: 1.3;
 }
 
 .desk-card {
