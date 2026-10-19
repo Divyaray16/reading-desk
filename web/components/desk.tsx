@@ -163,7 +163,6 @@ export function Desk() {
 
   const currentIds = cachedIds ?? shown.map((item) => item.id);
   const upcoming = refreshDesk(view, { skipped: skipIds, useful: usefulIds }, currentIds);
-  const searchOpen = Boolean(answer) || draft.trim().length > 0;
   const canRotate = !sameArticleSet(
     upcoming.shown.map((item) => item.id),
     shown.map((item) => item.id),
@@ -245,34 +244,11 @@ export function Desk() {
         </form>
       </section>
 
-      <div className="mt-8">
-        <div className="desk-filter">
-          <div className="min-w-0 flex-1">
-            <CategorySelect value={view} onValueChange={choose} />
-          </div>
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            className="h-10 w-10 min-h-10 min-w-10 shrink-0 rounded-xl border border-border bg-field px-0 text-ember shadow-[inset_0_1px_2px_rgba(0,0,0,0.45)] hover:bg-foreground/8 hover:text-ember"
-            aria-label="Refresh articles"
-            title={searchOpen || canRotate ? "Refresh articles" : "No other articles in this category"}
-            disabled={!searchOpen && !canRotate}
-            onClick={refresh}
-          >
-            <RefreshCw className="size-3.5" aria-hidden="true" />
-          </Button>
-        </div>
-        {hiddenHere > 0 ? (
-          <button type="button" className="mt-2 text-xs text-muted-foreground underline-offset-4 hover:underline" onClick={restore}>
-            Restore {hiddenHere} skipped
-          </button>
-        ) : null}
-      </div>
-
       {answer ? (
-        <div className="mt-4 flex items-baseline justify-between gap-3">
-          <p className="text-sm leading-relaxed text-muted-foreground">Matches for “{asked}” across the whole library</p>
+        <div className="mt-8 flex items-baseline justify-between gap-4">
+          <p className="text-sm leading-relaxed text-muted-foreground">
+            Matches for “{asked}” across the whole library.
+          </p>
           <button
             type="button"
             className="shrink-0 text-xs text-ember underline-offset-4 hover:underline"
@@ -286,7 +262,31 @@ export function Desk() {
           </button>
         </div>
       ) : (
-        <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{viewLine}</p>
+        <div className="mt-8">
+          <div className="desk-filter">
+            <div className="min-w-0 flex-1">
+              <CategorySelect value={view} onValueChange={choose} />
+            </div>
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className="h-10 w-10 min-h-10 min-w-10 shrink-0 rounded-xl border border-border bg-field px-0 text-ember shadow-[inset_0_1px_2px_rgba(0,0,0,0.45)] hover:bg-foreground/8 hover:text-ember"
+              aria-label="Refresh articles"
+              title={canRotate ? "Refresh articles" : "No other articles in this category"}
+              disabled={!canRotate}
+              onClick={refresh}
+            >
+              <RefreshCw className="size-3.5" aria-hidden="true" />
+            </Button>
+          </div>
+          {hiddenHere > 0 ? (
+            <button type="button" className="mt-2 text-xs text-muted-foreground underline-offset-4 hover:underline" onClick={restore}>
+              Restore {hiddenHere} skipped
+            </button>
+          ) : null}
+          <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{viewLine}</p>
+        </div>
       )}
 
       <div aria-live="polite" data-blog-count={answer?.kind === "reads" ? answer.articles.length : shown.length} data-category={view} data-day={today}>
