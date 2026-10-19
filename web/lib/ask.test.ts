@@ -13,9 +13,13 @@ function sentenceCount(text: string): number {
     .filter(Boolean).length;
 }
 
+function piecesOf(result: ReturnType<typeof ask>) {
+  if (result.kind === "reads" || result.kind === "advice") return result.pieces;
+  return [];
+}
+
 function assertOnShelf(result: ReturnType<typeof ask>) {
-  const list =
-    result.kind === "reads" ? result.pieces : result.kind === "advice" ? [result.piece] : [];
+  const list = piecesOf(result);
   for (const piece of list) {
     assert.equal(urls.has(piece.url), true);
     assert.equal(titles.has(piece.title), true);
@@ -26,11 +30,14 @@ function assertOnShelf(result: ReturnType<typeof ask>) {
   }
 }
 
-test("a reading question returns at most three shelf pieces", () => {
+test("a reading question returns the matching shelf pieces, at most three", () => {
   const result = ask("give me an AI UX blog");
   assert.equal(result.kind, "reads");
   if (result.kind !== "reads") return;
-  assert.ok(result.pieces.length >= 1 && result.pieces.length <= 3);
+  assert.deepEqual(
+    result.pieces.map((piece) => piece.id),
+    ["figma-content", "smashing-microcopy"],
+  );
   assertOnShelf(result);
   assert.equal(
     result.pieces[0]?.title,
@@ -42,25 +49,34 @@ test("a reading question returns at most three shelf pieces", () => {
   );
 });
 
-test("an empty-screen question is answered from the matching piece", () => {
+test("an empty-screen question returns the matching essays and one advice sentence", () => {
   const result = ask("what should the empty screen say");
   assert.equal(result.kind, "advice");
   if (result.kind !== "advice") return;
-  assert.equal(result.piece.id, "empty-states");
-  assert.equal(result.text.includes(result.piece.about), true);
-  assert.equal(result.text.includes(result.piece.gives), true);
-  assert.equal(result.text.includes(result.piece.title), true);
+  assert.deepEqual(
+    result.pieces.map((piece) => piece.id),
+    ["empty-states", "uxplanet-empty-guide", "smashing-empty"],
+  );
+  const lead = result.pieces[0];
+  assert.ok(lead);
+  assert.equal(result.text.includes(lead.about), true);
+  assert.equal(result.text.includes(lead.gives), true);
+  assert.equal(result.text.includes(lead.title), true);
   const count = sentenceCount(result.text);
   assert.ok(count >= 2 && count <= 4);
-  assert.equal(adviceText(result.piece), result.text);
+  assert.equal(adviceText(lead), result.text);
+  assert.equal(new Set(result.pieces.map((piece) => piece.id)).size, result.pieces.length);
   assertOnShelf(result);
 });
 
-test("color and accessibility match the color-system piece", () => {
+test("color and accessibility match the color-system piece and do not pad", () => {
   const result = ask("give me an article on color and accessibility");
   assert.equal(result.kind, "reads");
   if (result.kind !== "reads") return;
-  assert.equal(result.pieces[0]?.id, "stripe-color");
+  assert.deepEqual(
+    result.pieces.map((piece) => piece.id),
+    ["stripe-color"],
+  );
   assert.equal(result.pieces[0]?.url, "https://stripe.com/blog/accessible-color-systems");
   assertOnShelf(result);
 });
@@ -78,16 +94,39 @@ test("critique, controls, and design system use those topic tags", () => {
   const controls = ask("what should I do about too many controls");
   assert.equal(controls.kind, "advice");
   if (controls.kind === "advice") {
-    assert.equal(controls.piece.topics.includes("complexity"), true);
+    assert.deepEqual(
+      controls.pieces.map((piece) => piece.id),
+      ["progressive-disclosure", "ala-interaction", "training-wheels"],
+    );
+    assert.ok(controls.pieces.every((piece) => piece.topics.includes("complexity")));
+    assert.equal(adviceText(controls.pieces[0]!), controls.text);
     assert.ok(sentenceCount(controls.text) >= 2 && sentenceCount(controls.text) <= 4);
   }
 
   const system = ask("give me a design system article");
   assert.equal(system.kind, "reads");
   if (system.kind === "reads") {
+    assert.equal(system.pieces.length, 3);
     assert.ok(system.pieces.every((piece) => piece.topics.includes("design systems")));
-    assert.ok(system.pieces.length <= 3);
   }
+});
+
+test("a design question returns three essays and keeps the short advice", () => {
+  const result = ask("ai in design");
+  assert.equal(result.kind, "advice");
+  if (result.kind !== "advice") return;
+  assert.deepEqual(
+    result.pieces.map((piece) => piece.id),
+    ["linear-design-reset", "no-crap", "figma-ds-101"],
+  );
+  assert.equal(result.text, adviceText(result.pieces[0]!));
+  assert.equal(sentenceCount(result.text) <= 4, true);
+  for (const piece of result.pieces) {
+    const haystack = `${piece.title} ${piece.about} ${piece.topics.join(" ")}`.toLowerCase();
+    assert.equal(haystack.includes("design"), true);
+    assert.equal(piece.url.startsWith("https://"), true);
+  }
+  assertOnShelf(result);
 });
 
 test("an unknown question is one sentence and invents nothing", () => {

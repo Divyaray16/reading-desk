@@ -10,7 +10,7 @@ export const NO_MATCH = "Nothing on the shelf matches that.";
 
 export type AskResult =
   | { kind: "reads"; pieces: Piece[] }
-  | { kind: "advice"; piece: Piece; text: string }
+  | { kind: "advice"; pieces: Piece[]; text: string }
   | { kind: "none"; text: string };
 
 const READING =
@@ -195,13 +195,23 @@ function weightOf(fields: Set<Field> | undefined, weak: boolean): number {
   return weak ? Math.min(weight, 2) : weight;
 }
 
-type Ranked = { piece: Piece; strongHits: number; weight: number };
+/** A publication name alone is not the piece's own words. */
+function matchesInPiece(fields: Set<Field> | undefined): boolean {
+  if (!fields) return false;
+  for (const field of fields) {
+    if (field !== "publication") return true;
+  }
+  return false;
+}
+
+type Ranked = { piece: Piece; strongHits: number; contentHits: number; weight: number };
 
 function rank(question: string): Ranked[] {
   const { strong, weak } = contentTokens(question);
   const ranked: Ranked[] = [];
   for (const entry of indexed) {
     let strongHits = 0;
+    let contentHits = 0;
     let weight = 0;
     for (const token of strong) {
       const fields = entry.fields.get(token);
@@ -209,6 +219,7 @@ function rank(question: string): Ranked[] {
       if (tokenWeight > 0) {
         strongHits += 1;
         weight += tokenWeight;
+        if (matchesInPiece(fields)) contentHits += 1;
       }
     }
     for (const token of weak) {
@@ -216,7 +227,7 @@ function rank(question: string): Ranked[] {
     }
     const usable = strong.length > 0 ? strongHits > 0 : weight > 0;
     if (!usable) continue;
-    ranked.push({ piece: entry.piece, strongHits, weight });
+    ranked.push({ piece: entry.piece, strongHits, contentHits, weight });
   }
   ranked.sort((a, b) => {
     if (b.strongHits !== a.strongHits) return b.strongHits - a.strongHits;
@@ -257,12 +268,17 @@ export function ask(question: string): AskResult {
     return { kind: "none", text: NO_MATCH };
   }
 
-  const matches = rank(trimmed).slice(0, CAP);
+  const ranked = rank(trimmed);
+  const inThePiece = ranked.filter((item) => item.contentHits > 0);
+  // A publication-name overlap does not fill a remaining slot.
+  const pool = inThePiece.length > 0 ? inThePiece : ranked;
+  const matches = pool.slice(0, CAP);
   if (matches.length === 0) return { kind: "none", text: NO_MATCH };
 
-  if (reading) return { kind: "reads", pieces: matches.map((item) => item.piece) };
+  const found = matches.map((item) => item.piece);
+  if (reading) return { kind: "reads", pieces: found };
 
-  const best = matches[0]?.piece;
+  const best = found[0];
   if (!best) return { kind: "none", text: NO_MATCH };
-  return { kind: "advice", piece: best, text: adviceText(best) };
+  return { kind: "advice", pieces: found, text: adviceText(best) };
 }

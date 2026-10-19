@@ -93,7 +93,7 @@ export function Desk({ dateLabel }: { dateLabel: string }) {
           <label id="ask-label" htmlFor="ask" className="block font-serif text-2xl leading-snug text-balance">
             Ask about the work in front of you
           </label>
-          <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-stretch">
+          <div className="mt-4 flex items-center gap-3">
             <input
               id="ask"
               name="question"
@@ -103,9 +103,9 @@ export function Desk({ dateLabel }: { dateLabel: string }) {
               onChange={(event) => setDraft(event.target.value)}
               placeholder="give me an AI UX blog"
               autoComplete="off"
-              className="w-full min-w-0 border border-border bg-background px-3 py-2 text-base shadow-none outline-none placeholder:text-muted-foreground focus-visible:border-foreground"
+              className="h-11 min-w-0 flex-1 border border-border bg-background px-3 py-2 text-base shadow-none outline-none placeholder:text-muted-foreground focus-visible:border-foreground"
             />
-            <Button type="submit" className="w-full sm:w-auto" disabled={draft.trim().length === 0}>
+            <Button type="submit" className="h-11 shrink-0" disabled={draft.trim().length === 0}>
               Ask
             </Button>
           </div>
@@ -183,17 +183,23 @@ function Answer({ answer }: { answer: AskResult }) {
     return (
       <div className="mt-6" data-ask-answer="advice" aria-live="polite">
         <p className="max-w-[36rem] font-serif text-lg leading-snug text-pretty sm:text-xl">{answer.text}</p>
-        <p className="mt-4">
-          <a
-            href={answer.piece.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline-offset-4 hover:underline focus-visible:underline"
-          >
-            {answer.piece.title}
-          </a>
-        </p>
-        <p className="mt-2 text-xs break-all text-muted-foreground">{answer.piece.url}</p>
+        <div className="mt-4 space-y-4">
+          {answer.pieces.map((piece) => (
+            <div key={piece.id}>
+              <p>
+                <a
+                  href={piece.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline-offset-4 hover:underline focus-visible:underline"
+                >
+                  {piece.title}
+                </a>
+              </p>
+              <p className="mt-2 text-xs break-all text-muted-foreground">{piece.url}</p>
+            </div>
+          ))}
+        </div>
       </div>
     );
   }
