@@ -208,44 +208,63 @@ export function Desk() {
         {answer ? <Answer answer={answer} /> : null}
       </section>
 
-      <div className="mt-10">
-        <div className="desk-topics" role="group" aria-label="Categories">
-          {categories.map((item) => (
-            <Button
-              key={item.id}
-              type="button"
-              variant={item.id === view ? "default" : "ghost"}
-              aria-pressed={item.id === view}
-              onClick={() => choose(item.id)}
-              className={
-                item.id === view
-                  ? "h-auto min-h-11 rounded-[0.7rem] px-3.5 py-2 text-sm leading-snug whitespace-normal shadow-none"
-                  : "h-auto min-h-11 rounded-[0.7rem] px-3.5 py-2 text-sm leading-snug whitespace-normal text-muted-foreground shadow-none hover:bg-foreground/8 hover:text-foreground"
-              }
-            >
-              {item.label}
-            </Button>
-          ))}
-        </div>
-        <div className="mt-3 flex flex-wrap items-center gap-2">
-          {hiddenHere > 0 ? (
-            <Button type="button" variant="ghost" size="sm" className="h-11 rounded-xl px-3 text-muted-foreground" onClick={restore}>
-              Restore skipped
-            </Button>
-          ) : null}
-          <Button type="button" variant="ghost" size="sm" className="h-11 rounded-xl px-3 text-muted-foreground" onClick={refresh}>
-            Refresh today
+      <div className="mt-8">
+        <div className="desk-filter">
+          <div className="desk-topics" role="group" aria-label="Categories">
+            {categories.map((item) => (
+              <Button
+                key={item.id}
+                type="button"
+                variant={item.id === view ? "default" : "ghost"}
+                aria-pressed={item.id === view}
+                title={item.label}
+                onClick={() => choose(item.id)}
+                className={
+                  item.id === view
+                    ? "h-8 min-h-8 rounded-full px-3 text-[0.78rem] whitespace-nowrap shadow-none"
+                    : "h-8 min-h-8 rounded-full px-3 text-[0.78rem] whitespace-nowrap text-muted-foreground shadow-none hover:bg-foreground/8 hover:text-foreground"
+                }
+              >
+                {item.label}
+              </Button>
+            ))}
+          </div>
+          <Button type="button" variant="ghost" size="sm" className="h-8 shrink-0 rounded-full px-2.5 text-xs text-muted-foreground" onClick={refresh}>
+            Refresh
           </Button>
         </div>
+        {hiddenHere > 0 ? (
+          <button type="button" className="mt-2 text-xs text-muted-foreground underline-offset-4 hover:underline" onClick={restore}>
+            Restore {hiddenHere} skipped
+          </button>
+        ) : null}
       </div>
 
-      <p className="mt-5 text-sm leading-relaxed text-muted-foreground">{viewLine}</p>
+      <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{viewLine}</p>
 
       <div aria-live="polite" data-blog-count={shown.length} data-category={view} data-day={today}>
-        {!ready ? <p className="mt-5 text-base text-muted-foreground">Choosing three reads.</p> : null}
-        {ready && note ? <p className="mt-5 max-w-[36rem] text-base leading-relaxed text-foreground">{note}</p> : null}
+        {!ready ? <EmptyState kicker="Loading" title="Choosing three reads." body="The desk is lining up today’s articles." /> : null}
+        {ready && shown.length === 0 && hiddenHere > 0 ? (
+          <EmptyState
+            kicker="Skipped"
+            title="Nothing left on this desk."
+            body="You skipped the articles for this category. Restore them, or refresh for the next set."
+          />
+        ) : null}
+        {ready && shown.length === 0 && hiddenHere === 0 ? (
+          <EmptyState
+            kicker="Empty"
+            title="No article cleared the bar."
+            body={note ?? "Nothing was invented to fill the gap."}
+          />
+        ) : null}
+        {ready && shown.length > 0 && note ? (
+          <p className="mt-4 max-w-[36rem] text-sm leading-relaxed text-muted-foreground" data-short-list="">
+            {note}
+          </p>
+        ) : null}
         {ready && shown.length > 0 ? (
-          <ol className="mt-5 flex list-none flex-col gap-4 p-0">
+          <ol className="mt-4 flex list-none flex-col gap-4 p-0">
             {shown.map((article, index) => (
               <ArticleItem
                 key={article.id}
@@ -268,12 +287,22 @@ export function Desk() {
   );
 }
 
+function EmptyState({ kicker, title, body }: { kicker: string; title: string; body: string }) {
+  return (
+    <div className="desk-card mt-4 px-5 py-7 sm:px-7" data-empty={kicker.toLowerCase()}>
+      <p className="text-[0.68rem] font-medium tracking-[0.18em] text-ember uppercase">{kicker}</p>
+      <p className="mt-3 font-serif text-2xl leading-snug text-balance text-foreground">{title}</p>
+      <p className="mt-3 max-w-[34rem] text-sm leading-relaxed text-muted-foreground">{body}</p>
+    </div>
+  );
+}
+
 function Answer({ answer }: { answer: AskResult }) {
   if (answer.kind === "none") {
     return (
-      <p className="mt-5 max-w-[36rem] text-base leading-relaxed text-foreground" data-ask-answer="none" aria-live="polite">
-        {answer.text}
-      </p>
+      <div data-ask-answer="none" aria-live="polite">
+        <EmptyState kicker="No match" title="Nothing in the library fits." body={answer.text} />
+      </div>
     );
   }
 
