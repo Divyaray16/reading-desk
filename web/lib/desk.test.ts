@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { kolkataLabel, selectDesk } from "./desk.ts";
+import { selectDesk } from "./desk.ts";
 
 test("best three vary publications and stay on the shelf", () => {
   const desk = selectDesk("best", [], 0);
@@ -58,10 +58,4 @@ test("skipping a short topic can empty the desk without inventing a piece", () =
   const desk = selectDesk("critique", ["intercom-dribbblisation", "product-critique"], 0);
   assert.deepEqual(desk.shown, []);
   assert.match(desk.note ?? "", /skipped/i);
-});
-
-test("the date label is Asia/Kolkata", () => {
-  const label = kolkataLabel(new Date("2026-10-16T20:00:00Z"));
-  assert.match(label, /Saturday, 17 October 2026/);
-  assert.match(label, /Asia\/Kolkata/);
 });

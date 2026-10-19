@@ -164,14 +164,3 @@ export function selectDesk(view: DeskView, skippedIds: readonly string[], page: 
     pages: pageCount(available.length),
   };
 }
-
-export function kolkataLabel(now: Date): string {
-  const formatted = new Intl.DateTimeFormat("en-GB", {
-    timeZone: "Asia/Kolkata",
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  }).format(now);
-  return `${formatted} · Asia/Kolkata`;
-}

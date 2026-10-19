@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack --hostname 0.0.0.0 --port 47231",
-    "test": "node --experimental-strip-types --test lib/catalog.test.ts lib/desk.test.ts lib/ask.test.ts",
+    "test": "node --experimental-strip-types --test lib/catalog.test.ts lib/desk.test.ts lib/ask.test.ts lib/local-time.test.ts",
     "build": "next build --turbopack",
     "start": "next start",
     "lint": "eslint"

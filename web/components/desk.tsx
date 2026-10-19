@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { ask, type AskResult } from "@/lib/ask";
 import { pieces, publicationName, type Piece } from "@/lib/catalog";
 import { matches, selectDesk, views, type DeskView } from "@/lib/desk";
+import { visitorLocalLabel } from "@/lib/local-time";
 
 const SKIP_KEY = "reading-desk-skips";
 
@@ -21,7 +22,37 @@ function readSkips(): string[] {
   }
 }
 
-export function Desk({ dateLabel }: { dateLabel: string }) {
+const CLOCK_MS = 60_000;
+
+function browserTimeZone(): string | undefined {
+  try {
+    const zone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    if (typeof zone !== "string") return undefined;
+    const trimmed = zone.trim();
+    return trimmed.length > 0 ? trimmed : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+function VisitorClock() {
+  const [label, setLabel] = useState<string | null>(null);
+
+  useEffect(() => {
+    const update = () => setLabel(visitorLocalLabel(new Date(), browserTimeZone()));
+    update();
+    const id = window.setInterval(update, CLOCK_MS);
+    return () => window.clearInterval(id);
+  }, []);
+
+  return (
+    <p className="mt-4 min-h-5 text-sm text-muted-foreground" data-local-time={label ?? ""}>
+      {label ?? "Local time"}
+    </p>
+  );
+}
+
+export function Desk() {
   const [view, setView] = useState<DeskView>("best");
   const [page, setPage] = useState(0);
   const [skipped, setSkipped] = useState<string[] | null>(null);
@@ -85,7 +116,7 @@ export function Desk({ dateLabel }: { dateLabel: string }) {
         <p className="mt-4 max-w-[34rem] font-serif text-xl leading-snug text-pretty sm:text-2xl">
           Three pieces for the work in front of you.
         </p>
-        <p className="mt-4 text-sm text-muted-foreground">{dateLabel}</p>
+        <VisitorClock />
       </header>
 
       <section className="mt-8" aria-labelledby="ask-label">
