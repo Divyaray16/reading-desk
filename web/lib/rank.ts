@@ -52,6 +52,8 @@ export type Selection = {
   shown: Scored[];
   qualifiedCount: number;
   note: string | null;
+  /** Qualified articles in rank order, including ones held back from the three. */
+  pool: Scored[];
 };
 
 const ACTION = [
@@ -354,5 +356,5 @@ export function rankCategory(
 
   const shown = selectThree(unique);
 
-  return { shown, qualifiedCount: unique.length, note: null };
+  return { shown, qualifiedCount: unique.length, note: null, pool: unique };
 }

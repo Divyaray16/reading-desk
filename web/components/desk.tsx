@@ -1,12 +1,19 @@
 "use client";
 
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { Select } from "@base-ui/react/select";
+import { Check, ChevronDown, RefreshCw } from "lucide-react";
+import { useEffect, useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { ask, type AskResult } from "@/lib/ask";
 import { categories, DEFAULT_CATEGORY, type CategoryId } from "@/lib/categories";
 import { kolkataDay } from "@/lib/day";
-import { selectDesk, showCached, type Recommendation } from "@/lib/desk";
+import { refreshDesk, replaceDayPick, sameArticleSet, selectDesk, showCached, type Recommendation } from "@/lib/desk";
 import { visitorLocalLabel } from "@/lib/local-time";
+
+const categoryItems = categories.map((category) => ({
+  value: category.id,
+  label: category.label,
+}));
 
 const SKIP_KEY = "reading-desk-skips";
 const USEFUL_KEY = "reading-desk-useful";
@@ -81,7 +88,6 @@ export function Desk() {
   const [draft, setDraft] = useState("");
   const [asked, setAsked] = useState("");
   const [answer, setAnswer] = useState<AskResult | null>(null);
-  const topics = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const today = kolkataDay();
@@ -131,10 +137,7 @@ export function Desk() {
     setView(next);
     setAnswer(null);
     setAsked("");
-  }
-
-  function slideTopics(direction: number) {
-    topics.current?.scrollBy({ left: direction * 220, behavior: "smooth" });
+    setDraft("");
   }
 
   function skip(id: string) {
@@ -158,12 +161,25 @@ export function Desk() {
     setSkipped((current) => (current ?? readIds(SKIP_KEY)).filter((id) => !ids.has(id)));
   }
 
+  const currentIds = cachedIds ?? shown.map((item) => item.id);
+  const upcoming = refreshDesk(view, { skipped: skipIds, useful: usefulIds }, currentIds);
+  const searchOpen = Boolean(answer) || draft.trim().length > 0;
+  const canRotate = !sameArticleSet(
+    upcoming.shown.map((item) => item.id),
+    shown.map((item) => item.id),
+  );
+
   function refresh() {
-    const fresh = selectDesk(view, { skipped: skipIds, useful: usefulIds });
+    const fresh = refreshDesk(view, { skipped: skipIds, useful: usefulIds }, currentIds);
     setDay((current) => ({
       date: current?.date ?? today,
-      picks: { ...(current?.picks ?? {}), [view]: fresh.shown.map((item) => item.id) },
+      picks: replaceDayPick(current?.picks ?? {}, view, fresh.shown.map((item) => item.id)),
     }));
+    if (answer || asked || draft.trim()) {
+      setDraft("");
+      setAsked("");
+      setAnswer(null);
+    }
   }
 
   function submit(event: FormEvent<HTMLFormElement>) {
@@ -173,6 +189,21 @@ export function Desk() {
     setAsked(question);
     setAnswer(ask(question));
   }
+
+  useEffect(() => {
+    const question = draft.trim();
+    if (!question) {
+      setAnswer(null);
+      setAsked("");
+      return;
+    }
+    if (question.length < 2) return;
+    const id = window.setTimeout(() => {
+      setAsked(question);
+      setAnswer(ask(question));
+    }, 250);
+    return () => window.clearTimeout(id);
+  }, [draft]);
 
   return (
     <main className="mx-auto w-full min-w-0 max-w-[42rem] px-5 py-12 sm:px-8 sm:py-16">
@@ -217,47 +248,20 @@ export function Desk() {
 
       <div className="mt-8">
         <div className="desk-filter">
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            className="h-8 w-8 shrink-0 rounded-full px-0 text-base text-ember"
-            aria-label="Scroll categories back"
-            onClick={() => slideTopics(-1)}
-          >
-            ‹
-          </Button>
-          <div ref={topics} className="desk-topics" role="group" aria-label="Categories">
-            {categories.map((item) => (
-              <Button
-                key={item.id}
-                type="button"
-                variant={item.id === view ? "default" : "ghost"}
-                aria-pressed={item.id === view}
-                title={item.label}
-                onClick={() => choose(item.id)}
-                className={
-                  item.id === view
-                    ? "h-8 min-h-8 rounded-full px-3 text-[0.78rem] whitespace-nowrap shadow-none"
-                    : "h-8 min-h-8 rounded-full px-3 text-[0.78rem] whitespace-nowrap text-muted-foreground shadow-none hover:bg-foreground/8 hover:text-foreground"
-                }
-              >
-                {item.label}
-              </Button>
-            ))}
+          <div className="min-w-0 flex-1">
+            <CategorySelect value={view} onValueChange={choose} />
           </div>
           <Button
             type="button"
             variant="ghost"
             size="sm"
-            className="h-8 w-8 shrink-0 rounded-full px-0 text-base text-ember"
-            aria-label="Scroll categories forward"
-            onClick={() => slideTopics(1)}
+            className="h-10 w-10 min-h-10 min-w-10 shrink-0 rounded-xl px-0 text-ember"
+            aria-label="Refresh articles"
+            title={searchOpen || canRotate ? "Refresh articles" : "No other articles in this category"}
+            disabled={!searchOpen && !canRotate}
+            onClick={refresh}
           >
-            ›
-          </Button>
-          <Button type="button" variant="ghost" size="sm" className="h-8 shrink-0 rounded-full px-2.5 text-xs text-muted-foreground" onClick={refresh}>
-            Refresh
+            <RefreshCw className="size-3.5" aria-hidden="true" />
           </Button>
         </div>
         {hiddenHere > 0 ? (
@@ -269,13 +273,14 @@ export function Desk() {
 
       {answer ? (
         <div className="mt-4 flex items-baseline justify-between gap-3">
-          <p className="text-sm leading-relaxed text-muted-foreground">Matches for “{asked}”</p>
+          <p className="text-sm leading-relaxed text-muted-foreground">Matches for “{asked}” across the whole library</p>
           <button
             type="button"
             className="shrink-0 text-xs text-ember underline-offset-4 hover:underline"
             onClick={() => {
               setAnswer(null);
               setAsked("");
+              setDraft("");
             }}
           >
             Back to the desk
@@ -336,6 +341,61 @@ export function Desk() {
         Articles are retrieved from the approved sources and judged from their titles and excerpts. The desk does not invent a title, and it does not sign in to a model. The three stay put for the India calendar day unless you refresh.
       </p>
     </main>
+  );
+}
+
+function CategorySelect({ value, onValueChange }: { value: CategoryId; onValueChange: (next: CategoryId) => void }) {
+  return (
+    <Select.Root
+      items={categoryItems}
+      value={value}
+      modal={false}
+      onValueChange={(next) => {
+        if (next) onValueChange(next);
+      }}
+    >
+      <Select.Trigger
+        type="button"
+        data-category-select=""
+        className="group flex h-10 min-h-10 w-full min-w-0 items-center justify-between gap-2 rounded-xl border border-border bg-field px-3.5 text-left text-sm text-foreground shadow-[inset_0_1px_2px_rgba(0,0,0,0.45)] outline-none focus-visible:border-ember focus-visible:ring-2 focus-visible:ring-ember/35 data-[popup-open]:border-ember"
+      >
+        <span className="sr-only">Category</span>
+        <Select.Value className="min-w-0 flex-1 truncate" />
+        <Select.Icon className="shrink-0 text-ember">
+          <ChevronDown className="size-4 transition-transform duration-150 group-data-[popup-open]:rotate-180" aria-hidden />
+        </Select.Icon>
+      </Select.Trigger>
+      <Select.Portal>
+        <Select.Positioner
+          className="z-50 outline-none"
+          side="bottom"
+          align="start"
+          sideOffset={6}
+          alignItemWithTrigger={false}
+          collisionPadding={16}
+          collisionAvoidance={{ side: "flip", align: "shift", fallbackAxisSide: "none" }}
+        >
+          <Select.Popup className="box-border w-[min(var(--available-width),max(var(--anchor-width),22rem))] max-w-[var(--available-width)] origin-[var(--transform-origin)] rounded-xl border border-border bg-[#231f1b] text-foreground shadow-[inset_0_1px_0_rgba(255,236,214,0.06),0_18px_40px_-24px_rgba(0,0,0,0.9)] outline-none transition-[opacity,transform] duration-100 ease-out data-[closed]:pointer-events-none data-[ending-style]:scale-[0.98] data-[ending-style]:opacity-0 data-[starting-style]:scale-[0.98] data-[starting-style]:opacity-0">
+            <Select.List className="max-h-[min(24rem,var(--available-height))] overflow-y-auto overscroll-contain p-1.5 [scrollbar-color:#e0b08a_transparent] [scrollbar-width:thin]">
+              {categories.map((category) => (
+                <Select.Item
+                  key={category.id}
+                  value={category.id}
+                  className="flex min-h-10 cursor-pointer items-center gap-2.5 rounded-lg px-2.5 py-2 text-left text-sm leading-snug text-foreground outline-none select-none data-[highlighted]:bg-foreground/8 data-[selected]:bg-ember/12 data-[selected]:text-ember"
+                >
+                  <span className="flex size-4 shrink-0 items-center justify-center">
+                    <Select.ItemIndicator>
+                      <Check className="size-3.5" strokeWidth={2.4} aria-hidden />
+                    </Select.ItemIndicator>
+                  </span>
+                  <Select.ItemText className="min-w-0 flex-1 whitespace-normal">{category.label}</Select.ItemText>
+                </Select.Item>
+              ))}
+            </Select.List>
+          </Select.Popup>
+        </Select.Positioner>
+      </Select.Portal>
+    </Select.Root>
   );
 }
 
