@@ -141,11 +141,16 @@ test("near-duplicate titles collapse to one recommendation", () => {
   assert.equal(ranked.shown.length, 1);
 });
 
-test("fewer than three qualified articles stay fewer than three", () => {
-  const desk = selectDesk("ai-ux", { skipped: [], useful: [] }, NOW);
-  assert.ok(desk.shown.length < 3);
-  assert.match(desk.note ?? "", /cleared the bar/);
-  for (const item of desk.shown) assert.equal(item.url.startsWith("https://"), true);
+test("every category shows three real articles and does not mention an empty place", () => {
+  for (const category of categories) {
+    const desk = selectDesk(category.id, { skipped: [], useful: [] }, NOW);
+    assert.equal(desk.shown.length, 3, category.id);
+    assert.equal(desk.note, null);
+    for (const item of desk.shown) {
+      assert.equal(item.url.startsWith("https://"), true);
+      assert.equal(item.explanation.text.toLowerCase().includes("cleared the bar"), false);
+    }
+  }
 });
 
 test("skip feedback changes the next selection without deleting the article", () => {

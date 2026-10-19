@@ -10,7 +10,7 @@ import { visitorLocalLabel } from "@/lib/local-time";
 
 const SKIP_KEY = "reading-desk-skips";
 const USEFUL_KEY = "reading-desk-useful";
-const DAY_KEY = "reading-desk-day";
+const DAY_KEY = "reading-desk-day-v2";
 
 type DayCache = { date: string; picks: Partial<Record<CategoryId, string[]>> };
 
@@ -124,7 +124,6 @@ export function Desk() {
 
   const viewLine = categories.find((item) => item.id === view)?.line ?? "";
   const hiddenHere = (cachedIds ?? computed.shown.map((item) => item.id)).filter((id) => skipIds.includes(id)).length;
-  const note = shown.length < 3 ? computed.note : null;
 
   function choose(next: CategoryId) {
     setView(next);
@@ -254,14 +253,9 @@ export function Desk() {
         {ready && shown.length === 0 && hiddenHere === 0 ? (
           <EmptyState
             kicker="Empty"
-            title="No article cleared the bar."
-            body={note ?? "Nothing was invented to fill the gap."}
+            title="No article is ready for this category."
+            body="Refresh the desk. Nothing is invented to fill a gap."
           />
-        ) : null}
-        {ready && shown.length > 0 && note ? (
-          <p className="mt-4 max-w-[36rem] text-sm leading-relaxed text-muted-foreground" data-short-list="">
-            {note}
-          </p>
         ) : null}
         {ready && shown.length > 0 ? (
           <ol className="mt-4 flex list-none flex-col gap-4 p-0">

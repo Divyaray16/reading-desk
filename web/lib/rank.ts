@@ -98,8 +98,13 @@ export function articleUrlOk(url: string): boolean {
   const path = parsed.pathname.replace(/\/+$/, "");
   if (!path || path === "") return false;
   const parts = path.split("/").filter(Boolean);
-  if (parts.length < 2 && !path.includes(".")) return false;
   if (parts.some((part) => part === "feed" || part === "comments")) return false;
+  if (parts.length === 1) {
+    const slug = parts[0]?.toLowerCase() ?? "";
+    const index = new Set(["blog", "research", "articles", "category", "ux", "news", "feed"]);
+    return slug.length >= 12 && !index.has(slug);
+  }
+  if (parts.length < 1) return false;
   const last = parts[parts.length - 1] ?? "";
   if (["blog", "research", "articles", "category", "ux"].includes(last) && parts.length < 3) {
     return false;
@@ -139,6 +144,7 @@ function relevanceScore(article: Article, category: Category, matched: string[])
   if (strength >= 4) return 4;
   if (strength >= 3) return 3;
   if (strength >= 2) return 2;
+  if (strength === 1 && anchor && anchor.test(title)) return 2;
   return 0;
 }
 
@@ -347,12 +353,6 @@ export function rankCategory(
   });
 
   const shown = selectThree(unique);
-  const note =
-    shown.length === 0
-      ? "No article in the retrieved library cleared the bar for this category. Nothing was invented to fill the desk."
-      : shown.length < 3
-        ? `Only ${shown.length} ${shown.length === 1 ? "article" : "articles"} cleared the bar. The empty ${shown.length === 1 ? "places were" : "place was"} left empty.`
-        : null;
 
-  return { shown, qualifiedCount: unique.length, note };
+  return { shown, qualifiedCount: unique.length, note: null };
 }

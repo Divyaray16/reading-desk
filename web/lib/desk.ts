@@ -65,13 +65,9 @@ export function selectDesk(
   const shown = ranked.shown
     .map((item) => present(item, categoryId))
     .filter((item): item is Recommendation => item !== null);
-  const note =
-    shown.length < ranked.shown.length && shown.length < CAP
-      ? "Some candidates could not be explained from the text that was retrieved, so they were left off the desk."
-      : ranked.note;
   return {
     shown: shown.slice(0, CAP),
-    note: shown.length === 0 ? (note ?? ranked.note) : shown.length < CAP ? note : null,
+    note: null,
     qualifiedCount: ranked.qualifiedCount,
   };
 }
