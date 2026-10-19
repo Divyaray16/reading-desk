@@ -247,6 +247,29 @@ function requiredTokens(count: number): number {
   return Math.ceil((count * 2) / 3);
 }
 
+function adjacentPair(words: readonly string[], left: string, right: string): boolean {
+  for (let index = 0; index < words.length - 1; index += 1) {
+    const current = words[index];
+    const next = words[index + 1];
+    if (!current || !next) continue;
+    if ((sameWord(current, left) && sameWord(next, right)) || (sameWord(current, right) && sameWord(next, left))) return true;
+  }
+  return false;
+}
+
+function rarestIndex(tokens: readonly string[], documents: number, frequency: Map<string, number>): number {
+  let chosen = 0;
+  let best = -1;
+  tokens.forEach((token, index) => {
+    const factor = idf(token, documents, frequency);
+    if (factor > best) {
+      best = factor;
+      chosen = index;
+    }
+  });
+  return chosen;
+}
+
 function rowsFor(library: readonly Article[]): Indexed[] {
   if (library === articles) return index;
   const cached = new Map(index.map((row) => [row.article.id, row]));
@@ -353,8 +376,18 @@ export function searchArticles(question: string, library: readonly Article[] = a
 
     const covered = satisfied.filter(Boolean).length;
     if (tokens.length > 1 && covered === tokens.length) direct += 6;
+    let bigram = 0;
+    for (let index = 0; index < tokens.length - 1; index += 1) {
+      const left = tokens[index];
+      const right = tokens[index + 1];
+      if (left && right && adjacentPair(row.words, left, right)) bigram += 16;
+    }
+    direct += bigram;
     if (tokens.length > 0 && covered < needed) continue;
     if (tokens.length > 2 && covered < tokens.length && span > 8) continue;
+    if (tokens.length > 2 && covered < tokens.length && bigram === 0 && !satisfied[rarestIndex(tokens, rows.length, frequency)]) {
+      continue;
+    }
     if (tokenHits === 0 && phraseScore === 0 && (expanded < EXPANSION_ONLY_MIN || !strongExpansion)) continue;
     const score = Math.round((direct + expanded) * 100) / 100;
     if (score < MIN_SCORE) continue;
