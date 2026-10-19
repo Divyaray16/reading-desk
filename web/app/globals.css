@@ -204,3 +204,99 @@
 .desk-card-lead {
   border-top-color: rgba(224, 176, 138, 0.55);
 }
+
+.desk-loader {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+  min-height: 11.5rem;
+  margin-top: 1.5rem;
+}
+
+.desk-loader-rows {
+  display: flex;
+  max-width: 28rem;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.desk-loader-rows span {
+  display: grid;
+  grid-template-columns: 1.7rem minmax(0, 1fr);
+  align-items: center;
+  gap: 0.85rem;
+  color: var(--ember);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+}
+
+.desk-loader-rows span::after {
+  content: "";
+  height: 2px;
+  border-radius: 999px;
+  background-image: linear-gradient(90deg, transparent, var(--ember), transparent);
+  background-size: 220% 100%;
+  animation: desk-line 1.15s ease-in-out infinite;
+}
+
+.desk-loader-rows span:nth-child(1)::after {
+  width: 78%;
+}
+
+.desk-loader-rows span:nth-child(2)::after {
+  width: 56%;
+  animation-delay: 0.16s;
+}
+
+.desk-loader-rows span:nth-child(3)::after {
+  width: 36%;
+  animation-delay: 0.32s;
+}
+
+.desk-arrive > li {
+  animation: desk-arrive 0.62s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.desk-arrive > li:nth-child(2) {
+  animation-delay: 0.08s;
+}
+
+.desk-arrive > li:nth-child(3) {
+  animation-delay: 0.16s;
+}
+
+@keyframes desk-line {
+  0% {
+    background-position: 120% 0;
+    opacity: 0.28;
+  }
+
+  45% {
+    opacity: 1;
+  }
+
+  100% {
+    background-position: -20% 0;
+    opacity: 0.28;
+  }
+}
+
+@keyframes desk-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .desk-loader-rows span::after,
+  .desk-arrive > li {
+    animation: none;
+  }
+}

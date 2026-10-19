@@ -85,6 +85,7 @@ export function Desk() {
   const [useful, setUseful] = useState<string[] | null>(null);
   const [day, setDay] = useState<DayCache | null>(null);
   const [ready, setReady] = useState(false);
+  const [introduced, setIntroduced] = useState(false);
   const [draft, setDraft] = useState("");
   const [asked, setAsked] = useState("");
   const [answer, setAnswer] = useState<AskResult | null>(null);
@@ -96,6 +97,9 @@ export function Desk() {
     setUseful(readIds(USEFUL_KEY));
     setDay(stored && stored.date === today ? stored : { date: today, picks: {} });
     setReady(true);
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const id = window.setTimeout(() => setIntroduced(true), reduceMotion ? 0 : 780);
+    return () => window.clearTimeout(id);
   }, []);
 
   useEffect(() => {
@@ -302,23 +306,23 @@ export function Desk() {
         ) : null}
         {!answer ? (
           <>
-            {!ready ? <EmptyState kicker="Loading" title="Choosing three reads." body="The desk is lining up today’s articles." /> : null}
-            {ready && shown.length === 0 && hiddenHere > 0 ? (
+            {!introduced ? <DeskLoader /> : null}
+            {introduced && shown.length === 0 && hiddenHere > 0 ? (
               <EmptyState
                 kicker="Skipped"
                 title="Nothing left on this desk."
                 body="You skipped the articles for this category. Restore them, or refresh for the next set."
               />
             ) : null}
-            {ready && shown.length === 0 && hiddenHere === 0 ? (
+            {introduced && shown.length === 0 && hiddenHere === 0 ? (
               <EmptyState
                 kicker="Empty"
                 title="No article is ready for this category."
                 body="Refresh the desk. Nothing is invented to fill a gap."
               />
             ) : null}
-            {ready && shown.length > 0 ? (
-              <ol className="mt-4 flex list-none flex-col gap-4 p-0">
+            {introduced && shown.length > 0 ? (
+              <ol className="desk-arrive mt-4 flex list-none flex-col gap-4 p-0">
                 {shown.map((article, index) => (
                   <ArticleItem
                     key={article.id}
@@ -395,6 +399,20 @@ function CategorySelect({ value, onValueChange }: { value: CategoryId; onValueCh
         </Select.Positioner>
       </Select.Portal>
     </Select.Root>
+  );
+}
+
+function DeskLoader() {
+  return (
+    <div className="desk-loader" role="status" data-empty="loading">
+      <p className="text-[0.68rem] font-medium tracking-[0.18em] text-ember uppercase">Today’s three</p>
+      <div className="desk-loader-rows" aria-hidden="true">
+        <span>01</span>
+        <span>02</span>
+        <span>03</span>
+      </div>
+      <p className="font-serif text-2xl leading-snug text-foreground">Choosing three reads</p>
+    </div>
   );
 }
 
