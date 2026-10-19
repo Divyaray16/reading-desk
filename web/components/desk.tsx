@@ -3,22 +3,42 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { ask, type AskResult } from "@/lib/ask";
-import { categories, type BlogCard, type CategoryId } from "@/lib/catalog";
-import { DEFAULT_CATEGORY, matchesCategory, selectDesk } from "@/lib/desk";
+import { categories, DEFAULT_CATEGORY, type CategoryId } from "@/lib/categories";
+import { kolkataDay } from "@/lib/day";
+import { selectDesk, showCached, type Recommendation } from "@/lib/desk";
 import { visitorLocalLabel } from "@/lib/local-time";
 
 const SKIP_KEY = "reading-desk-skips";
+const USEFUL_KEY = "reading-desk-useful";
+const DAY_KEY = "reading-desk-day";
 
-function readSkips(): string[] {
+type DayCache = { date: string; picks: Partial<Record<CategoryId, string[]>> };
+
+function readIds(key: string): string[] {
   if (typeof window === "undefined") return [];
   try {
-    const raw = window.localStorage.getItem(SKIP_KEY);
+    const raw = window.localStorage.getItem(key);
     if (!raw) return [];
     const parsed: unknown = JSON.parse(raw);
     if (!Array.isArray(parsed)) return [];
     return parsed.filter((id): id is string => typeof id === "string");
   } catch {
     return [];
+  }
+}
+
+function readDay(): DayCache | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = window.localStorage.getItem(DAY_KEY);
+    if (!raw) return null;
+    const parsed: unknown = JSON.parse(raw);
+    if (!parsed || typeof parsed !== "object") return null;
+    const record = parsed as { date?: unknown; picks?: unknown };
+    if (typeof record.date !== "string" || !record.picks || typeof record.picks !== "object") return null;
+    return { date: record.date, picks: record.picks as DayCache["picks"] };
+  } catch {
+    return null;
   }
 }
 
@@ -55,11 +75,19 @@ function VisitorClock() {
 export function Desk() {
   const [view, setView] = useState<CategoryId>(DEFAULT_CATEGORY);
   const [skipped, setSkipped] = useState<string[] | null>(null);
+  const [useful, setUseful] = useState<string[] | null>(null);
+  const [day, setDay] = useState<DayCache | null>(null);
+  const [ready, setReady] = useState(false);
   const [draft, setDraft] = useState("");
   const [answer, setAnswer] = useState<AskResult | null>(null);
 
   useEffect(() => {
-    setSkipped(readSkips());
+    const today = kolkataDay();
+    const stored = readDay();
+    setSkipped(readIds(SKIP_KEY));
+    setUseful(readIds(USEFUL_KEY));
+    setDay(stored && stored.date === today ? stored : { date: today, picks: {} });
+    setReady(true);
   }, []);
 
   useEffect(() => {
@@ -67,10 +95,36 @@ export function Desk() {
     window.localStorage.setItem(SKIP_KEY, JSON.stringify(skipped));
   }, [skipped]);
 
+  useEffect(() => {
+    if (useful === null) return;
+    window.localStorage.setItem(USEFUL_KEY, JSON.stringify(useful));
+  }, [useful]);
+
+  useEffect(() => {
+    if (!day) return;
+    window.localStorage.setItem(DAY_KEY, JSON.stringify(day));
+  }, [day]);
+
   const skipIds = skipped ?? [];
-  const desk = selectDesk(view, skipIds);
+  const usefulIds = useful ?? [];
+  const today = day?.date ?? kolkataDay();
+  const cachedIds = day?.picks[view];
+  const computed = selectDesk(view, { skipped: skipIds, useful: usefulIds });
+  const shown = (cachedIds ? showCached(view, cachedIds) : computed.shown).filter((item) => !skipIds.includes(item.id));
+
+  useEffect(() => {
+    if (!ready || !day || skipped === null || useful === null) return;
+    if (day.picks[view]) return;
+    const fresh = selectDesk(view, { skipped, useful });
+    setDay((current) => {
+      if (!current || current.picks[view]) return current;
+      return { ...current, picks: { ...current.picks, [view]: fresh.shown.map((item) => item.id) } };
+    });
+  }, [ready, view, day, skipped, useful]);
+
   const viewLine = categories.find((item) => item.id === view)?.line ?? "";
-  const hiddenCount = skipIds.filter((id) => matchesCategory(id, view)).length;
+  const hiddenHere = (cachedIds ?? computed.shown.map((item) => item.id)).filter((id) => skipIds.includes(id)).length;
+  const note = shown.length < 3 ? computed.note : null;
 
   function choose(next: CategoryId) {
     setView(next);
@@ -78,17 +132,31 @@ export function Desk() {
 
   function skip(id: string) {
     setSkipped((current) => {
-      const base = current ?? readSkips();
+      const base = current ?? readIds(SKIP_KEY);
+      if (base.includes(id)) return base;
+      return [...base, id];
+    });
+  }
+
+  function markUseful(id: string) {
+    setUseful((current) => {
+      const base = current ?? readIds(USEFUL_KEY);
       if (base.includes(id)) return base;
       return [...base, id];
     });
   }
 
   function restore() {
-    setSkipped((current) => {
-      const base = current ?? readSkips();
-      return base.filter((id) => !matchesCategory(id, view));
-    });
+    const ids = new Set(cachedIds ?? computed.shown.map((item) => item.id));
+    setSkipped((current) => (current ?? readIds(SKIP_KEY)).filter((id) => !ids.has(id)));
+  }
+
+  function refresh() {
+    const fresh = selectDesk(view, { skipped: skipIds, useful: usefulIds });
+    setDay((current) => ({
+      date: current?.date ?? today,
+      picks: { ...(current?.picks ?? {}), [view]: fresh.shown.map((item) => item.id) },
+    }));
   }
 
   function submit(event: FormEvent<HTMLFormElement>) {
@@ -106,7 +174,7 @@ export function Desk() {
           Reading desk
         </h1>
         <p className="mt-4 max-w-[34rem] font-serif text-xl leading-snug text-pretty text-foreground/90 sm:text-[1.65rem]">
-          Three blogs for the work in front of you.
+          Three articles for the work in front of you.
         </p>
         <VisitorClock />
       </header>
@@ -124,7 +192,7 @@ export function Desk() {
               value={draft}
               data-ask-field=""
               onChange={(event) => setDraft(event.target.value)}
-              placeholder="give me an AI UX blog"
+              placeholder="give me an AI UX article"
               autoComplete="off"
               className="h-12 max-h-12 min-h-12 min-w-0 flex-1 rounded-xl border border-border bg-field px-3.5 text-base text-foreground shadow-[inset_0_1px_2px_rgba(0,0,0,0.45)] outline-none placeholder:text-[#b3a898] focus-visible:border-ember focus-visible:ring-2 focus-visible:ring-ember/35"
             />
@@ -159,29 +227,34 @@ export function Desk() {
             </Button>
           ))}
         </div>
-        {hiddenCount > 0 ? (
-          <div className="mt-3 flex flex-wrap items-center gap-2">
+        <div className="mt-3 flex flex-wrap items-center gap-2">
+          {hiddenHere > 0 ? (
             <Button type="button" variant="ghost" size="sm" className="h-11 rounded-xl px-3 text-muted-foreground" onClick={restore}>
               Restore skipped
             </Button>
-          </div>
-        ) : null}
+          ) : null}
+          <Button type="button" variant="ghost" size="sm" className="h-11 rounded-xl px-3 text-muted-foreground" onClick={refresh}>
+            Refresh today
+          </Button>
+        </div>
       </div>
 
       <p className="mt-5 text-sm leading-relaxed text-muted-foreground">{viewLine}</p>
 
-      <div aria-live="polite" data-blog-count={desk.shown.length} data-category={view}>
-        {desk.note ? <p className="mt-5 max-w-[36rem] text-base leading-relaxed text-foreground">{desk.note}</p> : null}
-
-        {desk.shown.length > 0 ? (
+      <div aria-live="polite" data-blog-count={shown.length} data-category={view} data-day={today}>
+        {!ready ? <p className="mt-5 text-base text-muted-foreground">Choosing three reads.</p> : null}
+        {ready && note ? <p className="mt-5 max-w-[36rem] text-base leading-relaxed text-foreground">{note}</p> : null}
+        {ready && shown.length > 0 ? (
           <ol className="mt-5 flex list-none flex-col gap-4 p-0">
-            {desk.shown.map((blog, index) => (
-              <BlogItem
-                key={blog.id}
-                blog={blog}
+            {shown.map((article, index) => (
+              <ArticleItem
+                key={article.id}
+                article={article}
                 number={String(index + 1).padStart(2, "0")}
                 primary={index === 0}
-                onSkip={() => skip(blog.id)}
+                useful={usefulIds.includes(article.id)}
+                onSkip={() => skip(article.id)}
+                onUseful={() => markUseful(article.id)}
               />
             ))}
           </ol>
@@ -189,7 +262,7 @@ export function Desk() {
       </div>
 
       <p className="mt-14 border-t border-border pt-5 text-xs leading-relaxed text-muted-foreground">
-        This page reads the catalog in the browser. Ask on this page. It does not sign in to Cursor.
+        Articles are retrieved from the approved sources and judged from their titles and excerpts. The desk does not invent a title, and it does not sign in to a model. The three stay put for the India calendar day unless you refresh.
       </p>
     </main>
   );
@@ -206,29 +279,34 @@ function Answer({ answer }: { answer: AskResult }) {
 
   return (
     <div className="mt-5" data-ask-answer="reads" aria-live="polite">
-      <p className="text-[0.68rem] font-medium tracking-[0.18em] text-muted-foreground uppercase">From the catalog</p>
+      <p className="text-[0.68rem] font-medium tracking-[0.18em] text-muted-foreground uppercase">From the library</p>
       <ol className="mt-4 flex list-none flex-col gap-4 p-0">
-        {answer.sources.map((blog, index) => (
-          <BlogItem key={blog.id} blog={blog} number={String(index + 1).padStart(2, "0")} primary={index === 0} />
+        {answer.articles.map((article, index) => (
+          <ArticleItem key={article.id} article={article} number={String(index + 1).padStart(2, "0")} primary={index === 0} />
         ))}
       </ol>
     </div>
   );
 }
 
-function BlogItem({
-  blog,
+function ArticleItem({
+  article,
   number,
   primary,
+  useful,
   onSkip,
+  onUseful,
 }: {
-  blog: BlogCard;
+  article: Recommendation;
   number: string;
   primary: boolean;
+  useful?: boolean;
   onSkip?: () => void;
+  onUseful?: () => void;
 }) {
+  const byline = [article.author, article.date].filter(Boolean).join(" · ");
   return (
-    <li className="min-w-0 list-none" data-blog-id={blog.id}>
+    <li className="min-w-0 list-none" data-blog-id={article.id}>
       <article className={primary ? "desk-card desk-card-lead min-w-0 px-5 py-6 sm:px-7 sm:py-7" : "desk-card min-w-0 px-5 py-6 sm:px-7 sm:py-7"}>
         <p
           className={
@@ -238,23 +316,25 @@ function BlogItem({
           }
         >
           {number}
+          <span className="ml-3 tracking-[0.14em]">{article.publication}</span>
         </p>
         <h2
           className={
             primary
-              ? "mt-3 font-serif text-[1.85rem] leading-[1.12] tracking-[-0.025em] text-balance text-foreground sm:text-[2.35rem]"
+              ? "mt-3 font-serif text-[1.85rem] leading-[1.12] tracking-[-0.025em] text-balance text-foreground sm:text-[2.15rem]"
               : "mt-3 font-serif text-[1.45rem] leading-snug tracking-[-0.02em] text-balance text-foreground sm:text-[1.7rem]"
           }
         >
           <a
-            href={blog.url}
+            href={article.url}
             target="_blank"
             rel="noreferrer"
             className="underline-offset-[0.14em] hover:underline focus-visible:underline"
           >
-            {blog.name}
+            {article.title}
           </a>
         </h2>
+        {byline ? <p className="mt-3 text-sm text-muted-foreground">{byline}</p> : null}
         <p
           className={
             primary
@@ -262,10 +342,26 @@ function BlogItem({
               : "mt-3 max-w-[36rem] text-base leading-relaxed text-pretty text-foreground"
           }
         >
-          {blog.line}
+          {article.explanation.text}
         </p>
-        {onSkip ? (
+        {article.explanation.focus ? (
+          <p className="mt-3 max-w-[36rem] text-sm leading-relaxed text-muted-foreground">{article.explanation.focus}</p>
+        ) : null}
+        <p className="mt-3 text-xs tracking-wide text-muted-foreground uppercase">
+          {article.evidence === "full_text" ? "Read in full" : "Assessed from the excerpt"}
+        </p>
+        {onSkip && onUseful ? (
           <div className="mt-5 flex items-center justify-end gap-3 border-t border-border pt-4">
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className="h-10 rounded-xl px-3 text-muted-foreground"
+              aria-pressed={useful}
+              onClick={onUseful}
+            >
+              {useful ? "Useful" : "Mark useful"}
+            </Button>
             <Button type="button" variant="ghost" size="sm" className="h-10 rounded-xl px-3 text-muted-foreground" onClick={onSkip}>
               Skip
             </Button>

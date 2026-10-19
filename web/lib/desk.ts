@@ -1,50 +1,77 @@
-import {
-  CAP,
-  categoryById,
-  hrefFor,
-  sourceById,
-  toBlogCard,
-  type BlogCard,
-  type CategoryId,
-} from "./catalog.ts";
+import { categoryById, type CategoryId } from "./categories.ts";
+import { articles, type Article } from "./corpus.ts";
+import { explain, type Explanation } from "./explain.ts";
+import { formatPublished } from "./day.ts";
+import { evaluateArticle, rankCategory, type Feedback, type Scored } from "./rank.ts";
+import { sourceById } from "./sources.ts";
 
-export { CAP };
+export const CAP = 3;
 
-export const DEFAULT_CATEGORY: CategoryId = "general-ux";
+export type Recommendation = {
+  id: string;
+  title: string;
+  url: string;
+  publication: string;
+  author: string;
+  date: string | null;
+  explanation: Explanation;
+  evidence: Scored["evidence"];
+};
 
-export function matchesCategory(sourceId: string, categoryId: CategoryId): boolean {
+export type Desk = {
+  shown: Recommendation[];
+  note: string | null;
+  qualifiedCount: number;
+};
+
+export function present(item: Scored, categoryId: CategoryId): Recommendation | null {
+  const source = sourceById(item.article.sourceId);
+  if (!source) return null;
   const category = categoryById(categoryId);
-  return category.featured.includes(sourceId);
-}
-
-export function deskNote(total: number, available: number, shown: number): string | null {
-  if (total === 0) {
-    return "Nothing in this category. No blog was invented to fill the gap.";
-  }
-  if (available === 0) {
-    return "You skipped every blog in this category. They stay hidden in this browser.";
-  }
-  if (shown < CAP && available < total) {
-    return "Fewer than three are left. Skipped blogs stay hidden in this browser.";
-  }
-  if (shown < CAP) {
-    return "This category has fewer than three blogs. No blog was invented to fill the gap.";
-  }
-  return null;
-}
-
-export function selectDesk(categoryId: CategoryId, skippedIds: readonly string[]) {
-  const category = categoryById(categoryId);
-  const skipped = new Set(skippedIds);
-  const featured = category.featured.map((id) => sourceById(id));
-  const available = featured.filter((source) => !skipped.has(source.id));
-  const shown: BlogCard[] = available
-    .slice(0, CAP)
-    .map((source) => toBlogCard(source, hrefFor(source, category.id)));
+  const explanation = explain(item.article, category, item.matched);
+  if (!explanation) return null;
   return {
-    shown,
-    total: featured.length,
-    available: available.length,
-    note: deskNote(featured.length, available.length, shown.length),
+    id: item.article.id,
+    title: item.article.title,
+    url: item.article.url,
+    publication: source.name,
+    author: item.article.author,
+    date: formatPublished(item.article.publishedAt),
+    explanation,
+    evidence: item.evidence,
+  };
+}
+
+/** Show a stored day's articles without re-ranking them. */
+export function showCached(categoryId: CategoryId, ids: readonly string[], now: Date = new Date()): Recommendation[] {
+  const shown: Recommendation[] = [];
+  for (const id of ids) {
+    const article = articles.find((item) => item.id === id);
+    if (!article) continue;
+    const scored = evaluateArticle(article, categoryId, now);
+    const card = present({ ...scored, qualified: true }, categoryId);
+    if (card) shown.push(card);
+  }
+  return shown;
+}
+
+export function selectDesk(
+  categoryId: CategoryId,
+  feedback: Feedback = { skipped: [], useful: [] },
+  now: Date = new Date(),
+  library: readonly Article[] = articles,
+): Desk {
+  const ranked = rankCategory(categoryId, library, now, feedback);
+  const shown = ranked.shown
+    .map((item) => present(item, categoryId))
+    .filter((item): item is Recommendation => item !== null);
+  const note =
+    shown.length < ranked.shown.length && shown.length < CAP
+      ? "Some candidates could not be explained from the text that was retrieved, so they were left off the desk."
+      : ranked.note;
+  return {
+    shown: shown.slice(0, CAP),
+    note: shown.length === 0 ? (note ?? ranked.note) : shown.length < CAP ? note : null,
+    qualifiedCount: ranked.qualifiedCount,
   };
 }

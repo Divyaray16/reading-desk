@@ -26,7 +26,7 @@ It is not a phone text. Slack is not connected. Nothing is emailed.
 
 ## A page with no login
 
-The browser page is separate from the agent. Divya opens it with no Cursor login and asks on this same page. It shows three pieces from the same shelf, ranked in the browser, and answers from that shelf. It does not call a model and it does not use a Cursor credential.
+The browser page is separate from the agent. Divya opens it with no Cursor login and asks on this same page. It shows up to three articles from one shared library of approved sources, ranked in the browser from retrieved titles and excerpts. A category filters by subject, not by publication. It does not call a model and it does not use a Cursor credential. The three stay fixed for the Asia/Kolkata day unless she refreshes. Skip and Useful are stored in the browser and affect the next selection.
 
 From `web/`:
 

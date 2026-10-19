@@ -1,0 +1,170 @@
+[
+  {
+    "sourceId": "smashing",
+    "method": "rss",
+    "url": "https://www.smashingmagazine.com/feed/",
+    "ok": true,
+    "items": 30
+  },
+  {
+    "sourceId": "ux-collective",
+    "method": "rss",
+    "url": "https://uxdesign.cc/feed",
+    "ok": true,
+    "items": 10
+  },
+  {
+    "sourceId": "ux-planet",
+    "method": "rss",
+    "url": "https://uxplanet.org/feed",
+    "ok": true,
+    "items": 10
+  },
+  {
+    "sourceId": "alistapart",
+    "method": "rss",
+    "url": "https://alistapart.com/main/feed/",
+    "ok": true,
+    "items": 20
+  },
+  {
+    "sourceId": "figma",
+    "method": "rss",
+    "url": "https://www.figma.com/blog/feed/atom.xml",
+    "ok": true,
+    "items": 40
+  },
+  {
+    "sourceId": "stripe",
+    "method": "rss",
+    "url": "https://stripe.com/blog/feed.rss",
+    "ok": true,
+    "items": 10
+  },
+  {
+    "sourceId": "bradfrost",
+    "method": "rss",
+    "url": "https://bradfrost.com/feed/",
+    "ok": true,
+    "items": 20
+  },
+  {
+    "sourceId": "lukew",
+    "method": "rss",
+    "url": "https://www.lukew.com/ff/rss/",
+    "ok": true,
+    "items": 15
+  },
+  {
+    "sourceId": "intercom",
+    "method": "rss",
+    "url": "https://www.intercom.com/blog/feed",
+    "ok": true,
+    "items": 20
+  },
+  {
+    "sourceId": "julie-zhuo",
+    "method": "rss",
+    "url": "https://lg.substack.com/feed",
+    "ok": true,
+    "items": 20
+  },
+  {
+    "sourceId": "nvidia",
+    "method": "rss",
+    "url": "https://developer.nvidia.com/blog/feed",
+    "ok": false,
+    "error": "unbound prefix: line 29, column 2"
+  },
+  {
+    "sourceId": "uxmatters",
+    "method": "rss",
+    "url": "https://www.uxmatters.com/index.xml",
+    "ok": true,
+    "items": 10
+  },
+  {
+    "sourceId": "nng",
+    "method": "sitemap+article-page",
+    "url": "https://www.nngroup.com/sitemap.xml",
+    "ok": true,
+    "items": 14,
+    "errors": 2
+  },
+  {
+    "sourceId": "anthropic",
+    "method": "sitemap+article-page",
+    "url": "https://www.anthropic.com/sitemap.xml",
+    "ok": true,
+    "items": 12,
+    "errors": 0
+  },
+  {
+    "sourceId": "linear",
+    "method": "sitemap+article-page",
+    "url": "https://linear.app/sitemap.xml",
+    "ok": true,
+    "items": 10,
+    "errors": 0
+  },
+  {
+    "sourceId": "ibm-research",
+    "method": "sitemap+article-page",
+    "url": "https://research.ibm.com/sitemap-0.xml",
+    "ok": true,
+    "items": 8,
+    "errors": 0
+  },
+  {
+    "sourceId": "amazon-science",
+    "method": "index+article-page",
+    "url": "https://www.amazon.science/blog",
+    "ok": true,
+    "items": 8,
+    "errors": 0,
+    "links": 13
+  },
+  {
+    "sourceId": "shumin",
+    "method": "index+article-page",
+    "url": "https://shumin.design/blog",
+    "ok": false,
+    "items": 0,
+    "errors": 0,
+    "links": 0
+  },
+  {
+    "sourceId": "baymard",
+    "method": "index+article-page",
+    "url": "https://baymard.com/blog",
+    "ok": true,
+    "items": 8,
+    "errors": 0,
+    "links": 15
+  },
+  {
+    "sourceId": "ibm-think",
+    "method": "index+article-page",
+    "url": "https://www.ibm.com/think",
+    "ok": true,
+    "items": 8,
+    "errors": 0,
+    "links": 16
+  },
+  {
+    "sourceId": "pair",
+    "method": "index",
+    "url": "https://pair.withgoogle.com/guidebook",
+    "ok": false,
+    "error": "No individual article URLs found on the public index.",
+    "items": 0
+  },
+  {
+    "sourceId": "hax",
+    "method": "index+article-page",
+    "url": "https://www.microsoft.com/en-us/haxtoolkit/",
+    "ok": true,
+    "items": 2,
+    "errors": 0
+  }
+]
