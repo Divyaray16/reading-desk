@@ -192,12 +192,11 @@ export function Desk() {
 
   useEffect(() => {
     const question = draft.trim();
-    if (!question) {
+    if (question.length < 2) {
       setAnswer(null);
       setAsked("");
       return;
     }
-    if (question.length < 2) return;
     const id = window.setTimeout(() => {
       setAsked(question);
       setAnswer(ask(question));
@@ -255,7 +254,7 @@ export function Desk() {
             type="button"
             variant="ghost"
             size="sm"
-            className="h-10 w-10 min-h-10 min-w-10 shrink-0 rounded-xl px-0 text-ember"
+            className="h-10 w-10 min-h-10 min-w-10 shrink-0 rounded-xl border border-border bg-field px-0 text-ember shadow-[inset_0_1px_2px_rgba(0,0,0,0.45)] hover:bg-foreground/8 hover:text-ember"
             aria-label="Refresh articles"
             title={searchOpen || canRotate ? "Refresh articles" : "No other articles in this category"}
             disabled={!searchOpen && !canRotate}
