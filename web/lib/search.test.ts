@@ -125,15 +125,17 @@ test("user research and React search the real library", () => {
   assert.match(react.map((hit) => hit.article.title).join("\n"), /React/);
 });
 
-test("search narrows to one primary category only when asked", () => {
-  const open = searchArticles("design systems", articles, NOW);
-  const systems = searchArticles("design systems", articles, NOW, { categoryId: "systems" });
-  const agentic = searchArticles("design systems", articles, NOW, { categoryId: "agentic" });
-  assert.ok(open.length >= 1);
-  assert.ok(systems.length >= 1);
-  for (const hit of systems) assert.equal(classifyArticle(hit.article).primary, "systems");
-  for (const hit of agentic) assert.equal(classifyArticle(hit.article).primary, "agentic");
-  assert.ok(open.some((hit) => classifyArticle(hit.article).primary !== "agentic"));
+test("search covers the whole library and does not narrow to one category", () => {
+  const hits = searchArticles("design systems", articles, NOW);
+  assert.ok(hits.length >= 1);
+  assert.ok(hits.some((hit) => classifyArticle(hit.article).primary !== "agentic"));
+  const asked = ask("design systems", NOW);
+  assert.equal(asked.kind, "reads");
+  if (asked.kind !== "reads") return;
+  assert.deepEqual(
+    asked.articles.map((article) => article.id),
+    hits.map((hit) => hit.article.id),
+  );
 });
 
 test("search is not limited to the articles on the current category desk", () => {

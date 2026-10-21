@@ -8,7 +8,7 @@ import { classifyArticle } from "./classify.ts";
 import { articles, type Article } from "./corpus.ts";
 import { explain } from "./explain.ts";
 import { formatPublished } from "./day.ts";
-import { searchArticles, type SearchScope } from "./search.ts";
+import { searchArticles } from "./search.ts";
 import { sourceById } from "./sources.ts";
 import type { Recommendation } from "./desk.ts";
 import type { Evidence } from "./corpus.ts";
@@ -30,9 +30,8 @@ export function ask(
   question: string,
   _now: Date = new Date(),
   library: readonly Article[] = articles,
-  scope: SearchScope = {},
 ): AskResult {
-  const hits = searchArticles(asText(question), library, _now, scope);
+  const hits = searchArticles(asText(question), library, _now);
   if (hits.length === 0) return { kind: "none", text: NO_MATCH };
 
   const shown: Recommendation[] = [];

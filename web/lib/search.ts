@@ -9,7 +9,7 @@
  * so a synonym stays below the same direct hit.
  */
 
-import { categoryById, type CategoryId } from "./categories.ts";
+import { categoryById } from "./categories.ts";
 import { articleTags, classifyArticle } from "./classify.ts";
 import { articles, type Article } from "./corpus.ts";
 import { articleUrlOk, isRecentArticle, nearDuplicate } from "./rank.ts";
@@ -27,10 +27,6 @@ import {
 
 export const RESULT_CAP = 3;
 
-export type SearchScope = {
-  /** When set, results are limited to this primary category. Omit it to search the whole library. */
-  categoryId?: CategoryId | null;
-};
 const MIN_SCORE = 8;
 const EXPANSION_ONLY_MIN = 10;
 const SOURCE_BAND = 0.55;
@@ -324,7 +320,6 @@ export function searchArticles(
   question: string,
   library: readonly Article[] = articles,
   now: Date = new Date(),
-  scope: SearchScope = {},
 ): SearchHit[] {
   const normalized = normalize(asText(question));
   const tokens = queryTokens(normalized);
@@ -339,7 +334,6 @@ export function searchArticles(
 
   for (const row of rows) {
     if (!isRecentArticle(asText(row.article.publishedAt), now)) continue;
-    if (scope.categoryId && classifyArticle(row.article).primary !== scope.categoryId) continue;
     let direct = 0;
     const matched: string[] = [];
     const satisfied = tokens.map(() => false);
