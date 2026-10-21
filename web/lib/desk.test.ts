@@ -16,7 +16,7 @@ function fixture(id: string, sourceId: string, title: string): Article {
     author: "Test Author",
     publishedAt: "2026-09-01T00:00:00Z",
     excerpt:
-      "This synthetic fixture explains a usability test method and a practical pattern for navigation and accessibility. It is not a retrieved article.",
+      "This synthetic fixture explains usability heuristics, information architecture, and a practical wayfinding pattern for navigation. It is not a retrieved article.",
     evidence: "excerpt",
     retrievedAt: "2026-10-19T00:00:00Z",
   };

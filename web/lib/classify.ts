@@ -1,131 +1,251 @@
 /**
- * Primary and secondary category for one article.
- * A category is earned by the article's subject, not by a publication and not by a stray word.
- * Thin text is marked for reevaluation instead of being forced into a category.
+ * One primary category, or needs-review.
+ * The primary is the central subject of the excerpt, not the publication and not a stray word.
+ * A thin excerpt, a title with nothing behind it in the excerpt, or two subjects too close
+ * to call stay in needs-review. Needs-review is not a category.
+ * Tags live in tags.ts and never stand in for the primary.
  */
 
 import { categories, type CategoryId } from "./categories.ts";
 import type { Article } from "./corpus.ts";
+import { articleTags } from "./tags.ts";
+import { containsPhrase, normalize, sameWord } from "./terms.ts";
 
-export const TECHNOLOGY_TAGS = [
-  "foundation model",
-  "language model",
-  "multimodal",
-  "inference",
-  "benchmark",
-  "transformer",
-  "neural",
-  "model capability",
-  "gpu",
-] as const;
+export { articleTags };
 
-export type ClassificationStatus = "classified" | "needs-reevaluation";
+export type ClassificationStatus = "classified" | "needs-review";
 
 export type Classification = {
   status: ClassificationStatus;
   primary: CategoryId | null;
-  secondary: CategoryId[];
   matched: Partial<Record<CategoryId, string[]>>;
   titleStrong: Partial<Record<CategoryId, boolean>>;
 };
 
-const PRIMARY_MIN = 4;
-const SECONDARY_CAP = 2;
+const THIN_EXCERPT = 80;
+const SHORT_EXCERPT = 420;
+const MIN_SCORE = 4;
+const CLOSE_MARGIN = 1.6;
+
+const LOW_WEIGHT: Record<string, number> = {
+  agent: 1.7,
+  layout: 3.3,
+  enterprise: 3.3,
+  dialogue: 3.3,
+  javascript: 3.3,
+  react: 3.3,
+  roi: 3.6,
+};
+
+const STRONG_WORD = new Set([
+  "accessibility",
+  "agentic",
+  "chatbot",
+  "css",
+  "dashboard",
+  "typography",
+  "usability",
+  "conversational",
+]);
+
+/** A bare technology token does not make the article design engineering. */
+const TECH_ONLY = new Set(["react"]);
+const DESIGN_CONTEXT = ["design", "interface", "css", "layout", "ux", "prototype", "frontend", "front end", "stylesheet"];
 
 type Hit = {
+  id: CategoryId;
+  excerptScore: number;
   score: number;
   phrases: string[];
   titleStrong: boolean;
-  strong: boolean;
 };
 
-function boundary(char: string | undefined): boolean {
-  return char === undefined || !/[a-z0-9]/.test(char);
+const cache = new WeakMap<object, Classification>();
+
+function signalWeight(phrase: string): number {
+  const lowered = LOW_WEIGHT[phrase];
+  if (lowered !== undefined) return lowered;
+  const words = phrase.split(" ").length;
+  if (words >= 3) return 5;
+  if (words === 2 || STRONG_WORD.has(phrase)) return 4.2;
+  return 3.3;
 }
 
-export function hasPhrase(text: string, phrase: string): boolean {
-  const body = text.toLowerCase();
-  const needle = phrase.toLowerCase().trim();
-  if (!needle) return false;
-  let from = 0;
-  while (from <= body.length - needle.length) {
-    const at = body.indexOf(needle, from);
-    if (at < 0) return false;
-    const before = at === 0 ? undefined : body[at - 1];
-    const after = body[at + needle.length];
-    const plural = after === "s" && boundary(body[at + needle.length + 1]);
-    if (boundary(before) && (boundary(after) || plural)) return true;
-    from = at + 1;
+function countSignal(raw: string, folded: string, phrase: string): number {
+  if (phrase === "react") return raw.match(/\bReact\b/g)?.length ?? 0;
+  return countPhrase(folded, phrase);
+}
+
+function countPhrase(haystack: string, phrase: string): number {
+  const words = haystack.split(" ").filter(Boolean);
+  const parts = phrase.split(" ").filter(Boolean);
+  if (!parts.length || words.length < parts.length) return 0;
+  let count = 0;
+  for (let start = 0; start <= words.length - parts.length; start += 1) {
+    let found = true;
+    for (let offset = 0; offset < parts.length; offset += 1) {
+      const word = words[start + offset];
+      const part = parts[offset];
+      if (!word || !part || !sameWord(word, part)) {
+        found = false;
+        break;
+      }
+    }
+    if (!found) continue;
+    count += 1;
+    start += parts.length - 1;
   }
-  return false;
+  return count;
 }
 
-function collect(text: string, phrases: readonly string[]): string[] {
-  const found = phrases.filter((phrase) => hasPhrase(text, phrase));
-  return found.filter(
-    (phrase) => !found.some((other) => other.length > phrase.length && other.includes(phrase) && hasPhrase(text, other)),
-  );
+function activePhrases(rawTitle: string, rawExcerpt: string, title: string, excerpt: string): Set<string> {
+  const matched = new Set<string>();
+  for (const category of categories) {
+    for (const phrase of category.signals) {
+      if (countSignal(rawTitle, title, phrase) > 0 || countSignal(rawExcerpt, excerpt, phrase) > 0) matched.add(phrase);
+    }
+  }
+  const drop = new Set<string>();
+  for (const phrase of matched) {
+    for (const other of matched) {
+      if (phrase !== other && containsPhrase(other, phrase)) drop.add(phrase);
+    }
+  }
+  for (const phrase of drop) matched.delete(phrase);
+  return matched;
 }
 
-function scoreCategory(title: string, excerpt: string, signals: readonly string[], support: readonly string[]): Hit {
-  const titleStrong = collect(title, signals);
-  const bodyStrong = collect(excerpt, signals).filter((phrase) => !titleStrong.includes(phrase));
-  const strong = titleStrong.length + bodyStrong.length > 0;
-  const titleSupport = strong ? [] : collect(title, support);
-  const bodySupport = strong ? collect(excerpt, support) : [];
-  const score = titleStrong.length * 5 + bodyStrong.length * 2 + titleSupport.length * 2 + bodySupport.length * 0.5;
+function designContext(title: string, excerpt: string): boolean {
+  const text = `${title} ${excerpt}`;
+  return DESIGN_CONTEXT.some((phrase) => containsPhrase(text, phrase));
+}
+
+/** A long excerpt needs the title, a repeated phrase, or more than one lead signal. One late mention is not the subject. */
+function anchored(
+  rawTitle: string,
+  rawExcerpt: string,
+  title: string,
+  excerpt: string,
+  phrases: readonly string[],
+  signals: readonly string[],
+): boolean {
+  if (phrases.length === 0) return false;
+  // The title can name the subject while the excerpt uses a different phrase from the same category.
+  if (signals.some((phrase) => countSignal(rawTitle, title, phrase) > 0)) return true;
+  if (excerpt.length < SHORT_EXCERPT) return true;
+  let total = 0;
+  for (const phrase of phrases) {
+    const hits = countSignal(rawExcerpt, excerpt, phrase);
+    if (hits >= 2) return true;
+    total += hits;
+  }
+  if (total < 2) return false;
+  const lead = excerpt.slice(0, 320);
+  const rawLead = rawExcerpt.slice(0, 320);
+  return phrases.some((phrase) => countSignal(rawLead, lead, phrase) > 0);
+}
+
+function scoreCategory(
+  rawTitle: string,
+  rawExcerpt: string,
+  title: string,
+  excerpt: string,
+  id: CategoryId,
+  allowed: Set<string>,
+): Hit {
+  const category = categories.find((item) => item.id === id);
+  const signals = (category?.signals ?? []).filter((phrase) => allowed.has(phrase));
+  const support = category?.support ?? [];
+  const excerptPhrases: string[] = [];
+  let excerptScore = 0;
+  for (const phrase of signals) {
+    const hits = countSignal(rawExcerpt, excerpt, phrase);
+    if (hits === 0) continue;
+    excerptScore += signalWeight(phrase) + Math.min(hits - 1, 3) * 0.85;
+    excerptPhrases.push(phrase);
+  }
+  const titlePhrases = signals.filter((phrase) => countSignal(rawTitle, title, phrase) > 0);
+  const empty = (titleStrong: boolean): Hit => ({ id, excerptScore: 0, score: 0, phrases: [], titleStrong });
+  if (!anchored(rawTitle, rawExcerpt, title, excerpt, excerptPhrases, signals)) return empty(titlePhrases.length > 0);
+  let score = excerptScore;
+  if (excerptPhrases.length > 0 && titlePhrases.length > 0) score += 3.2;
+  if (excerptPhrases.length > 0) {
+    let added = 0;
+    for (const phrase of support) {
+      if (added >= 3) break;
+      if (countPhrase(excerpt, phrase) === 0) continue;
+      if (excerptPhrases.some((signal) => signal === phrase || containsPhrase(signal, phrase))) continue;
+      score += 0.7;
+      excerptScore += 0.7;
+      added += 1;
+    }
+  }
+  if (
+    id === "engineering" &&
+    excerptPhrases.length > 0 &&
+    excerptPhrases.every((phrase) => TECH_ONLY.has(phrase)) &&
+    !designContext(title, excerpt)
+  ) {
+    return empty(titlePhrases.length > 0);
+  }
+  if (id === "enterprise" && excerptPhrases.length > 0 && excerptPhrases.every((phrase) => phrase === "enterprise")) {
+    const text = `${title} ${excerpt}`;
+    const designed = ["ux", "design", "interface", "workflow", "dashboard", "user", "usability"].some((word) =>
+      containsPhrase(text, word),
+    );
+    if (!designed) return empty(titlePhrases.length > 0);
+  }
   return {
+    id,
+    excerptScore,
     score,
-    phrases: [...new Set([...titleStrong, ...bodyStrong, ...titleSupport])],
-    titleStrong: titleStrong.length > 0,
-    strong,
+    phrases: excerptPhrases,
+    titleStrong: titlePhrases.length > 0,
   };
 }
 
-function earliest(title: string, phrases: readonly string[]): number {
-  const lower = title.toLowerCase();
-  let at = Number.POSITIVE_INFINITY;
-  for (const phrase of phrases) {
-    const found = lower.indexOf(phrase.toLowerCase());
-    if (found >= 0) at = Math.min(at, found);
-  }
-  return at;
+function tooClose(top: Hit, second: Hit | undefined): boolean {
+  if (!second || second.excerptScore <= 0 || second.score < MIN_SCORE) return false;
+  const margin = top.score - second.score;
+  if (margin >= CLOSE_MARGIN) return false;
+  if (top.score <= 0 || second.score / top.score < 0.8) return false;
+  if (top.titleStrong && !second.titleStrong && margin >= 1) return false;
+  return true;
 }
 
-export function technologyTags(article: Pick<Article, "title" | "excerpt">): string[] {
-  const text = `${article.title} ${article.excerpt}`;
-  return TECHNOLOGY_TAGS.filter((tag) => hasPhrase(text, tag));
+function classify(article: Pick<Article, "title" | "excerpt" | "evidence">): Classification {
+  const rawTitle = typeof article.title === "string" ? article.title : "";
+  const rawExcerpt = typeof article.excerpt === "string" ? article.excerpt : "";
+  const title = normalize(rawTitle);
+  const excerpt = normalize(rawExcerpt);
+  const allowed = activePhrases(rawTitle, rawExcerpt, title, excerpt);
+  const hits = categories.map((category) => scoreCategory(rawTitle, rawExcerpt, title, excerpt, category.id, allowed));
+  const matched: Classification["matched"] = {};
+  const titleStrong: Classification["titleStrong"] = {};
+  for (const hit of hits) {
+    if (hit.phrases.length === 0) continue;
+    matched[hit.id] = hit.phrases;
+    titleStrong[hit.id] = hit.titleStrong;
+  }
+
+  const thin = excerpt.trim().length < THIN_EXCERPT;
+  const ranked = hits
+    .filter((hit) => hit.excerptScore > 0 && hit.score >= MIN_SCORE)
+    .sort((a, b) => b.score - a.score || categories.findIndex((item) => item.id === a.id) - categories.findIndex((item) => item.id === b.id));
+  const top = ranked[0];
+  if (thin || !top || tooClose(top, ranked[1])) {
+    return { status: "needs-review", primary: null, matched, titleStrong };
+  }
+  return { status: "classified", primary: top.id, matched, titleStrong };
 }
 
 export function classifyArticle(article: Pick<Article, "title" | "excerpt" | "evidence">): Classification {
-  const title = typeof article.title === "string" ? article.title : "";
-  const excerpt = typeof article.excerpt === "string" ? article.excerpt : "";
-  const thin = excerpt.trim().length < 80;
-  const hits = categories.map((category) => ({
-    id: category.id,
-    hit: scoreCategory(title, excerpt, category.signals, category.support),
-  }));
-  const earned = hits.filter((row) => row.hit.strong && row.hit.score >= PRIMARY_MIN);
-  earned.sort((a, b) => {
-    if (b.hit.score !== a.hit.score) return b.hit.score - a.hit.score;
-    if (a.hit.titleStrong !== b.hit.titleStrong) return a.hit.titleStrong ? -1 : 1;
-    const place = earliest(title, a.hit.phrases) - earliest(title, b.hit.phrases);
-    if (place !== 0) return place;
-    return categories.findIndex((item) => item.id === a.id) - categories.findIndex((item) => item.id === b.id);
-  });
-
-  const matched: Classification["matched"] = {};
-  const titleStrong: Classification["titleStrong"] = {};
-  for (const row of earned) {
-    matched[row.id] = row.hit.phrases;
-    titleStrong[row.id] = row.hit.titleStrong;
+  if (article && typeof article === "object") {
+    const cached = cache.get(article);
+    if (cached) return cached;
+    const result = classify(article);
+    cache.set(article, result);
+    return result;
   }
-
-  if (thin || earned.length === 0) {
-    return { status: "needs-reevaluation", primary: null, secondary: [], matched, titleStrong };
-  }
-
-  const primary = earned[0]?.id ?? null;
-  const secondary = earned.slice(1, 1 + SECONDARY_CAP).map((row) => row.id);
-  return { status: "classified", primary, secondary, matched, titleStrong };
+  return classify(article);
 }

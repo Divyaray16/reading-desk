@@ -23,7 +23,7 @@ function fixture(partial: Partial<Article> & Pick<Article, "id" | "title" | "url
     author: "Test Author",
     publishedAt: "2026-09-01T00:00:00Z",
     excerpt:
-      "This synthetic fixture explains a usability test method and a practical pattern for navigation. It is not a retrieved article.",
+      "This synthetic fixture explains usability heuristics and a practical pattern for information architecture and navigation. It is not a retrieved article.",
     evidence: "excerpt",
     retrievedAt: "2026-10-19T00:00:00Z",
     ...partial,
@@ -72,7 +72,7 @@ test("sources are not locked to one category", () => {
       title: "A usability test pattern for navigation",
       url: "https://www.figma.com/blog/synthetic-usability-navigation/",
       excerpt:
-        "This synthetic fixture covers a usability test, navigation, and a practical method for information architecture. It is not a retrieved article.",
+        "This synthetic fixture covers usability heuristics, wayfinding, and a method for information architecture. It is not a retrieved article.",
     }),
   ];
   const agentic = rankCategory("agentic", library, NOW);
@@ -141,26 +141,35 @@ test("near-duplicate titles collapse to one recommendation", () => {
   assert.equal(ranked.shown.length, 1);
 });
 
-test("every category shows three real articles and does not mention an empty place", () => {
+test("a category shows only its real recent articles and does not mention an empty place", () => {
+  let full = 0;
   for (const category of categories) {
     const desk = selectDesk(category.id, { skipped: [], useful: [] }, NOW);
-    assert.equal(desk.shown.length, 3, category.id);
+    assert.equal(desk.shown.length, Math.min(3, desk.qualifiedCount), category.id);
+    assert.ok(desk.shown.length <= 3);
     assert.equal(desk.note, null);
+    assert.equal(JSON.stringify(desk).toLowerCase().includes("empty place"), false);
+    if (desk.qualifiedCount >= 3) {
+      assert.equal(desk.shown.length, 3, category.id);
+      full += 1;
+    }
     for (const item of desk.shown) {
       assert.equal(item.url.startsWith("https://"), true);
       assert.equal(item.explanation.text.toLowerCase().includes("cleared the bar"), false);
+      assert.equal(item.explanation.text.toLowerCase().includes("empty place"), false);
     }
   }
+  assert.ok(full >= 1);
 });
 
 test("skip feedback changes the next selection without deleting the article", () => {
   const library = [
     fixture({
       id: "strong",
-      title: "A usability test framework and practical checklist",
+      title: "A usability heuristic framework and practical checklist",
       url: "https://www.nngroup.com/articles/usability-test-framework-checklist/",
       excerpt:
-        "This synthetic fixture gives a usability test framework, a checklist, and a method for navigation and cognitive load. It is not a retrieved article.",
+        "This synthetic fixture gives a usability heuristic framework, a checklist, and a method for information architecture and cognitive load. It is not a retrieved article.",
     }),
     fixture({
       id: "other",
@@ -168,7 +177,7 @@ test("skip feedback changes the next selection without deleting the article", ()
       title: "How to run a usability test for form design",
       url: "https://www.smashingmagazine.com/2026/10/how-to-usability-test-form-design/",
       excerpt:
-        "This synthetic fixture explains how to run a usability test, with a practical pattern for form design and accessibility. It is not a retrieved article.",
+        "This synthetic fixture explains how to apply usability heuristics, with a pattern for information architecture and wayfinding. It is not a retrieved article.",
     }),
   ];
   const before = rankCategory("foundations", library, NOW);
@@ -186,7 +195,7 @@ test("articles older than 18 months are left off the desk", () => {
       url: "https://www.nngroup.com/articles/usability-information-architecture/",
       publishedAt: "2018-01-01T00:00:00Z",
       excerpt:
-        "This synthetic fixture from 2018 still gives a usability method, a checklist, and a framework for information architecture and navigation. It is not a retrieved article. The study covered 40 tasks.",
+        "This synthetic fixture from 2018 still gives a usability heuristic, a checklist, and a framework for information architecture and navigation. It is not a retrieved article. The study covered 40 tasks.",
     }),
     fixture({
       id: "new",
@@ -195,7 +204,7 @@ test("articles older than 18 months are left off the desk", () => {
       url: "https://uxplanet.org/readability-checklist-navigation-labels/",
       publishedAt: "2026-10-18T00:00:00Z",
       excerpt:
-        "This synthetic fixture explains a readability checklist, a practical method for navigation, and how accessibility shows up in the interface. It is not a retrieved article.",
+        "This synthetic fixture explains a readability checklist, usability heuristics, and information architecture for navigation labels. It is not a retrieved article.",
     }),
   ];
   const old = evaluateArticle(library[0]!, "foundations", NOW);
@@ -213,19 +222,21 @@ test("the India calendar day, not UTC, decides the cache date", () => {
 });
 
 test("selection is stable for the same inputs", () => {
-  const first = selectDesk("interaction", { skipped: [], useful: [] }, NOW);
-  const second = selectDesk("interaction", { skipped: [], useful: [] }, NOW);
+  const first = selectDesk("systems", { skipped: [], useful: [] }, NOW);
+  const second = selectDesk("systems", { skipped: [], useful: [] }, NOW);
   assert.deepEqual(
     first.shown.map((item) => item.id),
     second.shown.map((item) => item.id),
   );
+  assert.equal(first.shown.length, Math.min(3, first.qualifiedCount));
   assert.equal(first.shown.length, 3);
 });
 
-test("the eight desks are not the same three articles", () => {
-  const signatures = categories.map((category) =>
-    selectDesk(category.id, { skipped: [], useful: [] }, NOW).shown.map((item) => item.id).join("|"),
-  );
+test("visible desks are not the same three articles", () => {
+  const signatures = categories
+    .map((category) => selectDesk(category.id, { skipped: [], useful: [] }, NOW).shown.map((item) => item.id).join("|"))
+    .filter((signature) => signature.length > 0);
+  assert.ok(signatures.length >= 2);
   assert.equal(new Set(signatures).size, signatures.length);
 });
 

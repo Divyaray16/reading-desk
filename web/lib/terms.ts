@@ -74,24 +74,33 @@ export const EXPANSIONS: Record<string, readonly Expansion[]> = {
     { phrase: "information architecture", weight: 0.6 },
   ],
   "ux research": [
-    { phrase: "user research", weight: 0.75 },
-    { phrase: "behavioral insights", weight: 0.6 },
+    { phrase: "user research", weight: 0.8 },
+    { phrase: "usability testing", weight: 0.66 },
     { phrase: "empathy mapping", weight: 0.55 },
+  ],
+  "user research": [
+    { phrase: "ux research", weight: 0.8 },
+    { phrase: "usability testing", weight: 0.66 },
+    { phrase: "research method", weight: 0.5 },
   ],
   "interaction patterns": [
     { phrase: "interaction design", weight: 0.7 },
-    { phrase: "product design", weight: 0.65 },
-    { phrase: "interface design", weight: 0.6 },
+    { phrase: "microinteraction", weight: 0.6 },
+    { phrase: "user flow", weight: 0.55 },
   ],
   "design engineering": [
-    { phrase: "design systems", weight: 0.7 },
-    { phrase: "design tokens", weight: 0.6 },
-    { phrase: "component libraries", weight: 0.55 },
+    { phrase: "design to code", weight: 0.7 },
+    { phrase: "frontend", weight: 0.6 },
+    { phrase: "css", weight: 0.55 },
   ],
   "product strategy": [
-    { phrase: "enterprise ux", weight: 0.65 },
-    { phrase: "design leadership", weight: 0.6 },
-    { phrase: "operating model", weight: 0.5 },
+    { phrase: "product discovery", weight: 0.65 },
+    { phrase: "prioritization", weight: 0.55 },
+    { phrase: "design strategy", weight: 0.6 },
+  ],
+  react: [
+    { phrase: "react component", weight: 0.55 },
+    { phrase: "jsx", weight: 0.45 },
   ],
   "autonomous workflows": [
     { phrase: "ai agents", weight: 0.7 },
@@ -136,7 +145,12 @@ export function root(word: string): string {
 
 export function sameWord(a: string, b: string): boolean {
   if (a === b) return true;
-  if (a.length <= 3 || b.length <= 3) return false;
+  if (a.length <= 3 || b.length <= 3) {
+    const [short, long] = a.length <= b.length ? [a, b] : [b, a];
+    // "map"/"maps", but not two-letter abbreviations.
+    if (short.length >= 3 && (long === `${short}s` || long === `${short}es`)) return true;
+    return false;
+  }
   if (stem(a) === stem(b)) return true;
   const left = root(a);
   const right = root(b);

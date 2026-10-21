@@ -1,17 +1,18 @@
 /**
  * Editorial ranking. Score math, gates, and the final three are deterministic.
  * Semantic signals come from the category definition and the article text.
- * Ranking version 2 — 21 Oct 2026. Weights: relevance 35, actionability 25,
- * depth 20, credibility 10, freshness 10.
+ * Ranking version 3 — 21 Oct 2026. Weights: relevance 35, actionability 25,
+ * depth 20, credibility 10, freshness 10. An article qualifies for a desk
+ * only when that desk is its primary category.
  */
 
+import { categories, categoryById, type Category, type CategoryId } from "./categories.ts";
 import { classifyArticle } from "./classify.ts";
-import { categoryById, type Category, type CategoryId } from "./categories.ts";
-import type { Article, Evidence } from "./corpus.ts";
+import { articles as corpusArticles, type Article, type Evidence } from "./corpus.ts";
 import { parsePublished } from "./day.ts";
 import { sourceById, type SourceType } from "./sources.ts";
 
-export const RANKING_VERSION = 2;
+export const RANKING_VERSION = 3;
 
 /** Known publication dates older than this stay in the library and stay out of the desk. */
 export const MAX_ARTICLE_AGE_DAYS = 548;
@@ -135,17 +136,12 @@ export function matchedSignals(article: Article, category: Category): string[] {
   return classifyArticle(article).matched[category.id] ?? [];
 }
 
-/** Primary category outranks a secondary one. A passing keyword is not relevance. */
+/** Only the primary category earns relevance. A passing keyword does not. */
 function relevanceScore(article: Article, category: Category): number {
   const classified = classifyArticle(article);
-  const earned = classified.matched[category.id];
-  if (!earned || earned.length === 0) return 0;
-  if (classified.status === "classified" && classified.primary === category.id) {
-    return classified.titleStrong[category.id] ? 5 : 4;
-  }
-  if (classified.status === "classified" && classified.secondary.includes(category.id)) return 3;
-  if (classified.status === "needs-reevaluation" && classified.titleStrong[category.id]) return 2;
-  return 0;
+  if (classified.status !== "classified" || classified.primary !== category.id) return 0;
+  // The title agreeing with the category outranks a body-only match.
+  return classified.titleStrong[category.id] ? 5 : 3;
 }
 
 function actionabilityScore(article: Article): number {
@@ -355,4 +351,16 @@ export function rankCategory(
   const shown = selectThree(unique);
 
   return { shown, qualifiedCount: unique.length, note: null, pool: unique };
+}
+
+/** Eligible recent articles whose primary category is that desk. Categories with zero stay hidden. */
+export function categoryArticleCounts(
+  library: readonly Article[] = corpusArticles,
+  now: Date = new Date(),
+): Record<CategoryId, number> {
+  const counts = {} as Record<CategoryId, number>;
+  for (const category of categories) {
+    counts[category.id] = rankCategory(category.id, library, now).qualifiedCount;
+  }
+  return counts;
 }

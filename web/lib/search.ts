@@ -9,8 +9,8 @@
  * so a synonym stays below the same direct hit.
  */
 
-import { categories, categoryById, type CategoryId } from "./categories.ts";
-import { classifyArticle, technologyTags } from "./classify.ts";
+import { categoryById, type CategoryId } from "./categories.ts";
+import { articleTags, classifyArticle } from "./classify.ts";
 import { articles, type Article } from "./corpus.ts";
 import { articleUrlOk, isRecentArticle, nearDuplicate } from "./rank.ts";
 import { sourceById } from "./sources.ts";
@@ -26,6 +26,11 @@ import {
 } from "./terms.ts";
 
 export const RESULT_CAP = 3;
+
+export type SearchScope = {
+  /** When set, results are limited to this primary category. Omit it to search the whole library. */
+  categoryId?: CategoryId | null;
+};
 const MIN_SCORE = 8;
 const EXPANSION_ONLY_MIN = 10;
 const SOURCE_BAND = 0.55;
@@ -79,18 +84,6 @@ function hasWord(words: readonly string[], token: string): boolean {
   return words.some((word) => sameWord(word, token));
 }
 
-function topicSignals(title: string, excerpt: string): string {
-  const text = `${title} ${excerpt}`.trim();
-  const found: string[] = [];
-  for (const category of categories) {
-    for (const signal of category.signals) {
-      const phrase = normalize(signal);
-      if (phrase && containsPhrase(text, phrase) && !found.includes(phrase)) found.push(phrase);
-    }
-  }
-  return found.join(" ");
-}
-
 function urlOk(url: unknown): boolean {
   if (typeof url !== "string" || !url.startsWith("https://")) return false;
   try {
@@ -111,11 +104,9 @@ function indexArticle(article: Article): Indexed | null {
   const publication = normalize(sourceById(asText(article.sourceId))?.name ?? "");
   if (title.length < 3 && excerpt.length < 20) return null;
   const classified = classifyArticle(article);
-  const labels = [classified.primary, ...classified.secondary]
-    .filter((id): id is CategoryId => id !== null)
-    .map((id) => normalize(categoryById(id).label));
-  const tags = technologyTags(article).map((tag) => normalize(tag));
-  const topics = [topicSignals(title, excerpt), ...labels, ...tags].filter(Boolean).join(" ");
+  const label = classified.primary ? normalize(categoryById(classified.primary).label) : "";
+  const tags = articleTags(article).map((tag) => normalize(tag));
+  const topics = [label, ...tags].filter(Boolean).join(" ");
   return {
     article,
     title,
@@ -186,7 +177,6 @@ function plansFor(normalized: string, tokens: readonly string[]): Plan[] {
   }
 
   for (const [key, expansions] of Object.entries(EXPANSIONS)) {
-    if (key.includes(" ")) continue;
     for (const expansion of expansions) {
       const phrase = normalize(expansion.phrase);
       if (expansion.weight < 0.65 || !phrase || !containsPhrase(normalized, phrase)) continue;
@@ -330,7 +320,12 @@ function diversify(hits: readonly SearchHit[]): SearchHit[] {
   return chosen;
 }
 
-export function searchArticles(question: string, library: readonly Article[] = articles, now: Date = new Date()): SearchHit[] {
+export function searchArticles(
+  question: string,
+  library: readonly Article[] = articles,
+  now: Date = new Date(),
+  scope: SearchScope = {},
+): SearchHit[] {
   const normalized = normalize(asText(question));
   const tokens = queryTokens(normalized);
   const phrases = phraseKeys(normalized);
@@ -344,6 +339,7 @@ export function searchArticles(question: string, library: readonly Article[] = a
 
   for (const row of rows) {
     if (!isRecentArticle(asText(row.article.publishedAt), now)) continue;
+    if (scope.categoryId && classifyArticle(row.article).primary !== scope.categoryId) continue;
     let direct = 0;
     const matched: string[] = [];
     const satisfied = tokens.map(() => false);

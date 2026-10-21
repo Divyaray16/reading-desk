@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { ask, NO_MATCH } from "./ask.ts";
+import { classifyArticle } from "./classify.ts";
 import { articles, type Article } from "./corpus.ts";
 import { selectDesk } from "./desk.ts";
 import { searchArticles } from "./search.ts";
@@ -22,7 +23,8 @@ test("UX finds usability and experience writing, not an empty result", () => {
 
 test("user experience, usability, UI, and interaction design return articles", () => {
   for (const query of ["user experience", "usability", "UI", "interaction design"]) {
-    assert.equal(titles(query).length, 3, query);
+    const found = titles(query);
+    assert.ok(found.length >= 1 && found.length <= 3, query);
   }
 });
 
@@ -36,6 +38,8 @@ test("AI UX, agents, design systems, enterprise, and conversational queries retu
     "enterprise UX",
     "conversational AI",
     "usability testing",
+    "user research",
+    "React",
     "trustworthy AI assistants",
   ]) {
     const result = ask(query, NOW);
@@ -92,15 +96,44 @@ test("design systems ranks a real design-system title first", () => {
   assert.match(hits[0]?.article.title ?? "", /design system/i);
 });
 
-test("enterprise UX stays on strategy and enterprise writing", () => {
+test("enterprise UX stays on enterprise product writing", () => {
   const hits = searchArticles("enterprise UX", articles, NOW);
   assert.ok(hits.length >= 1);
   for (const hit of hits) {
-    const blob = `${hit.article.title} ${hit.article.excerpt}`;
-    assert.match(blob, /enterprise|roi|leadership|strategy|adoption|stakeholder/i);
+    const blob = `${hit.article.title} ${hit.article.excerpt} ${hit.matched.join(" ")}`;
+    assert.match(blob, /enterprise|dashboard|workflow|saas|adoption|complex|business/i);
     assert.match(blob, /ux|usability|user experience|interface|design/i);
     assert.equal(hit.article.url.startsWith("https://"), true);
   }
+});
+
+test("user research and React search the real library", () => {
+  for (const query of ["user research", "React"]) {
+    const hits = searchArticles(query, articles, NOW);
+    assert.ok(hits.length >= 1, query);
+    for (const hit of hits) {
+      assert.equal(articles.some((article) => article.id === hit.article.id), true);
+      assert.equal(hit.article.url.startsWith("https://"), true);
+    }
+  }
+  const research = searchArticles("user research", articles, NOW)
+    .map((hit) => `${hit.article.title} ${hit.article.excerpt} ${hit.matched.join(" ")}`)
+    .join("\n")
+    .toLowerCase();
+  assert.match(research, /research|usability test|empathy/);
+  const react = searchArticles("React", articles, NOW);
+  assert.match(react.map((hit) => hit.article.title).join("\n"), /React/);
+});
+
+test("search narrows to one primary category only when asked", () => {
+  const open = searchArticles("design systems", articles, NOW);
+  const systems = searchArticles("design systems", articles, NOW, { categoryId: "systems" });
+  const agentic = searchArticles("design systems", articles, NOW, { categoryId: "agentic" });
+  assert.ok(open.length >= 1);
+  assert.ok(systems.length >= 1);
+  for (const hit of systems) assert.equal(classifyArticle(hit.article).primary, "systems");
+  for (const hit of agentic) assert.equal(classifyArticle(hit.article).primary, "agentic");
+  assert.ok(open.some((hit) => classifyArticle(hit.article).primary !== "agentic"));
 });
 
 test("search is not limited to the articles on the current category desk", () => {

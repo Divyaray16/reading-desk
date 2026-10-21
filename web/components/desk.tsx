@@ -3,22 +3,19 @@
 import { Popover } from "@base-ui/react/popover";
 import { Select } from "@base-ui/react/select";
 import { Bookmark, Check, ChevronDown, RefreshCw } from "lucide-react";
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { ask, type AskResult } from "@/lib/ask";
 import { categories, DEFAULT_CATEGORY, type CategoryId } from "@/lib/categories";
+import { articles } from "@/lib/corpus";
 import { kolkataDay } from "@/lib/day";
 import { bookmarksFor, refreshDesk, replaceDayPick, sameArticleSet, selectDesk, showCached, type Recommendation } from "@/lib/desk";
 import { visitorLocalLabel } from "@/lib/local-time";
-
-const categoryItems = categories.map((category) => ({
-  value: category.id,
-  label: category.label,
-}));
+import { categoryArticleCounts } from "@/lib/rank";
 
 const SKIP_KEY = "reading-desk-skips";
 const USEFUL_KEY = "reading-desk-useful";
-const DAY_KEY = "reading-desk-day-v3";
+const DAY_KEY = "reading-desk-day-v4";
 
 type DayCache = { date: string; picks: Partial<Record<CategoryId, string[]>> };
 
@@ -90,6 +87,17 @@ export function Desk() {
   const [draft, setDraft] = useState("");
   const [asked, setAsked] = useState("");
   const [answer, setAnswer] = useState<AskResult | null>(null);
+  const [narrow, setNarrow] = useState(false);
+  const counts = useMemo(() => categoryArticleCounts(articles), []);
+  const visible = useMemo(
+    () => categories.filter((category) => (counts[category.id] ?? 0) > 0),
+    [counts],
+  );
+  const active: CategoryId = visible.some((category) => category.id === view) ? view : (visible[0]?.id ?? view);
+
+  useEffect(() => {
+    if (active !== view) setView(active);
+  }, [active, view]);
 
   useEffect(() => {
     const today = kolkataDay();
@@ -121,21 +129,22 @@ export function Desk() {
   const skipIds = skipped ?? [];
   const usefulIds = useful ?? [];
   const today = day?.date ?? kolkataDay();
-  const cachedIds = day?.picks[view];
-  const computed = selectDesk(view, { skipped: skipIds, useful: usefulIds });
-  const shown = (cachedIds ? showCached(view, cachedIds) : computed.shown).filter((item) => !skipIds.includes(item.id));
+  const cachedIds = day?.picks[active];
+  const computed = selectDesk(active, { skipped: skipIds, useful: usefulIds });
+  const shown = (cachedIds ? showCached(active, cachedIds) : computed.shown).filter((item) => !skipIds.includes(item.id));
 
   useEffect(() => {
     if (!ready || !day || skipped === null || useful === null) return;
-    if (day.picks[view]) return;
-    const fresh = selectDesk(view, { skipped, useful });
+    if (day.picks[active]) return;
+    const fresh = selectDesk(active, { skipped, useful });
     setDay((current) => {
-      if (!current || current.picks[view]) return current;
-      return { ...current, picks: { ...current.picks, [view]: fresh.shown.map((item) => item.id) } };
+      if (!current || current.picks[active]) return current;
+      return { ...current, picks: { ...current.picks, [active]: fresh.shown.map((item) => item.id) } };
     });
-  }, [ready, view, day, skipped, useful]);
+  }, [ready, active, day, skipped, useful]);
 
-  const viewLine = categories.find((item) => item.id === view)?.line ?? "";
+  const viewLine = categories.find((item) => item.id === active)?.line ?? "";
+  const activeLabel = categories.find((item) => item.id === active)?.label ?? "";
   const hiddenHere = (cachedIds ?? computed.shown.map((item) => item.id)).filter((id) => skipIds.includes(id)).length;
 
   function choose(next: CategoryId) {
@@ -167,17 +176,17 @@ export function Desk() {
   }
 
   const currentIds = cachedIds ?? shown.map((item) => item.id);
-  const upcoming = refreshDesk(view, { skipped: skipIds, useful: usefulIds }, currentIds);
+  const upcoming = refreshDesk(active, { skipped: skipIds, useful: usefulIds }, currentIds);
   const canRotate = !sameArticleSet(
     upcoming.shown.map((item) => item.id),
     shown.map((item) => item.id),
   );
 
   function refresh() {
-    const fresh = refreshDesk(view, { skipped: skipIds, useful: usefulIds }, currentIds);
+    const fresh = refreshDesk(active, { skipped: skipIds, useful: usefulIds }, currentIds);
     setDay((current) => ({
       date: current?.date ?? today,
-      picks: replaceDayPick(current?.picks ?? {}, view, fresh.shown.map((item) => item.id)),
+      picks: replaceDayPick(current?.picks ?? {}, active, fresh.shown.map((item) => item.id)),
     }));
     if (answer || asked || draft.trim()) {
       setDraft("");
@@ -191,7 +200,7 @@ export function Desk() {
     const question = draft.trim();
     if (!question) return;
     setAsked(question);
-    setAnswer(ask(question));
+    setAnswer(ask(question, new Date(), articles, narrow ? { categoryId: active } : {}));
   }
 
   useEffect(() => {
@@ -203,10 +212,10 @@ export function Desk() {
     }
     const id = window.setTimeout(() => {
       setAsked(question);
-      setAnswer(ask(question));
+      setAnswer(ask(question, new Date(), articles, narrow ? { categoryId: active } : {}));
     }, 250);
     return () => window.clearTimeout(id);
-  }, [draft]);
+  }, [draft, narrow, active]);
 
   return (
     <main className="mx-auto w-full min-w-0 max-w-[42rem] px-5 py-12 sm:px-8 sm:py-16">
@@ -249,13 +258,40 @@ export function Desk() {
               Ask
             </Button>
           </div>
+          <label className="mt-3 flex items-start gap-2 text-sm leading-snug text-muted-foreground">
+            <input
+              type="checkbox"
+              checked={narrow}
+              data-search-narrow=""
+              onChange={(event) => setNarrow(event.target.checked)}
+              className="mt-0.5 size-4 shrink-0 accent-[#e0b08a]"
+            />
+            <span>Search only in {activeLabel}</span>
+          </label>
         </form>
       </section>
 
       {answer ? (
         <div className="mt-8 flex items-baseline justify-between gap-4">
-          <p className="text-sm leading-relaxed text-muted-foreground">
-            Matches for “{asked}” across the whole library.
+          <p className="text-sm leading-relaxed text-muted-foreground" data-search-library={narrow ? "category" : "all"}>
+            Matches for “{asked}”{" "}
+            {narrow ? (
+              <>
+                in{" "}
+                <button
+                  type="button"
+                  data-search-scope="category"
+                  className="inline-flex items-center gap-1 rounded-full border border-ember/40 bg-ember/10 px-2.5 py-0.5 align-baseline text-xs text-ember"
+                  onClick={() => setNarrow(false)}
+                >
+                  {activeLabel}
+                  <span aria-hidden="true">×</span>
+                  <span className="sr-only">Remove the category limit and search the whole library</span>
+                </button>
+              </>
+            ) : (
+              "across the whole library."
+            )}
           </p>
           <button
             type="button"
@@ -273,7 +309,7 @@ export function Desk() {
         <div className="mt-8">
           <div className="desk-filter">
             <div className="min-w-0 flex-1">
-              <CategorySelect value={view} onValueChange={choose} />
+              <CategorySelect value={active} counts={counts} options={visible} onValueChange={choose} />
             </div>
             <Button
               type="button"
@@ -297,7 +333,7 @@ export function Desk() {
         </div>
       )}
 
-      <div aria-live="polite" data-blog-count={answer?.kind === "reads" ? answer.articles.length : shown.length} data-category={view} data-day={today}>
+      <div aria-live="polite" data-blog-count={answer?.kind === "reads" ? answer.articles.length : shown.length} data-category={active} data-day={today}>
         {answer?.kind === "none" ? (
           <EmptyState kicker="No match" title="Nothing in the library fits." body={answer.text} />
         ) : null}
@@ -358,12 +394,29 @@ export function Desk() {
   );
 }
 
-function CategorySelect({ value, onValueChange }: { value: CategoryId; onValueChange: (next: CategoryId) => void }) {
+function CategorySelect({
+  value,
+  counts,
+  options,
+  onValueChange,
+}: {
+  value: CategoryId;
+  counts: Partial<Record<CategoryId, number>>;
+  options: readonly { id: CategoryId; label: string }[];
+  onValueChange: (next: CategoryId) => void;
+}) {
+  const [filter, setFilter] = useState("");
+  const items = options.map((category) => ({ value: category.id, label: category.label }));
+  const query = filter.trim().toLowerCase();
+  const shown = options.filter((category) => category.label.toLowerCase().includes(query));
   return (
     <Select.Root
-      items={categoryItems}
+      items={items}
       value={value}
       modal={false}
+      onOpenChange={(open) => {
+        if (!open) setFilter("");
+      }}
       onValueChange={(next) => {
         if (next) onValueChange(next);
       }}
@@ -389,22 +442,47 @@ function CategorySelect({ value, onValueChange }: { value: CategoryId; onValueCh
           collisionPadding={16}
           collisionAvoidance={{ side: "flip", align: "shift", fallbackAxisSide: "none" }}
         >
-          <Select.Popup className="box-border w-[min(var(--available-width),max(var(--anchor-width),22rem))] max-w-[var(--available-width)] origin-[var(--transform-origin)] rounded-xl border border-border bg-[#231f1b] text-foreground shadow-[inset_0_1px_0_rgba(255,236,214,0.06),0_18px_40px_-24px_rgba(0,0,0,0.9)] outline-none transition-[opacity,transform] duration-100 ease-out data-[closed]:pointer-events-none data-[ending-style]:scale-[0.98] data-[ending-style]:opacity-0 data-[starting-style]:scale-[0.98] data-[starting-style]:opacity-0">
-            <Select.List className="max-h-[min(24rem,var(--available-height))] overflow-y-auto overscroll-contain p-1.5 [scrollbar-color:#e0b08a_transparent] [scrollbar-width:thin]">
-              {categories.map((category) => (
-                <Select.Item
-                  key={category.id}
-                  value={category.id}
-                  className="flex min-h-10 cursor-pointer items-center gap-2.5 rounded-lg px-2.5 py-2 text-left text-sm leading-snug text-foreground outline-none select-none data-[highlighted]:bg-foreground/8 data-[selected]:bg-ember/12 data-[selected]:text-ember"
-                >
-                  <span className="flex size-4 shrink-0 items-center justify-center">
-                    <Select.ItemIndicator>
-                      <Check className="size-3.5" strokeWidth={2.4} aria-hidden />
-                    </Select.ItemIndicator>
-                  </span>
-                  <Select.ItemText className="min-w-0 flex-1 whitespace-normal">{category.label}</Select.ItemText>
-                </Select.Item>
-              ))}
+          <Select.Popup className="box-border w-[min(var(--available-width),max(var(--anchor-width),28rem))] max-w-[var(--available-width)] origin-[var(--transform-origin)] rounded-xl border border-border bg-[#231f1b] text-foreground shadow-[inset_0_1px_0_rgba(255,236,214,0.06),0_18px_40px_-24px_rgba(0,0,0,0.9)] outline-none transition-[opacity,transform] duration-100 ease-out data-[closed]:pointer-events-none data-[ending-style]:scale-[0.98] data-[ending-style]:opacity-0 data-[starting-style]:scale-[0.98] data-[starting-style]:opacity-0">
+            <div className="border-b border-border p-1.5">
+              <input
+                data-category-filter=""
+                value={filter}
+                onChange={(event) => setFilter(event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key !== "Escape") event.stopPropagation();
+                }}
+                onClick={(event) => event.stopPropagation()}
+                placeholder="Find a category"
+                aria-label="Find a category"
+                autoComplete="off"
+                className="h-9 w-full rounded-lg border border-border bg-field px-2.5 text-sm text-foreground outline-none placeholder:text-[#b3a898] focus-visible:border-ember focus-visible:ring-2 focus-visible:ring-ember/35"
+              />
+            </div>
+            <Select.List className="max-h-[min(22rem,var(--available-height))] overflow-y-auto overscroll-contain p-1.5 [scrollbar-color:#e0b08a_transparent] [scrollbar-width:thin]">
+              {shown.map((category) => {
+                const count = counts[category.id] ?? 0;
+                return (
+                  <Select.Item
+                    key={category.id}
+                    value={category.id}
+                    data-category-id={category.id}
+                    data-category-count={count}
+                    aria-label={`${category.label}, ${count} ${count === 1 ? "article" : "articles"}`}
+                    className="flex min-h-10 cursor-pointer items-center gap-2.5 rounded-lg px-2.5 py-2 text-left text-sm leading-snug text-foreground outline-none select-none data-[highlighted]:bg-foreground/8 data-[selected]:bg-ember/12 data-[selected]:text-ember"
+                  >
+                    <span className="flex size-4 shrink-0 items-center justify-center">
+                      <Select.ItemIndicator>
+                        <Check className="size-3.5" strokeWidth={2.4} aria-hidden />
+                      </Select.ItemIndicator>
+                    </span>
+                    <Select.ItemText className="min-w-0 flex-1 whitespace-normal">{category.label}</Select.ItemText>
+                    <span className="shrink-0 text-xs tabular-nums text-muted-foreground" aria-hidden="true">
+                      {count}
+                    </span>
+                  </Select.Item>
+                );
+              })}
+              {shown.length === 0 ? <p className="px-2.5 py-3 text-sm text-muted-foreground">No category matches.</p> : null}
             </Select.List>
           </Select.Popup>
         </Select.Positioner>
