@@ -245,7 +245,7 @@ export function Desk() {
       <section className="mt-10" aria-labelledby="ask-label">
         <form onSubmit={submit}>
           <label id="ask-label" htmlFor="ask" className="block font-serif text-2xl leading-snug text-balance">
-            Ask about the work in front of you
+            Search about the work in front of you
           </label>
           <div className="desk-ask mt-4">
             <input
@@ -264,7 +264,7 @@ export function Desk() {
               className="h-12 max-h-12 min-h-12 shrink-0 rounded-xl px-5 text-[0.95rem] shadow-[inset_0_1px_0_rgba(255,255,255,0.28),0_10px_18px_-14px_rgba(0,0,0,0.95)] hover:bg-[#e7dccb] active:translate-y-px"
               disabled={draft.trim().length === 0}
             >
-              Ask
+              Search
             </Button>
           </div>
         </form>
