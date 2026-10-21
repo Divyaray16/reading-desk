@@ -242,8 +242,6 @@ export function Desk() {
         <VisitorClock />
       </header>
 
-      {useful !== null ? <Bookmarks ids={usefulIds} onRemove={toggleBookmark} /> : null}
-
       <section className="mt-10" aria-labelledby="ask-label">
         <form onSubmit={submit}>
           <label id="ask-label" htmlFor="ask" className="block font-serif text-2xl leading-snug text-balance">
@@ -571,45 +569,6 @@ function BookmarkMenu({ ids, onRemove }: { ids: readonly string[]; onRemove: (id
         </Popover.Positioner>
       </Popover.Portal>
     </Popover.Root>
-  );
-}
-
-function Bookmarks({ ids, onRemove }: { ids: readonly string[]; onRemove: (id: string) => void }) {
-  const bookmarks = bookmarksFor(ids);
-  if (bookmarks.length === 0) return null;
-  return (
-    <section className="mt-8" aria-labelledby="bookmarks-label" data-bookmarks={bookmarks.length}>
-      <div className="flex items-baseline justify-between gap-4">
-        <h2 id="bookmarks-label" className="text-[0.68rem] font-medium tracking-[0.22em] text-ember uppercase">
-          Bookmarks
-        </h2>
-        <p className="text-xs text-muted-foreground">{bookmarks.length} saved in this browser</p>
-      </div>
-      <ul className="mt-3 flex list-none flex-col divide-y divide-border overflow-hidden rounded-xl border border-border bg-card p-0">
-        {bookmarks.map((bookmark) => (
-          <li key={bookmark.id} className="flex items-start gap-3 px-4 py-3" data-bookmark-id={bookmark.id}>
-            <div className="min-w-0 flex-1">
-              <a
-                href={bookmark.url}
-                target="_blank"
-                rel="noreferrer"
-                className="font-serif text-lg leading-snug text-balance text-foreground underline-offset-[0.14em] hover:underline focus-visible:underline"
-              >
-                {bookmark.title}
-              </a>
-              <p className="mt-1 text-[0.68rem] tracking-[0.14em] text-muted-foreground uppercase">{bookmark.publication}</p>
-            </div>
-            <button
-              type="button"
-              className="shrink-0 pt-1 text-xs text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
-              onClick={() => onRemove(bookmark.id)}
-            >
-              Remove
-            </button>
-          </li>
-        ))}
-      </ul>
-    </section>
   );
 }
 
