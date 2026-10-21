@@ -1,7 +1,8 @@
 "use client";
 
+import { Popover } from "@base-ui/react/popover";
 import { Select } from "@base-ui/react/select";
-import { Check, ChevronDown, RefreshCw } from "lucide-react";
+import { Bookmark, Check, ChevronDown, RefreshCw } from "lucide-react";
 import { useEffect, useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { ask, type AskResult } from "@/lib/ask";
@@ -210,7 +211,10 @@ export function Desk() {
   return (
     <main className="mx-auto w-full min-w-0 max-w-[42rem] px-5 py-12 sm:px-8 sm:py-16">
       <header className="border-b border-border pb-8">
-        <p className="text-[0.68rem] font-medium tracking-[0.22em] text-ember uppercase">Today</p>
+        <div className="flex items-center justify-between gap-3">
+          <p className="text-[0.68rem] font-medium tracking-[0.22em] text-ember uppercase">Today</p>
+          <BookmarkMenu ids={usefulIds} onRemove={toggleBookmark} />
+        </div>
         <h1 className="mt-4 font-serif text-[2.85rem] leading-[0.98] tracking-[-0.03em] text-balance text-foreground sm:text-6xl">
           Reading desk
         </h1>
@@ -219,8 +223,6 @@ export function Desk() {
         </p>
         <VisitorClock />
       </header>
-
-      {useful !== null ? <Bookmarks ids={useful} onRemove={toggleBookmark} /> : null}
 
       <section className="mt-10" aria-labelledby="ask-label">
         <form onSubmit={submit}>
@@ -411,51 +413,95 @@ function CategorySelect({ value, onValueChange }: { value: CategoryId; onValueCh
   );
 }
 
-function Bookmarks({ ids, onRemove }: { ids: readonly string[]; onRemove: (id: string) => void }) {
+function BookmarkMenu({ ids, onRemove }: { ids: readonly string[]; onRemove: (id: string) => void }) {
   const bookmarks = bookmarksFor(ids);
+  const count = bookmarks.length;
+
   return (
-    <section className="mt-8" aria-labelledby="bookmarks-label" data-bookmarks={bookmarks.length}>
-      <div className="flex items-baseline justify-between gap-4">
-        <h2 id="bookmarks-label" className="text-[0.68rem] font-medium tracking-[0.22em] text-ember uppercase">
-          Bookmarks
-        </h2>
-        {bookmarks.length > 0 ? (
-          <p className="text-xs text-muted-foreground">
-            {bookmarks.length} saved in this browser
-          </p>
+    <Popover.Root>
+      <Popover.Trigger
+        type="button"
+        aria-label="Bookmarks"
+        data-bookmarks-trigger=""
+        data-bookmark-count={count}
+        className={(state) => {
+          const marked = state.open || count > 0;
+          return [
+            "group inline-flex h-9 shrink-0 items-center justify-center rounded-xl border border-border bg-field shadow-[inset_0_1px_2px_rgba(0,0,0,0.45)] outline-none focus-visible:border-ember focus-visible:ring-2 focus-visible:ring-ember/35",
+            marked ? "text-ember" : "text-muted-foreground",
+            state.open ? "border-ember" : "",
+            count > 0 ? "gap-1 px-2" : "w-9",
+          ].join(" ");
+        }}
+      >
+        <Bookmark
+          aria-hidden="true"
+          className="size-4 group-data-[popup-open]:fill-current"
+          fill={count > 0 ? "currentColor" : "none"}
+          strokeWidth={1.75}
+        />
+        {count > 0 ? (
+          <span className="min-w-4 text-center text-[0.7rem] leading-none font-medium tabular-nums" aria-hidden="true">
+            {count}
+          </span>
         ) : null}
-      </div>
-      {bookmarks.length === 0 ? (
-        <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-          Bookmark an essay and it stays here the next time you open this desk.
-        </p>
-      ) : (
-        <ul className="mt-3 flex list-none flex-col divide-y divide-border overflow-hidden rounded-xl border border-border bg-card p-0">
-          {bookmarks.map((bookmark) => (
-            <li key={bookmark.id} className="flex items-start gap-3 px-4 py-3" data-bookmark-id={bookmark.id}>
-              <div className="min-w-0 flex-1">
-                <a
-                  href={bookmark.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="font-serif text-lg leading-snug text-balance text-foreground underline-offset-[0.14em] hover:underline focus-visible:underline"
-                >
-                  {bookmark.title}
-                </a>
-                <p className="mt-1 text-[0.68rem] tracking-[0.14em] text-muted-foreground uppercase">{bookmark.publication}</p>
-              </div>
-              <button
-                type="button"
-                className="shrink-0 pt-1 text-xs text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
-                onClick={() => onRemove(bookmark.id)}
-              >
-                Remove
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
-    </section>
+      </Popover.Trigger>
+      <Popover.Portal>
+        <Popover.Positioner
+          className="z-50 outline-none"
+          side="bottom"
+          align="end"
+          sideOffset={8}
+          collisionPadding={12}
+          collisionAvoidance={{ side: "flip", align: "shift", fallbackAxisSide: "none" }}
+        >
+          <Popover.Popup
+            data-bookmarks={count}
+            className="box-border w-[min(22rem,var(--available-width,calc(100vw-1.5rem)))] max-w-[min(var(--available-width,calc(100vw-1.5rem)),calc(100vw-1.5rem))] origin-[var(--transform-origin)] rounded-xl border border-border bg-card text-foreground shadow-[inset_0_1px_0_rgba(255,236,214,0.06),0_18px_40px_-24px_rgba(0,0,0,0.9)] outline-none"
+          >
+            <div className="max-h-[min(24rem,var(--available-height,70vh))] overflow-x-hidden overflow-y-auto overscroll-contain p-3 [scrollbar-color:#e0b08a_transparent] [scrollbar-width:thin]">
+              <Popover.Title className="text-[0.68rem] font-medium tracking-[0.22em] text-ember uppercase">
+                Bookmarks
+              </Popover.Title>
+              {count === 0 ? (
+                <Popover.Description className="mt-2 text-sm leading-relaxed text-pretty text-muted-foreground">
+                  The essays you bookmark stay in this browser.
+                </Popover.Description>
+              ) : (
+                <ul className="mt-1 flex list-none flex-col p-0">
+                  {bookmarks.map((bookmark) => (
+                    <li
+                      key={bookmark.id}
+                      className="flex items-start gap-3 border-t border-border py-2.5 first:border-t-0"
+                      data-bookmark-id={bookmark.id}
+                    >
+                      <div className="min-w-0 flex-1">
+                        <a
+                          href={bookmark.url}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="font-serif text-base leading-snug text-pretty break-words text-foreground underline-offset-[0.14em] hover:underline focus-visible:underline"
+                        >
+                          {bookmark.title}
+                        </a>
+                        <p className="mt-1 text-[0.68rem] tracking-[0.14em] text-muted-foreground uppercase">{bookmark.publication}</p>
+                      </div>
+                      <button
+                        type="button"
+                        className="shrink-0 pt-0.5 text-xs text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+                        onClick={() => onRemove(bookmark.id)}
+                      >
+                        Remove
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </Popover.Popup>
+        </Popover.Positioner>
+      </Popover.Portal>
+    </Popover.Root>
   );
 }
 
