@@ -87,7 +87,6 @@ export function Desk() {
   const [draft, setDraft] = useState("");
   const [asked, setAsked] = useState("");
   const [answer, setAnswer] = useState<AskResult | null>(null);
-  const [narrow, setNarrow] = useState(false);
   const counts = useMemo(() => categoryArticleCounts(articles), []);
   const visible = useMemo(
     () => categories.filter((category) => (counts[category.id] ?? 0) > 0),
@@ -144,7 +143,6 @@ export function Desk() {
   }, [ready, active, day, skipped, useful]);
 
   const viewLine = categories.find((item) => item.id === active)?.line ?? "";
-  const activeLabel = categories.find((item) => item.id === active)?.label ?? "";
   const hiddenHere = (cachedIds ?? computed.shown.map((item) => item.id)).filter((id) => skipIds.includes(id)).length;
 
   function choose(next: CategoryId) {
@@ -200,7 +198,7 @@ export function Desk() {
     const question = draft.trim();
     if (!question) return;
     setAsked(question);
-    setAnswer(ask(question, new Date(), articles, narrow ? { categoryId: active } : {}));
+    setAnswer(ask(question, new Date(), articles));
   }
 
   useEffect(() => {
@@ -212,10 +210,10 @@ export function Desk() {
     }
     const id = window.setTimeout(() => {
       setAsked(question);
-      setAnswer(ask(question, new Date(), articles, narrow ? { categoryId: active } : {}));
+      setAnswer(ask(question, new Date(), articles));
     }, 250);
     return () => window.clearTimeout(id);
-  }, [draft, narrow, active]);
+  }, [draft]);
 
   return (
     <main className="mx-auto w-full min-w-0 max-w-[42rem] px-5 py-12 sm:px-8 sm:py-16">
@@ -260,40 +258,13 @@ export function Desk() {
               Ask
             </Button>
           </div>
-          <label className="mt-3 flex items-start gap-2 text-sm leading-snug text-muted-foreground">
-            <input
-              type="checkbox"
-              checked={narrow}
-              data-search-narrow=""
-              onChange={(event) => setNarrow(event.target.checked)}
-              className="mt-0.5 size-4 shrink-0 accent-[#e0b08a]"
-            />
-            <span>Search only in {activeLabel}</span>
-          </label>
         </form>
       </section>
 
       {answer ? (
         <div className="mt-8 flex items-baseline justify-between gap-4">
-          <p className="text-sm leading-relaxed text-muted-foreground" data-search-library={narrow ? "category" : "all"}>
-            Matches for “{asked}”{" "}
-            {narrow ? (
-              <>
-                in{" "}
-                <button
-                  type="button"
-                  data-search-scope="category"
-                  className="inline-flex items-center gap-1 rounded-full border border-ember/40 bg-ember/10 px-2.5 py-0.5 align-baseline text-xs text-ember"
-                  onClick={() => setNarrow(false)}
-                >
-                  {activeLabel}
-                  <span aria-hidden="true">×</span>
-                  <span className="sr-only">Remove the category limit and search the whole library</span>
-                </button>
-              </>
-            ) : (
-              "across the whole library."
-            )}
+          <p className="text-sm leading-relaxed text-muted-foreground" data-search-library="all">
+            Matches for “{asked}” across the whole library.
           </p>
           <button
             type="button"
@@ -541,7 +512,7 @@ function BookmarkMenu({ ids, onRemove }: { ids: readonly string[]; onRemove: (id
               </Popover.Title>
               {count === 0 ? (
                 <Popover.Description className="mt-2 text-sm leading-relaxed text-pretty text-muted-foreground">
-                  The essays you bookmark stay in this browser.
+                  The articles you bookmark stay in this browser.
                 </Popover.Description>
               ) : (
                 <ul className="mt-1 flex list-none flex-col p-0">
@@ -593,7 +564,7 @@ function Bookmarks({ ids, onRemove }: { ids: readonly string[]; onRemove: (id: s
       </div>
       {bookmarks.length === 0 ? (
         <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-          Bookmark an essay and it stays here the next time you open this desk.
+          Bookmark an article and it stays here the next time you open this desk.
         </p>
       ) : (
         <ul className="mt-3 flex list-none flex-col divide-y divide-border overflow-hidden rounded-xl border border-border bg-card p-0">
