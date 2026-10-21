@@ -510,11 +510,7 @@ function BookmarkMenu({ ids, onRemove }: { ids: readonly string[]; onRemove: (id
               <Popover.Title className="text-[0.68rem] font-medium tracking-[0.22em] text-ember uppercase">
                 Bookmarks
               </Popover.Title>
-              {count === 0 ? (
-                <Popover.Description className="mt-2 text-sm leading-relaxed text-pretty text-muted-foreground">
-                  The articles you bookmark stay in this browser.
-                </Popover.Description>
-              ) : (
+              {count > 0 ? (
                 <ul className="mt-1 flex list-none flex-col p-0">
                   {bookmarks.map((bookmark) => (
                     <li
@@ -543,7 +539,7 @@ function BookmarkMenu({ ids, onRemove }: { ids: readonly string[]; onRemove: (id
                     </li>
                   ))}
                 </ul>
-              )}
+              ) : null}
             </div>
           </Popover.Popup>
         </Popover.Positioner>
@@ -554,44 +550,39 @@ function BookmarkMenu({ ids, onRemove }: { ids: readonly string[]; onRemove: (id
 
 function Bookmarks({ ids, onRemove }: { ids: readonly string[]; onRemove: (id: string) => void }) {
   const bookmarks = bookmarksFor(ids);
+  if (bookmarks.length === 0) return null;
   return (
     <section className="mt-8" aria-labelledby="bookmarks-label" data-bookmarks={bookmarks.length}>
       <div className="flex items-baseline justify-between gap-4">
         <h2 id="bookmarks-label" className="text-[0.68rem] font-medium tracking-[0.22em] text-ember uppercase">
           Bookmarks
         </h2>
-        {bookmarks.length > 0 ? <p className="text-xs text-muted-foreground">{bookmarks.length} saved in this browser</p> : null}
+        <p className="text-xs text-muted-foreground">{bookmarks.length} saved in this browser</p>
       </div>
-      {bookmarks.length === 0 ? (
-        <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-          Bookmark an article and it stays here the next time you open this desk.
-        </p>
-      ) : (
-        <ul className="mt-3 flex list-none flex-col divide-y divide-border overflow-hidden rounded-xl border border-border bg-card p-0">
-          {bookmarks.map((bookmark) => (
-            <li key={bookmark.id} className="flex items-start gap-3 px-4 py-3" data-bookmark-id={bookmark.id}>
-              <div className="min-w-0 flex-1">
-                <a
-                  href={bookmark.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="font-serif text-lg leading-snug text-balance text-foreground underline-offset-[0.14em] hover:underline focus-visible:underline"
-                >
-                  {bookmark.title}
-                </a>
-                <p className="mt-1 text-[0.68rem] tracking-[0.14em] text-muted-foreground uppercase">{bookmark.publication}</p>
-              </div>
-              <button
-                type="button"
-                className="shrink-0 pt-1 text-xs text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
-                onClick={() => onRemove(bookmark.id)}
+      <ul className="mt-3 flex list-none flex-col divide-y divide-border overflow-hidden rounded-xl border border-border bg-card p-0">
+        {bookmarks.map((bookmark) => (
+          <li key={bookmark.id} className="flex items-start gap-3 px-4 py-3" data-bookmark-id={bookmark.id}>
+            <div className="min-w-0 flex-1">
+              <a
+                href={bookmark.url}
+                target="_blank"
+                rel="noreferrer"
+                className="font-serif text-lg leading-snug text-balance text-foreground underline-offset-[0.14em] hover:underline focus-visible:underline"
               >
-                Remove
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
+                {bookmark.title}
+              </a>
+              <p className="mt-1 text-[0.68rem] tracking-[0.14em] text-muted-foreground uppercase">{bookmark.publication}</p>
+            </div>
+            <button
+              type="button"
+              className="shrink-0 pt-1 text-xs text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+              onClick={() => onRemove(bookmark.id)}
+            >
+              Remove
+            </button>
+          </li>
+        ))}
+      </ul>
     </section>
   );
 }
