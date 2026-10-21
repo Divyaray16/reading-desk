@@ -15,7 +15,7 @@ const newsreader = Newsreader({
 });
 
 export const metadata: Metadata = {
-  title: "Reading desk",
+  title: "Reading Desk",
   description: "Three articles for the work in front of you. No login.",
 };
 
