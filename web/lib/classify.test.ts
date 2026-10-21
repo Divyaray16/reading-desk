@@ -4,8 +4,9 @@ import { categories } from "./categories.ts";
 import { classifyArticle } from "./classify.ts";
 import { articles, type Article } from "./corpus.ts";
 import { selectDesk } from "./desk.ts";
-import { isRecentArticle, MAX_ARTICLE_AGE_DAYS } from "./rank.ts";
+import { isRecentArticle, MAX_ARTICLE_AGE_DAYS, rankCategory } from "./rank.ts";
 import { articleTags, isCanonicalTag, TAG_CAP } from "./tags.ts";
+import { containsPhrase, normalize } from "./terms.ts";
 
 const NOW = new Date("2026-10-19T12:00:00Z");
 
@@ -40,7 +41,7 @@ function article(partial: Partial<Article> & Pick<Article, "title" | "excerpt">)
   };
 }
 
-test("the desk has fifteen categories and needs-review is not one of them", () => {
+test("the desk has fifteen categories and needs-reevaluation is not one of them", () => {
   assert.equal(categories.length, 15);
   assert.equal(new Set(categories.map((category) => category.label)).size, 15);
   assert.deepEqual(
@@ -75,7 +76,7 @@ test("a passing keyword does not set the primary category", () => {
   assert.equal(articleTags(piece).includes("AI Agents"), false);
 });
 
-test("two subjects in equal measure stay in needs-review", () => {
+test("two subjects in equal measure stay in needs-reevaluation", () => {
   const classified = classifyArticle(
     article({
       title: "Service design and the design system",
@@ -83,7 +84,7 @@ test("two subjects in equal measure stay in needs-review", () => {
         "This essay gives the same attention to service design and the design system. It explains service design and the design system in equal depth, and it never picks one as the point of the piece. Both service design and the design system stay in frame the whole way through.",
     }),
   );
-  assert.equal(classified.status, "needs-review");
+  assert.equal(classified.status, "needs-reevaluation");
   assert.equal(classified.primary, null);
 });
 
@@ -95,7 +96,7 @@ test("a title without excerpt support is not classified", () => {
         "The team met for a planning offsite, compared calendars, and wrote down the publishing schedule for the next quarter. The notes mention the weather, the room, and the lunch order, and they stop there.",
     }),
   );
-  assert.equal(classified.status, "needs-review");
+  assert.equal(classified.status, "needs-reevaluation");
   assert.equal(classified.primary, null);
 });
 
@@ -107,7 +108,7 @@ test("model research without a design decision is tagged, not forced into a cate
   });
   const classified = classifyArticle(piece);
   const tags = articleTags(piece);
-  assert.equal(classified.status, "needs-review");
+  assert.equal(classified.status, "needs-reevaluation");
   assert.equal(classified.primary, null);
   assert.ok(tags.includes("Transformer"));
   assert.ok(tags.includes("GPU"));
@@ -141,11 +142,11 @@ test("a short excerpt is marked for review instead of being filed", () => {
       excerpt: "Too short to judge.",
     }),
   );
-  assert.equal(classified.status, "needs-review");
+  assert.equal(classified.status, "needs-reevaluation");
   assert.equal(classified.primary, null);
 });
 
-test("every real article has one primary or needs-review, and tags stay separate", () => {
+test("every real article has one primary or needs-reevaluation, and tags stay separate", () => {
   const labels = new Set(LABELS);
   const urls = new Set<string>();
   assert.ok(articles.length > 200);
@@ -154,8 +155,8 @@ test("every real article has one primary or needs-review, and tags stay separate
     urls.add(piece.url);
     const classified = classifyArticle(piece);
     assert.equal("secondary" in classified, false);
-    assert.ok(classified.status === "classified" || classified.status === "needs-review");
-    if (classified.status === "needs-review") {
+    assert.ok(classified.status === "classified" || classified.status === "needs-reevaluation");
+    if (classified.status === "needs-reevaluation") {
       assert.equal(classified.primary, null);
     } else {
       assert.ok(categories.some((category) => category.id === classified.primary));
@@ -205,4 +206,24 @@ test("a category shows three recent articles only when the corpus has them", () 
     }
   }
   assert.ok(full >= 1);
+});
+
+test("phrase matching stays on word boundaries", () => {
+  assert.equal(containsPhrase(normalize("design systems"), "design system"), true);
+  assert.equal(containsPhrase(normalize("agentic workflows"), "agent"), false);
+  assert.equal(containsPhrase(normalize("personalization engine"), "persona"), false);
+  assert.equal(containsPhrase(normalize("the agents plan"), "agent"), true);
+});
+
+test("excerpt-backed subjects fill interaction, visual, product, content, and emerging", () => {
+  const expectOne = ["foundations", "interaction", "visual", "product", "content", "emerging"] as const;
+  for (const id of expectOne) {
+    const ranked = rankCategory(id, articles, NOW);
+    assert.ok(ranked.qualifiedCount >= 1, `${id} ${ranked.qualifiedCount}`);
+    for (const item of ranked.pool) {
+      if (!item.qualified) continue;
+      assert.equal(classifyArticle(item.article).primary, id, item.article.title);
+      assert.equal(item.article.evidence === "full_text", false, item.article.title);
+    }
+  }
 });

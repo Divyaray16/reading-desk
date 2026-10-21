@@ -1,8 +1,8 @@
 /**
- * One primary category, or needs-review.
+ * One primary category, or needs-reevaluation.
  * The primary is the central subject of the excerpt, not the publication and not a stray word.
  * A thin excerpt, a title with nothing behind it in the excerpt, or two subjects too close
- * to call stay in needs-review. Needs-review is not a category.
+ * to call stay in needs-reevaluation. Needs reevaluation is not a category.
  * Tags live in tags.ts and never stand in for the primary.
  */
 
@@ -13,7 +13,7 @@ import { containsPhrase, normalize, sameWord } from "./terms.ts";
 
 export { articleTags };
 
-export type ClassificationStatus = "classified" | "needs-review";
+export type ClassificationStatus = "classified" | "needs-reevaluation";
 
 export type Classification = {
   status: ClassificationStatus;
@@ -50,7 +50,11 @@ const STRONG_WORD = new Set([
 
 /** A bare technology token does not make the article design engineering. */
 const TECH_ONLY = new Set(["react"]);
+const GENERIC_ENGINEERING = new Set(["css", "javascript", "front end", "frontend", "react", "stylesheet"]);
 const DESIGN_CONTEXT = ["design", "interface", "css", "layout", "ux", "prototype", "frontend", "front end", "stylesheet"];
+
+/** Title phrases that can place an article when the excerpt is about the same work. */
+const TITLE_CORROBORATE = new Set(["boardroom", "design leadership", "ux writing", "storytelling"]);
 
 type Hit = {
   id: CategoryId;
@@ -120,6 +124,40 @@ function designContext(title: string, excerpt: string): boolean {
   return DESIGN_CONTEXT.some((phrase) => containsPhrase(text, phrase));
 }
 
+function excerptBacksTitle(id: CategoryId, excerpt: string): boolean {
+  const practice =
+    id === "product"
+      ? ["ux", "design", "user", "product", "stakeholder", "wireframe", "budget"]
+      : id === "content"
+        ? ["write", "writing", "user", "design", "story", "content"]
+        : [];
+  return practice.some((phrase) => containsPhrase(excerpt, phrase));
+}
+
+function earliestWord(title: string, phrases: readonly string[]): number {
+  const words = title.split(" ").filter(Boolean);
+  let best = -1;
+  for (const phrase of phrases) {
+    const parts = phrase.split(" ").filter(Boolean);
+    if (!parts.length || words.length < parts.length) continue;
+    for (let start = 0; start <= words.length - parts.length; start += 1) {
+      let found = true;
+      for (let offset = 0; offset < parts.length; offset += 1) {
+        const word = words[start + offset];
+        const part = parts[offset];
+        if (!word || !part || !sameWord(word, part)) {
+          found = false;
+          break;
+        }
+      }
+      if (!found) continue;
+      if (best < 0 || start < best) best = start;
+      break;
+    }
+  }
+  return best;
+}
+
 /** A long excerpt needs the title, a repeated phrase, or more than one lead signal. One late mention is not the subject. */
 function anchored(
   rawTitle: string,
@@ -156,6 +194,7 @@ function scoreCategory(
   const category = categories.find((item) => item.id === id);
   const signals = (category?.signals ?? []).filter((phrase) => allowed.has(phrase));
   const support = category?.support ?? [];
+  const titlePhrases = signals.filter((phrase) => countSignal(rawTitle, title, phrase) > 0);
   const excerptPhrases: string[] = [];
   let excerptScore = 0;
   for (const phrase of signals) {
@@ -164,7 +203,24 @@ function scoreCategory(
     excerptScore += signalWeight(phrase) + Math.min(hits - 1, 3) * 0.85;
     excerptPhrases.push(phrase);
   }
-  const titlePhrases = signals.filter((phrase) => countSignal(rawTitle, title, phrase) > 0);
+  if (id === "engineering" && excerptPhrases.length > 0 && excerptPhrases.every((phrase) => GENERIC_ENGINEERING.has(phrase))) {
+    const titled = excerptPhrases.filter((phrase) => titlePhrases.includes(phrase));
+    excerptPhrases.length = 0;
+    excerptScore = 0;
+    for (const phrase of titled) {
+      const hits = countSignal(rawExcerpt, excerpt, phrase);
+      if (hits === 0) continue;
+      excerptScore += signalWeight(phrase) + Math.min(hits - 1, 3) * 0.85;
+      excerptPhrases.push(phrase);
+    }
+  }
+  if (excerptPhrases.length === 0 && excerpt.length >= THIN_EXCERPT && excerptBacksTitle(id, excerpt)) {
+    const phrase = titlePhrases.find((item) => TITLE_CORROBORATE.has(item));
+    if (phrase) {
+      excerptPhrases.push(phrase);
+      excerptScore += signalWeight(phrase);
+    }
+  }
   const empty = (titleStrong: boolean): Hit => ({ id, excerptScore: 0, score: 0, phrases: [], titleStrong });
   if (!anchored(rawTitle, rawExcerpt, title, excerpt, excerptPhrases, signals)) return empty(titlePhrases.length > 0);
   let score = excerptScore;
@@ -204,12 +260,17 @@ function scoreCategory(
   };
 }
 
-function tooClose(top: Hit, second: Hit | undefined): boolean {
+function tooClose(top: Hit, second: Hit | undefined, title: string): boolean {
   if (!second || second.excerptScore <= 0 || second.score < MIN_SCORE) return false;
   const margin = top.score - second.score;
   if (margin >= CLOSE_MARGIN) return false;
   if (top.score <= 0 || second.score / top.score < 0.8) return false;
   if (top.titleStrong && !second.titleStrong && margin >= 1) return false;
+  if (top.titleStrong && second.titleStrong) {
+    const topAt = earliestWord(title, top.phrases);
+    const secondAt = earliestWord(title, second.phrases);
+    if (topAt >= 0 && secondAt >= topAt + 2) return false;
+  }
   return true;
 }
 
@@ -233,8 +294,8 @@ function classify(article: Pick<Article, "title" | "excerpt" | "evidence">): Cla
     .filter((hit) => hit.excerptScore > 0 && hit.score >= MIN_SCORE)
     .sort((a, b) => b.score - a.score || categories.findIndex((item) => item.id === a.id) - categories.findIndex((item) => item.id === b.id));
   const top = ranked[0];
-  if (thin || !top || tooClose(top, ranked[1])) {
-    return { status: "needs-review", primary: null, matched, titleStrong };
+  if (thin || !top || tooClose(top, ranked[1], title)) {
+    return { status: "needs-reevaluation", primary: null, matched, titleStrong };
   }
   return { status: "classified", primary: top.id, matched, titleStrong };
 }

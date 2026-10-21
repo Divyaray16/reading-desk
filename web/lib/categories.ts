@@ -1,7 +1,7 @@
 /**
  * Fifteen subject categories. They describe an article's contribution,
  * not the publication it came from. Every approved source may appear in any category.
- * Needs-review is a holding state for thin or ambiguous excerpts. It is not a category.
+ * needs-reevaluation is a holding state for thin or ambiguous excerpts. It is not a category.
  */
 
 export type CategoryId =
@@ -94,6 +94,10 @@ export const categories: readonly Category[] = [
       "interaction pattern",
       "navigation pattern",
       "motion design",
+      "point and click",
+      "graphical user interface",
+      "search bar",
+      "tactile",
     ],
     support: ["prototype", "prototyping", "gesture", "navigation", "flow"],
   },
@@ -111,6 +115,9 @@ export const categories: readonly Category[] = [
       "graphic design",
       "visual identity",
       "visual direction",
+      "visual noise",
+      "ui badge",
+      "image editing",
       "layout",
       "whitespace",
     ],
@@ -155,6 +162,9 @@ export const categories: readonly Category[] = [
       "design engineering",
       "design to code",
       "creative coding",
+      "code connect",
+      "code layer",
+      "container query",
       "front end",
       "frontend",
       "css",
@@ -274,6 +284,7 @@ export const categories: readonly Category[] = [
       "voice and tone",
       "ux writer",
       "content designer",
+      "storytelling",
     ],
     support: ["copy", "terminology", "tone", "writing"],
   },
@@ -311,6 +322,7 @@ export const categories: readonly Category[] = [
       "speculative design",
       "emerging technology",
       "no interface",
+      "humanoid",
     ],
     support: ["headset", "paradigm", "futures"],
   },

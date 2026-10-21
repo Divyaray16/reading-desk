@@ -15,7 +15,7 @@ import { categoryArticleCounts } from "@/lib/rank";
 
 const SKIP_KEY = "reading-desk-skips";
 const USEFUL_KEY = "reading-desk-useful";
-const DAY_KEY = "reading-desk-day-v4";
+const DAY_KEY = "reading-desk-day-v5";
 
 type DayCache = { date: string; picks: Partial<Record<CategoryId, string[]>> };
 
@@ -232,6 +232,8 @@ export function Desk() {
         </p>
         <VisitorClock />
       </header>
+
+      {useful !== null ? <Bookmarks ids={usefulIds} onRemove={toggleBookmark} /> : null}
 
       <section className="mt-10" aria-labelledby="ask-label">
         <form onSubmit={submit}>
@@ -580,6 +582,50 @@ function BookmarkMenu({ ids, onRemove }: { ids: readonly string[]; onRemove: (id
         </Popover.Positioner>
       </Popover.Portal>
     </Popover.Root>
+  );
+}
+
+function Bookmarks({ ids, onRemove }: { ids: readonly string[]; onRemove: (id: string) => void }) {
+  const bookmarks = bookmarksFor(ids);
+  return (
+    <section className="mt-8" aria-labelledby="bookmarks-label" data-bookmarks={bookmarks.length}>
+      <div className="flex items-baseline justify-between gap-4">
+        <h2 id="bookmarks-label" className="text-[0.68rem] font-medium tracking-[0.22em] text-ember uppercase">
+          Bookmarks
+        </h2>
+        {bookmarks.length > 0 ? <p className="text-xs text-muted-foreground">{bookmarks.length} saved in this browser</p> : null}
+      </div>
+      {bookmarks.length === 0 ? (
+        <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+          Bookmark an essay and it stays here the next time you open this desk.
+        </p>
+      ) : (
+        <ul className="mt-3 flex list-none flex-col divide-y divide-border overflow-hidden rounded-xl border border-border bg-card p-0">
+          {bookmarks.map((bookmark) => (
+            <li key={bookmark.id} className="flex items-start gap-3 px-4 py-3" data-bookmark-id={bookmark.id}>
+              <div className="min-w-0 flex-1">
+                <a
+                  href={bookmark.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="font-serif text-lg leading-snug text-balance text-foreground underline-offset-[0.14em] hover:underline focus-visible:underline"
+                >
+                  {bookmark.title}
+                </a>
+                <p className="mt-1 text-[0.68rem] tracking-[0.14em] text-muted-foreground uppercase">{bookmark.publication}</p>
+              </div>
+              <button
+                type="button"
+                className="shrink-0 pt-1 text-xs text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+                onClick={() => onRemove(bookmark.id)}
+              >
+                Remove
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
   );
 }
 

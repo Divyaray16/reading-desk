@@ -1,5 +1,6 @@
 import type { Category } from "./categories.ts";
 import type { Article, Evidence } from "./corpus.ts";
+import { containsPhrase, normalize } from "./terms.ts";
 
 export type Explanation = {
   text: string;
@@ -19,15 +20,17 @@ function sentences(excerpt: string): string[] {
 export function explain(article: Article, category: Category, matched: readonly string[]): Explanation | null {
   if (article.evidence === "metadata" || article.excerpt.trim().length < 40) return null;
   const found = sentences(article.excerpt);
-  const sentence =
-    found.find((line) => matched.some((signal) => line.toLowerCase().includes(signal))) ?? found[0];
+  const discusses = (line: string, signal: string) => containsPhrase(normalize(line), normalize(signal));
+  const sentence = found.find((line) => matched.some((signal) => discusses(line, signal))) ?? found[0];
   if (!sentence) return null;
   const clipped = sentence.length > 320 ? `${sentence.slice(0, 317).trim()}…` : sentence;
-  const focus = matched.slice(0, 2);
+  const discussed = matched.filter((signal) => discusses(article.excerpt, signal)).slice(0, 2);
   const focusLine =
-    focus.length > 0
-      ? `It belongs with ${category.label} because the excerpt discusses ${focus.join(" and ")}.`
-      : "";
+    discussed.length > 0
+      ? `It belongs with ${category.label} because the excerpt discusses ${discussed.join(" and ")}.`
+      : matched.length > 0
+        ? `It belongs with ${category.label} because the title names that subject and the excerpt stays on the same work.`
+        : "";
   return {
     text: clipped,
     focus: focusLine,
