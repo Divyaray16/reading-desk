@@ -18,6 +18,13 @@ export type Recommendation = {
   evidence: Scored["evidence"];
 };
 
+export type Bookmark = {
+  id: string;
+  title: string;
+  url: string;
+  publication: string;
+};
+
 export type Desk = {
   shown: Recommendation[];
   note: string | null;
@@ -40,6 +47,32 @@ export function present(item: Scored, categoryId: CategoryId): Recommendation | 
     explanation,
     evidence: item.evidence,
   };
+}
+
+/**
+ * Essays marked useful, newest first. A missing or unapproved id is dropped.
+ * The same list still boosts ranking; this only resolves what to show.
+ */
+export function bookmarksFor(ids: readonly string[], library: readonly Article[] = articles): Bookmark[] {
+  const byId = new Map(library.map((article) => [article.id, article]));
+  const seen = new Set<string>();
+  const bookmarks: Bookmark[] = [];
+  for (let index = ids.length - 1; index >= 0; index -= 1) {
+    const id = ids[index];
+    if (!id || seen.has(id)) continue;
+    seen.add(id);
+    const article = byId.get(id);
+    if (!article || !article.url.startsWith("https://")) continue;
+    const source = sourceById(article.sourceId);
+    if (!source) continue;
+    bookmarks.push({
+      id: article.id,
+      title: article.title,
+      url: article.url,
+      publication: source.name,
+    });
+  }
+  return bookmarks;
 }
 
 /** Show a stored day's articles without re-ranking them. */

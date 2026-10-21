@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { categories } from "./categories.ts";
 import type { Article } from "./corpus.ts";
-import { refreshDesk, replaceDayPick, selectDesk, showCached } from "./desk.ts";
+import { bookmarksFor, refreshDesk, replaceDayPick, selectDesk, showCached } from "./desk.ts";
 
 const NOW = new Date("2026-10-19T12:00:00Z");
 const EMPTY = { skipped: [] as string[], useful: [] as string[] };
@@ -108,4 +108,16 @@ test("refresh keeps skipped articles hidden and does not require clearing useful
   for (const item of refreshed.shown) {
     assert.equal(POOL.some((article) => article.id === item.id), true);
   }
+});
+
+test("bookmarks keep the newest mark first and drop unknown ids", () => {
+  const marks = ["refresh-1", "missing", "refresh-2", "refresh-1"];
+  const bookmarks = bookmarksFor(marks, POOL);
+  assert.deepEqual(
+    bookmarks.map((item) => item.id),
+    ["refresh-1", "refresh-2"],
+  );
+  assert.equal(bookmarks[0]?.url.startsWith("https://"), true);
+  assert.equal(bookmarks[0]?.publication.length > 0, true);
+  assert.equal(bookmarksFor([], POOL).length, 0);
 });
