@@ -92,18 +92,19 @@ test("design systems ranks a real design-system title first", () => {
   assert.match(hits[0]?.article.title ?? "", /design system/i);
 });
 
-test("enterprise UX stays on articles that mention enterprise", () => {
-  const hits = searchArticles("enterprise UX");
+test("enterprise UX stays on strategy and enterprise writing", () => {
+  const hits = searchArticles("enterprise UX", articles, NOW);
   assert.ok(hits.length >= 1);
   for (const hit of hits) {
     const blob = `${hit.article.title} ${hit.article.excerpt}`;
-    assert.match(blob, /enterprise/i);
-    assert.match(blob, /ux|usability|user experience|interface/i);
+    assert.match(blob, /enterprise|roi|leadership|strategy|adoption|stakeholder/i);
+    assert.match(blob, /ux|usability|user experience|interface|design/i);
+    assert.equal(hit.article.url.startsWith("https://"), true);
   }
 });
 
 test("search is not limited to the articles on the current category desk", () => {
-  const desk = selectDesk("general-ux", { skipped: [], useful: [] }, NOW);
+  const desk = selectDesk("foundations", { skipped: [], useful: [] }, NOW);
   const deskIds = new Set(desk.shown.map((item) => item.id));
   const hits = searchArticles("AI agents");
   assert.ok(hits.length >= 1);

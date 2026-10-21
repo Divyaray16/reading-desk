@@ -9,9 +9,10 @@
  * so a synonym stays below the same direct hit.
  */
 
-import { categories } from "./categories.ts";
+import { categories, categoryById, type CategoryId } from "./categories.ts";
+import { classifyArticle, technologyTags } from "./classify.ts";
 import { articles, type Article } from "./corpus.ts";
-import { articleUrlOk, nearDuplicate } from "./rank.ts";
+import { articleUrlOk, isRecentArticle, nearDuplicate } from "./rank.ts";
 import { sourceById } from "./sources.ts";
 import {
   EXPANSIONS,
@@ -109,7 +110,12 @@ function indexArticle(article: Article): Indexed | null {
   const author = normalize(asText(article.author));
   const publication = normalize(sourceById(asText(article.sourceId))?.name ?? "");
   if (title.length < 3 && excerpt.length < 20) return null;
-  const topics = topicSignals(title, excerpt);
+  const classified = classifyArticle(article);
+  const labels = [classified.primary, ...classified.secondary]
+    .filter((id): id is CategoryId => id !== null)
+    .map((id) => normalize(categoryById(id).label));
+  const tags = technologyTags(article).map((tag) => normalize(tag));
+  const topics = [topicSignals(title, excerpt), ...labels, ...tags].filter(Boolean).join(" ");
   return {
     article,
     title,
@@ -324,7 +330,7 @@ function diversify(hits: readonly SearchHit[]): SearchHit[] {
   return chosen;
 }
 
-export function searchArticles(question: string, library: readonly Article[] = articles): SearchHit[] {
+export function searchArticles(question: string, library: readonly Article[] = articles, now: Date = new Date()): SearchHit[] {
   const normalized = normalize(asText(question));
   const tokens = queryTokens(normalized);
   const phrases = phraseKeys(normalized);
@@ -337,6 +343,7 @@ export function searchArticles(question: string, library: readonly Article[] = a
   const hits: SearchHit[] = [];
 
   for (const row of rows) {
+    if (!isRecentArticle(asText(row.article.publishedAt), now)) continue;
     let direct = 0;
     const matched: string[] = [];
     const satisfied = tokens.map(() => false);

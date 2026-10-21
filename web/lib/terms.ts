@@ -68,6 +68,36 @@ export const EXPANSIONS: Record<string, readonly Expansion[]> = {
     { phrase: "user testing", weight: 0.65 },
     { phrase: "usability evaluation", weight: 0.6 },
   ],
+  "ux foundations": [
+    { phrase: "usability", weight: 0.7 },
+    { phrase: "accessibility", weight: 0.65 },
+    { phrase: "information architecture", weight: 0.6 },
+  ],
+  "ux research": [
+    { phrase: "user research", weight: 0.75 },
+    { phrase: "behavioral insights", weight: 0.6 },
+    { phrase: "empathy mapping", weight: 0.55 },
+  ],
+  "interaction patterns": [
+    { phrase: "interaction design", weight: 0.7 },
+    { phrase: "product design", weight: 0.65 },
+    { phrase: "interface design", weight: 0.6 },
+  ],
+  "design engineering": [
+    { phrase: "design systems", weight: 0.7 },
+    { phrase: "design tokens", weight: 0.6 },
+    { phrase: "component libraries", weight: 0.55 },
+  ],
+  "product strategy": [
+    { phrase: "enterprise ux", weight: 0.65 },
+    { phrase: "design leadership", weight: 0.6 },
+    { phrase: "operating model", weight: 0.5 },
+  ],
+  "autonomous workflows": [
+    { phrase: "ai agents", weight: 0.7 },
+    { phrase: "agentic workflows", weight: 0.65 },
+    { phrase: "orchestration", weight: 0.55 },
+  ],
 };
 
 const STOP = new Set(

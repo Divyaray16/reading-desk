@@ -1,16 +1,20 @@
 /**
  * Editorial ranking. Score math, gates, and the final three are deterministic.
  * Semantic signals come from the category definition and the article text.
- * Ranking version 1 — 19 Oct 2026. Weights: relevance 35, actionability 25,
+ * Ranking version 2 — 21 Oct 2026. Weights: relevance 35, actionability 25,
  * depth 20, credibility 10, freshness 10.
  */
 
+import { classifyArticle } from "./classify.ts";
 import { categoryById, type Category, type CategoryId } from "./categories.ts";
 import type { Article, Evidence } from "./corpus.ts";
 import { parsePublished } from "./day.ts";
 import { sourceById, type SourceType } from "./sources.ts";
 
-export const RANKING_VERSION = 1;
+export const RANKING_VERSION = 2;
+
+/** Known publication dates older than this stay in the library and stay out of the desk. */
+export const MAX_ARTICLE_AGE_DAYS = 548;
 
 export const WEIGHTS = {
   relevance: 35,
@@ -35,7 +39,8 @@ export type Rejection =
   | "irrelevant"
   | "duplicate"
   | "promotional"
-  | "index-page";
+  | "index-page"
+  | "stale";
 
 export type Scored = {
   article: Article;
@@ -118,35 +123,28 @@ function haystack(article: Article): string {
   return `${article.title} ${article.excerpt}`.toLowerCase();
 }
 
-export function matchedSignals(article: Article, category: Category): string[] {
-  const text = haystack(article);
-  return category.signals.filter((signal) => text.includes(signal));
+export function isRecentArticle(publishedAt: string, now: Date): boolean {
+  const published = parsePublished(publishedAt);
+  if (!published) return true;
+  const days = (now.getTime() - published.getTime()) / 86_400_000;
+  if (days < 0) return true;
+  return days <= MAX_ARTICLE_AGE_DAYS;
 }
 
-const ANCHOR: Partial<Record<Category["id"], RegExp>> = {
-  "ai-ux": /\bai\b|model|assistant|algorithm/,
-  agentic: /\bagents?\b|agentic/,
-  conversational: /assistant|chatbot|dialogue|dialog|conversation|copilot/,
-  "ai-technology": /\bai\b|model|neural|gpu|inference|multimodal|transformer/,
-};
+export function matchedSignals(article: Article, category: Category): string[] {
+  return classifyArticle(article).matched[category.id] ?? [];
+}
 
-function relevanceScore(article: Article, category: Category, matched: string[]): number {
-  const text = haystack(article);
-  const anchor = ANCHOR[category.id];
-  if (anchor && !anchor.test(text)) return 0;
-  const title = article.title.toLowerCase();
-  let titleHits = 0;
-  let bodyHits = 0;
-  for (const signal of matched) {
-    if (title.includes(signal)) titleHits += 1;
-    else bodyHits += 1;
+/** Primary category outranks a secondary one. A passing keyword is not relevance. */
+function relevanceScore(article: Article, category: Category): number {
+  const classified = classifyArticle(article);
+  const earned = classified.matched[category.id];
+  if (!earned || earned.length === 0) return 0;
+  if (classified.status === "classified" && classified.primary === category.id) {
+    return classified.titleStrong[category.id] ? 5 : 4;
   }
-  const strength = titleHits * 2 + bodyHits;
-  if (strength >= 6) return 5;
-  if (strength >= 4) return 4;
-  if (strength >= 3) return 3;
-  if (strength >= 2) return 2;
-  if (strength === 1 && anchor && anchor.test(title)) return 2;
+  if (classified.status === "classified" && classified.secondary.includes(category.id)) return 3;
+  if (classified.status === "needs-reevaluation" && classified.titleStrong[category.id]) return 2;
   return 0;
 }
 
@@ -181,17 +179,16 @@ export function freshnessScore(article: Article, category: Category, now: Date, 
   if (!published) return depth >= 4 ? 3 : 2;
   const days = (now.getTime() - published.getTime()) / 86_400_000;
   if (days < 0) return 3;
+  if (days > MAX_ARTICLE_AGE_DAYS) return 1;
   if (category.pace === "fast") {
     if (days <= 45) return 5;
     if (days <= 120) return 4;
-    if (days <= 240) return 3;
-    if (days <= 400) return 2;
-    return depth >= 4 ? 2 : 1;
+    if (days <= 270) return 3;
+    return 2;
   }
-  if (days <= 200) return 5;
-  if (days <= 800) return 4;
-  if (days <= 1800) return 3;
-  return depth >= 3 ? 3 : 2;
+  if (days <= 120) return 5;
+  if (days <= 270) return 4;
+  return 2;
 }
 
 function angleOf(article: Article, type: SourceType | undefined): Scored["angle"] {
@@ -227,7 +224,7 @@ export function evaluateArticle(article: Article, categoryId: CategoryId, now: D
   const matched = source ? matchedSignals(article, category) : [];
   const depth = depthScore(article);
   const dimensions: Dimensions = {
-    relevance: source ? relevanceScore(article, category, matched) : 0,
+    relevance: source ? relevanceScore(article, category) : 0,
     actionability: actionabilityScore(article),
     depth,
     credibility: source ? credibilityScore(source.type, article.evidence) : 0,
@@ -253,6 +250,7 @@ export function evaluateArticle(article: Article, categoryId: CategoryId, now: D
     return { ...base, rejection: "insufficient" };
   }
   if (article.excerpt.trim().length < 40) return { ...base, rejection: "insufficient" };
+  if (!isRecentArticle(article.publishedAt, now)) return { ...base, rejection: "stale" };
   if (PROMO.test(article.title) && dimensions.actionability <= 2 && dimensions.relevance < 3) {
     return { ...base, rejection: "promotional" };
   }

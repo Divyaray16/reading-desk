@@ -17,7 +17,7 @@ const categoryItems = categories.map((category) => ({
 
 const SKIP_KEY = "reading-desk-skips";
 const USEFUL_KEY = "reading-desk-useful";
-const DAY_KEY = "reading-desk-day-v2";
+const DAY_KEY = "reading-desk-day-v3";
 
 type DayCache = { date: string; picks: Partial<Record<CategoryId, string[]>> };
 
@@ -341,7 +341,7 @@ export function Desk() {
       </div>
 
       <p className="mt-14 border-t border-border pt-5 text-xs leading-relaxed text-muted-foreground">
-        Articles are retrieved from the approved sources and judged from their titles and excerpts. The desk does not invent a title, and it does not sign in to a model. The three stay put for the India calendar day unless you refresh.
+        Articles are retrieved from the approved sources and judged from their titles and excerpts. A known date older than 18 months stays off the desk. The desk does not invent a title, and it does not sign in to a model. The three stay put for the India calendar day unless you refresh.
       </p>
     </main>
   );

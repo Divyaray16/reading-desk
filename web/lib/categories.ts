@@ -1,17 +1,17 @@
 /**
- * Category definitions are semantic guidance for scoring an article's text.
- * They do not restrict which publications may contribute.
+ * Eight subject categories. They describe an article's contribution,
+ * not the publication it came from. Every approved source may appear in any category.
  */
 
 export type CategoryId =
-  | "general-ux"
+  | "foundations"
+  | "research"
+  | "interaction"
+  | "systems"
   | "ai-ux"
-  | "agentic"
-  | "product"
   | "conversational"
-  | "enterprise"
-  | "strategy"
-  | "ai-technology";
+  | "agentic"
+  | "enterprise";
 
 export type FreshnessPace = "slow" | "fast";
 
@@ -19,92 +19,114 @@ export type Category = {
   id: CategoryId;
   label: string;
   line: string;
-  /** Phrases that indicate the subject. Matching is a signal, not a keyword gate by itself. */
+  /** Phrases that carry the category's subject. A passing mention is not enough. */
   signals: readonly string[];
+  /** Nearby words. They support a strong phrase; they do not place an article alone. */
+  support: readonly string[];
   pace: FreshnessPace;
 };
 
 export const categories: readonly Category[] = [
   {
-    id: "general-ux",
-    label: "General UX & Usability",
-    line: "Usability, accessibility, navigation, and evidence for interface decisions.",
+    id: "foundations",
+    label: "UX Foundations & Usability",
+    line: "Usability, accessibility, and the interface decisions people feel immediately.",
     pace: "slow",
     signals: [
       "usability",
-      "accessible",
       "accessibility",
-      "navigation",
+      "inclusive design",
+      "cognitive inclusion",
       "information architecture",
-      "cognitive load",
       "heuristic",
       "wayfinding",
       "form design",
-      "microinteraction",
-      "user research",
       "readability",
       "error message",
-      "usability test",
+      "ux writing",
+      "ux audit",
+      "tactile ux",
+      "cognitive load",
+      "navigation",
     ],
+    support: ["user experience", "interface"],
+  },
+  {
+    id: "research",
+    label: "UX Research & Behavioral Insights",
+    line: "How people are studied, and what their behavior changes in the design.",
+    pace: "slow",
+    signals: [
+      "ux research",
+      "user research",
+      "empathy map",
+      "empathy mapping",
+      "design thinking",
+      "form insight",
+      "storytelling",
+      "personalization",
+      "usability test",
+      "usability testing",
+      "diary study",
+      "field study",
+    ],
+    support: ["interview", "survey", "persona", "participant", "behavioral", "behaviour"],
+  },
+  {
+    id: "interaction",
+    label: "Product Design & Interaction Patterns",
+    line: "Patterns, prototypes, and the shape of the interaction itself.",
+    pace: "slow",
+    signals: [
+      "interaction design",
+      "product design",
+      "interface design",
+      "microinteraction",
+      "prototype",
+      "design pattern",
+      "service design",
+      "visual direction",
+      "tactile",
+    ],
+    support: ["interface", "layout", "button", "pattern"],
+  },
+  {
+    id: "systems",
+    label: "Design Systems & Design Engineering",
+    line: "Components, tokens, and the work of keeping a system buildable.",
+    pace: "slow",
+    signals: [
+      "design system",
+      "design token",
+      "component library",
+      "design engineering",
+      "code connect",
+      "content model",
+    ],
+    support: ["component", "token", "naming"],
   },
   {
     id: "ai-ux",
     label: "AI UX & Human–AI Interaction",
-    line: "Trust, control, uncertainty, and how people work with AI systems.",
+    line: "How a person understands, directs, and trusts a model.",
     pace: "slow",
     signals: [
-      "trust",
-      "transparency",
-      "uncertainty",
-      "oversight",
-      "explainability",
-      "explainable",
       "human-ai",
       "human ai",
-      "disclosure",
-      "user control",
-      "responsible ai",
-      "confidence",
-      "people and ai",
+      "human in the loop",
+      "ai usability",
       "ai experience",
+      "using ai for ux",
+      "designing ai",
+      "users think",
+      "designing with uncertainty",
+      "ai labelling",
+      "ai labeling",
+      "disclose ai",
+      "responsible ai",
+      "explainability",
     ],
-  },
-  {
-    id: "agentic",
-    label: "Agentic AI & AI Product Design",
-    line: "Agents, tool use, orchestration, and where a person still intervenes.",
-    pace: "fast",
-    signals: [
-      "agentic",
-      "ai agent",
-      "agents",
-      "orchestration",
-      "tool calling",
-      "tool use",
-      "multi-agent",
-      "autonomous",
-      "escalation",
-      "agent workflow",
-      "agent design",
-    ],
-  },
-  {
-    id: "product",
-    label: "Product Design & Design Systems",
-    line: "Product craft, components, and design-to-development collaboration.",
-    pace: "slow",
-    signals: [
-      "design system",
-      "component",
-      "prototyp",
-      "interaction design",
-      "design token",
-      "product design",
-      "interface design",
-      "consistency",
-      "craft",
-      "design-to-dev",
-    ],
+    support: ["trust", "transparency", "uncertainty", "oversight", "modality"],
   },
   {
     id: "conversational",
@@ -116,74 +138,54 @@ export const categories: readonly Category[] = [
       "conversation design",
       "dialogue",
       "chatbot",
-      "copilot",
       "assistant",
-      "turn-taking",
-      "clarification",
-      "messaging",
-      "customer support",
+      "copilot",
+      "siri",
     ],
+    support: ["chat", "messaging", "turn-taking"],
+  },
+  {
+    id: "agentic",
+    label: "Agentic AI & Autonomous Workflows",
+    line: "Agents that plan, use tools, and hand work back to a person.",
+    pace: "fast",
+    signals: [
+      "agentic",
+      "ai agent",
+      "agents",
+      "agent",
+      "autonomous",
+      "orchestration",
+      "tool calling",
+      "tool use",
+      "multi-agent",
+      "agent workflow",
+    ],
+    support: ["handoff", "escalation", "planning"],
   },
   {
     id: "enterprise",
-    label: "Enterprise UX & Complex Workflows",
-    line: "Dense work, operational tools, and workflows with many roles.",
+    label: "Enterprise UX & Product Strategy",
+    line: "Operating models, adoption, and strategy for complex product work.",
     pace: "slow",
     signals: [
       "enterprise",
-      "workflow",
-      "operational",
-      "dashboard",
-      "checkout",
-      "ecommerce",
-      "productivity",
-      "role-based",
-      "business process",
-      "supply chain",
-      "data-heavy",
-    ],
-  },
-  {
-    id: "strategy",
-    label: "UX Strategy & Design Thinking",
-    line: "Framing the problem, research strategy, and design leadership.",
-    pace: "slow",
-    signals: [
+      "brand strategy",
+      "product strategy",
       "design strategy",
       "ux strategy",
+      "design leadership",
       "leadership",
-      "design thinking",
-      "problem framing",
-      "opportunity",
-      "organizational",
-      "product strategy",
-      "systems thinking",
-      "influence",
-      "design-led",
+      "operating model",
+      "roi",
+      "boardroom",
+      "stakeholder",
     ],
-  },
-  {
-    id: "ai-technology",
-    label: "AI Technology & Emerging Trends",
-    line: "Model capabilities, architectures, and research that changes the product.",
-    pace: "fast",
-    signals: [
-      "foundation model",
-      "language model",
-      "multimodal",
-      "inference",
-      "benchmark",
-      "transformer",
-      "neural",
-      "training",
-      "reasoning",
-      "model capability",
-      "gpu",
-    ],
+    support: ["organization", "roadmap", "dashboard", "workflow", "adoption", "data residency"],
   },
 ];
 
-export const DEFAULT_CATEGORY: CategoryId = "general-ux";
+export const DEFAULT_CATEGORY: CategoryId = "foundations";
 
 export function categoryById(id: CategoryId): Category {
   const category = categories.find((item) => item.id === id);

@@ -52,7 +52,7 @@ test("an NN/g article about agents can qualify for agentic work", () => {
   assert.ok(article);
   const scored = evaluateArticle(article, "agentic", NOW);
   assert.equal(scored.qualified, true, scored.rejection);
-  const general = evaluateArticle(article, "general-ux", NOW);
+  const general = evaluateArticle(article, "foundations", NOW);
   assert.equal(general.qualified, false);
 });
 
@@ -76,7 +76,7 @@ test("sources are not locked to one category", () => {
     }),
   ];
   const agentic = rankCategory("agentic", library, NOW);
-  const general = rankCategory("general-ux", library, NOW);
+  const general = rankCategory("foundations", library, NOW);
   assert.deepEqual(agentic.shown.map((item) => item.article.id), ["nng-agent"]);
   assert.deepEqual(general.shown.map((item) => item.article.id), ["figma-usability"]);
 });
@@ -84,7 +84,7 @@ test("sources are not locked to one category", () => {
 test("invalid urls, thin metadata, and outside sources are rejected", () => {
   const badUrl = evaluateArticle(
     fixture({ id: "bad-url", title: "Usability test method", url: "https://www.nngroup.com/blog" }),
-    "general-ux",
+    "foundations",
     NOW,
   );
   assert.equal(badUrl.rejection, "invalid-url");
@@ -98,7 +98,7 @@ test("invalid urls, thin metadata, and outside sources are rejected", () => {
       excerpt: "Too short.",
       evidence: "metadata",
     }),
-    "general-ux",
+    "foundations",
     NOW,
   );
   assert.equal(thin.rejection, "insufficient");
@@ -110,7 +110,7 @@ test("invalid urls, thin metadata, and outside sources are rejected", () => {
       title: "A usability test for navigation",
       url: "https://example.com/articles/usability-test-navigation/",
     }),
-    "general-ux",
+    "foundations",
     NOW,
   );
   assert.equal(outsider.rejection, "unapproved-source");
@@ -137,7 +137,7 @@ test("near-duplicate titles collapse to one recommendation", () => {
       url: "https://www.smashingmagazine.com/2026/10/usability-test-navigation-labels/",
     }),
   ];
-  const ranked = rankCategory("general-ux", library, NOW);
+  const ranked = rankCategory("foundations", library, NOW);
   assert.equal(ranked.shown.length, 1);
 });
 
@@ -171,36 +171,40 @@ test("skip feedback changes the next selection without deleting the article", ()
         "This synthetic fixture explains how to run a usability test, with a practical pattern for form design and accessibility. It is not a retrieved article.",
     }),
   ];
-  const before = rankCategory("general-ux", library, NOW);
+  const before = rankCategory("foundations", library, NOW);
   assert.equal(before.shown[0]?.article.id, "strong");
-  const after = rankCategory("general-ux", library, NOW, { skipped: ["strong"], useful: [] });
+  const after = rankCategory("foundations", library, NOW, { skipped: ["strong"], useful: [] });
   assert.equal(after.shown[0]?.article.id, "other");
   assert.equal(after.qualifiedCount, 2);
 });
 
-test("an older foundational article can still outrank a shallow new one", () => {
+test("articles older than 18 months are left off the desk", () => {
   const library = [
     fixture({
       id: "old",
-      title: "A usability test method for information architecture",
-      url: "https://www.nngroup.com/articles/usability-test-information-architecture/",
+      title: "A usability method for information architecture",
+      url: "https://www.nngroup.com/articles/usability-information-architecture/",
       publishedAt: "2018-01-01T00:00:00Z",
       excerpt:
-        "This synthetic fixture from 2018 still gives a usability test method, a checklist, and a framework for information architecture and navigation. It is not a retrieved article. The study covered 40 tasks.",
+        "This synthetic fixture from 2018 still gives a usability method, a checklist, and a framework for information architecture and navigation. It is not a retrieved article. The study covered 40 tasks.",
     }),
     fixture({
       id: "new",
       sourceId: "ux-planet",
-      title: "Hello usability",
-      url: "https://uxplanet.org/hello-usability-synthetic/",
+      title: "A readability checklist for navigation labels",
+      url: "https://uxplanet.org/readability-checklist-navigation-labels/",
       publishedAt: "2026-10-18T00:00:00Z",
-      excerpt: "This synthetic fixture mentions usability once and little else about the work.",
+      excerpt:
+        "This synthetic fixture explains a readability checklist, a practical method for navigation, and how accessibility shows up in the interface. It is not a retrieved article.",
     }),
   ];
-  const ranked = rankCategory("general-ux", library, NOW);
-  assert.equal(ranked.shown[0]?.article.id, "old");
-  const fresh = evaluateArticle(library[0]!, "general-ux", NOW);
-  assert.ok(fresh.dimensions.freshness >= 2);
+  const old = evaluateArticle(library[0]!, "foundations", NOW);
+  assert.equal(old.rejection, "stale");
+  const ranked = rankCategory("foundations", library, NOW);
+  assert.deepEqual(
+    ranked.shown.map((item) => item.article.id),
+    ["new"],
+  );
 });
 
 test("the India calendar day, not UTC, decides the cache date", () => {
@@ -209,8 +213,8 @@ test("the India calendar day, not UTC, decides the cache date", () => {
 });
 
 test("selection is stable for the same inputs", () => {
-  const first = selectDesk("product", { skipped: [], useful: [] }, NOW);
-  const second = selectDesk("product", { skipped: [], useful: [] }, NOW);
+  const first = selectDesk("interaction", { skipped: [], useful: [] }, NOW);
+  const second = selectDesk("interaction", { skipped: [], useful: [] }, NOW);
   assert.deepEqual(
     first.shown.map((item) => item.id),
     second.shown.map((item) => item.id),

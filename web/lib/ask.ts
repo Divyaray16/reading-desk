@@ -3,7 +3,8 @@
  * No model call. Short words such as "UX" are kept and expanded.
  */
 
-import { categories } from "./categories.ts";
+import { categories, categoryById } from "./categories.ts";
+import { classifyArticle } from "./classify.ts";
 import { articles, type Article } from "./corpus.ts";
 import { explain } from "./explain.ts";
 import { formatPublished } from "./day.ts";
@@ -26,7 +27,7 @@ function asEvidence(value: unknown): Evidence {
 }
 
 export function ask(question: string, _now: Date = new Date(), library: readonly Article[] = articles): AskResult {
-  const hits = searchArticles(asText(question), library);
+  const hits = searchArticles(asText(question), library, _now);
   if (hits.length === 0) return { kind: "none", text: NO_MATCH };
 
   const shown: Recommendation[] = [];
@@ -40,8 +41,10 @@ export function ask(question: string, _now: Date = new Date(), library: readonly
     const evidence = asEvidence(hit.article.evidence);
     const shownEvidence: Evidence = evidence === "full_text" ? "excerpt" : evidence;
     const text = `${title} ${excerpt}`.toLowerCase();
-    const category =
-      categories.find((item) => item.signals.some((signal) => text.includes(signal))) ?? categories[0];
+    const classified = classifyArticle({ title, excerpt, evidence });
+    const category = classified.primary
+      ? categoryById(classified.primary)
+      : (categories.find((item) => item.signals.some((signal) => text.includes(signal))) ?? categories[0]);
     if (!category) continue;
     const safeArticle = { ...hit.article, title, excerpt, author, publishedAt, evidence };
     const explanation = explain(safeArticle, category, hit.matched) ?? {
