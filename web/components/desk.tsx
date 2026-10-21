@@ -289,7 +289,7 @@ export function Desk() {
         <div className="mt-8">
           <div className="desk-filter">
             <div className="min-w-0 flex-1">
-              <CategorySelect value={active} counts={counts} options={visible} onValueChange={choose} />
+              <CategorySelect value={active} options={visible} onValueChange={choose} />
             </div>
             <Button
               type="button"
@@ -372,12 +372,10 @@ export function Desk() {
 
 function CategorySelect({
   value,
-  counts,
   options,
   onValueChange,
 }: {
   value: CategoryId;
-  counts: Partial<Record<CategoryId, number>>;
   options: readonly { id: CategoryId; label: string }[];
   onValueChange: (next: CategoryId) => void;
 }) {
@@ -435,29 +433,21 @@ function CategorySelect({
               />
             </div>
             <Select.List className="max-h-[min(22rem,var(--available-height))] overflow-y-auto overscroll-contain p-1.5 [scrollbar-color:#e0b08a_transparent] [scrollbar-width:thin]">
-              {shown.map((category) => {
-                const count = counts[category.id] ?? 0;
-                return (
-                  <Select.Item
-                    key={category.id}
-                    value={category.id}
-                    data-category-id={category.id}
-                    data-category-count={count}
-                    aria-label={`${category.label}, ${count} ${count === 1 ? "article" : "articles"}`}
-                    className="flex min-h-10 cursor-pointer items-center gap-2.5 rounded-lg px-2.5 py-2 text-left text-sm leading-snug text-foreground outline-none select-none data-[highlighted]:bg-foreground/8 data-[selected]:bg-ember/12 data-[selected]:text-ember"
-                  >
-                    <span className="flex size-4 shrink-0 items-center justify-center">
-                      <Select.ItemIndicator>
-                        <Check className="size-3.5" strokeWidth={2.4} aria-hidden />
-                      </Select.ItemIndicator>
-                    </span>
-                    <Select.ItemText className="min-w-0 flex-1 whitespace-normal">{category.label}</Select.ItemText>
-                    <span className="shrink-0 text-xs tabular-nums text-muted-foreground" aria-hidden="true">
-                      {count}
-                    </span>
-                  </Select.Item>
-                );
-              })}
+              {shown.map((category) => (
+                <Select.Item
+                  key={category.id}
+                  value={category.id}
+                  data-category-id={category.id}
+                  className="flex min-h-10 cursor-pointer items-center gap-2.5 rounded-lg px-2.5 py-2 text-left text-sm leading-snug text-foreground outline-none select-none data-[highlighted]:bg-foreground/8 data-[selected]:bg-ember/12 data-[selected]:text-ember"
+                >
+                  <span className="flex size-4 shrink-0 items-center justify-center">
+                    <Select.ItemIndicator>
+                      <Check className="size-3.5" strokeWidth={2.4} aria-hidden />
+                    </Select.ItemIndicator>
+                  </span>
+                  <Select.ItemText className="min-w-0 flex-1 whitespace-normal">{category.label}</Select.ItemText>
+                </Select.Item>
+              ))}
               {shown.length === 0 ? <p className="px-2.5 py-3 text-sm text-muted-foreground">No category matches.</p> : null}
             </Select.List>
           </Select.Popup>
@@ -506,18 +496,29 @@ function BookmarkMenu({ ids, onRemove }: { ids: readonly string[]; onRemove: (id
           side="bottom"
           align="end"
           sideOffset={8}
-          collisionPadding={12}
+          collisionPadding={16}
           collisionAvoidance={{ side: "flip", align: "shift", fallbackAxisSide: "none" }}
         >
           <Popover.Popup
             data-bookmarks={count}
-            className="box-border w-[min(22rem,var(--available-width,calc(100vw-1.5rem)))] max-w-[min(var(--available-width,calc(100vw-1.5rem)),calc(100vw-1.5rem))] origin-[var(--transform-origin)] rounded-xl border border-border bg-card text-foreground shadow-[inset_0_1px_0_rgba(255,236,214,0.06),0_18px_40px_-24px_rgba(0,0,0,0.9)] outline-none"
+            className={
+              count === 0
+                ? "box-border w-max max-w-[var(--available-width,calc(100vw-2rem))] origin-[var(--transform-origin)] rounded-xl border border-border bg-card px-3.5 py-2.5 text-foreground shadow-[inset_0_1px_0_rgba(255,236,214,0.06),0_18px_40px_-24px_rgba(0,0,0,0.9)] outline-none"
+                : "box-border w-[min(22rem,var(--available-width,calc(100vw-2rem)))] max-w-[var(--available-width,calc(100vw-2rem))] origin-[var(--transform-origin)] rounded-xl border border-border bg-card text-foreground shadow-[inset_0_1px_0_rgba(255,236,214,0.06),0_18px_40px_-24px_rgba(0,0,0,0.9)] outline-none"
+            }
           >
-            <div className="max-h-[min(24rem,var(--available-height,70vh))] overflow-x-hidden overflow-y-auto overscroll-contain p-3 [scrollbar-color:#e0b08a_transparent] [scrollbar-width:thin]">
-              <Popover.Title className="text-[0.68rem] font-medium tracking-[0.22em] text-ember uppercase">
-                Bookmarks
+            {count === 0 ? (
+              <Popover.Title
+                render={<p />}
+                className="text-left text-sm leading-snug font-normal tracking-normal text-pretty text-foreground normal-case"
+              >
+                You have not bookmarked anything.
               </Popover.Title>
-              {count > 0 ? (
+            ) : (
+              <div className="max-h-[min(24rem,var(--available-height,70vh))] overflow-x-hidden overflow-y-auto overscroll-contain p-3 [scrollbar-color:#e0b08a_transparent] [scrollbar-width:thin]">
+                <Popover.Title className="text-[0.68rem] font-medium tracking-[0.22em] text-ember uppercase">
+                  Bookmarks
+                </Popover.Title>
                 <ul className="mt-1 flex list-none flex-col p-0">
                   {bookmarks.map((bookmark) => (
                     <li
@@ -546,8 +547,8 @@ function BookmarkMenu({ ids, onRemove }: { ids: readonly string[]; onRemove: (id
                     </li>
                   ))}
                 </ul>
-              ) : null}
-            </div>
+              </div>
+            )}
           </Popover.Popup>
         </Popover.Positioner>
       </Popover.Portal>
