@@ -15,7 +15,7 @@ import { categoryArticleCounts } from "@/lib/rank";
 
 const SKIP_KEY = "reading-desk-skips";
 const USEFUL_KEY = "reading-desk-useful";
-const DAY_KEY = "reading-desk-day-v5";
+const DAY_KEY = "reading-desk-day-v6";
 
 type DayCache = { date: string; picks: Partial<Record<CategoryId, string[]>> };
 

@@ -46,6 +46,7 @@ const STRONG_WORD = new Set([
   "typography",
   "usability",
   "conversational",
+  "naming",
 ]);
 
 /** A bare technology token does not make the article design engineering. */
@@ -54,7 +55,14 @@ const GENERIC_ENGINEERING = new Set(["css", "javascript", "front end", "frontend
 const DESIGN_CONTEXT = ["design", "interface", "css", "layout", "ux", "prototype", "frontend", "front end", "stylesheet"];
 
 /** Title phrases that can place an article when the excerpt is about the same work. */
-const TITLE_CORROBORATE = new Set(["boardroom", "design leadership", "ux writing", "storytelling"]);
+const TITLE_CORROBORATE = new Set([
+  "boardroom",
+  "design leadership",
+  "ux writing",
+  "storytelling",
+  "visual identity",
+  "great product",
+]);
 
 type Hit = {
   id: CategoryId;
@@ -130,7 +138,9 @@ function excerptBacksTitle(id: CategoryId, excerpt: string): boolean {
       ? ["ux", "design", "user", "product", "stakeholder", "wireframe", "budget"]
       : id === "content"
         ? ["write", "writing", "user", "design", "story", "content"]
-        : [];
+        : id === "visual"
+          ? ["design", "brand", "visual"]
+          : [];
   return practice.some((phrase) => containsPhrase(excerpt, phrase));
 }
 
@@ -158,7 +168,10 @@ function earliestWord(title: string, phrases: readonly string[]): number {
   return best;
 }
 
-/** A long excerpt needs the title, a repeated phrase, or more than one lead signal. One late mention is not the subject. */
+/**
+ * A long excerpt needs the title, the opening, a repeated phrase, a strong phrase
+ * early in the piece, or two subject phrases. One late weak mention is not the subject.
+ */
 function anchored(
   rawTitle: string,
   rawExcerpt: string,
@@ -171,16 +184,18 @@ function anchored(
   // The title can name the subject while the excerpt uses a different phrase from the same category.
   if (signals.some((phrase) => countSignal(rawTitle, title, phrase) > 0)) return true;
   if (excerpt.length < SHORT_EXCERPT) return true;
-  let total = 0;
+  const opening = excerpt.slice(0, 220);
+  const rawOpening = rawExcerpt.slice(0, 220);
+  if (phrases.some((phrase) => countSignal(rawOpening, opening, phrase) > 0)) return true;
+  const early = excerpt.slice(0, 430);
+  const rawEarly = rawExcerpt.slice(0, 430);
   for (const phrase of phrases) {
     const hits = countSignal(rawExcerpt, excerpt, phrase);
     if (hits >= 2) return true;
-    total += hits;
+    // A specific phrase in the first part of the essay is the subject. A bare word is not.
+    if (signalWeight(phrase) >= 4.2 && countSignal(rawEarly, early, phrase) > 0) return true;
   }
-  if (total < 2) return false;
-  const lead = excerpt.slice(0, 320);
-  const rawLead = rawExcerpt.slice(0, 320);
-  return phrases.some((phrase) => countSignal(rawLead, lead, phrase) > 0);
+  return false;
 }
 
 function scoreCategory(
@@ -214,6 +229,14 @@ function scoreCategory(
       excerptPhrases.push(phrase);
     }
   }
+  // "naming" at the end of a systems essay is not content design. The title or a repeated discussion is.
+  if (id === "content" && excerptPhrases.includes("naming") && !titlePhrases.includes("naming")) {
+    const hits = countSignal(rawExcerpt, excerpt, "naming");
+    if (hits < 2) {
+      excerptPhrases.splice(excerptPhrases.indexOf("naming"), 1);
+      excerptScore -= signalWeight("naming");
+    }
+  }
   if (excerptPhrases.length === 0 && excerpt.length >= THIN_EXCERPT && excerptBacksTitle(id, excerpt)) {
     const phrase = titlePhrases.find((item) => TITLE_CORROBORATE.has(item));
     if (phrase) {
@@ -243,6 +266,16 @@ function scoreCategory(
     !designContext(title, excerpt)
   ) {
     return empty(titlePhrases.length > 0);
+  }
+  // One example of a chatbot or a line of dialogue is not conversation design.
+  if (
+    id === "conversational" &&
+    excerptPhrases.length > 0 &&
+    excerptPhrases.every((phrase) => phrase === "chatbot" || phrase === "dialogue") &&
+    titlePhrases.length === 0 &&
+    excerptPhrases.every((phrase) => countSignal(rawExcerpt, excerpt, phrase) < 2)
+  ) {
+    return empty(false);
   }
   if (id === "enterprise" && excerptPhrases.length > 0 && excerptPhrases.every((phrase) => phrase === "enterprise")) {
     const text = `${title} ${excerpt}`;

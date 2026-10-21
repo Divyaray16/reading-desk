@@ -141,25 +141,19 @@ test("near-duplicate titles collapse to one recommendation", () => {
   assert.equal(ranked.shown.length, 1);
 });
 
-test("a category shows only its real recent articles and does not mention an empty place", () => {
-  let full = 0;
+test("every category shows exactly three real recent articles and does not mention an empty place", () => {
   for (const category of categories) {
     const desk = selectDesk(category.id, { skipped: [], useful: [] }, NOW);
-    assert.equal(desk.shown.length, Math.min(3, desk.qualifiedCount), category.id);
-    assert.ok(desk.shown.length <= 3);
+    assert.ok(desk.qualifiedCount >= 3, `${category.id} ${desk.qualifiedCount}`);
+    assert.equal(desk.shown.length, 3, category.id);
     assert.equal(desk.note, null);
     assert.equal(JSON.stringify(desk).toLowerCase().includes("empty place"), false);
-    if (desk.qualifiedCount >= 3) {
-      assert.equal(desk.shown.length, 3, category.id);
-      full += 1;
-    }
     for (const item of desk.shown) {
       assert.equal(item.url.startsWith("https://"), true);
       assert.equal(item.explanation.text.toLowerCase().includes("cleared the bar"), false);
       assert.equal(item.explanation.text.toLowerCase().includes("empty place"), false);
     }
   }
-  assert.ok(full >= 1);
 });
 
 test("skip feedback changes the next selection without deleting the article", () => {
@@ -228,7 +222,6 @@ test("selection is stable for the same inputs", () => {
     first.shown.map((item) => item.id),
     second.shown.map((item) => item.id),
   );
-  assert.equal(first.shown.length, Math.min(3, first.qualifiedCount));
   assert.equal(first.shown.length, 3);
 });
 

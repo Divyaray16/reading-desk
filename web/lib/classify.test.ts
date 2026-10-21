@@ -191,12 +191,11 @@ test("one publication can contribute to more than one category", () => {
   assert.ok(homes.size >= 1);
 });
 
-test("a category shows three recent articles only when the corpus has them", () => {
-  let full = 0;
+test("every category shows exactly three recent articles", () => {
   for (const category of categories) {
     const desk = selectDesk(category.id, { skipped: [], useful: [] }, NOW);
-    assert.equal(desk.shown.length, Math.min(3, desk.qualifiedCount), category.id);
-    if (desk.qualifiedCount >= 3) full += 1;
+    assert.ok(desk.qualifiedCount >= 3, `${category.id} ${desk.qualifiedCount}`);
+    assert.equal(desk.shown.length, 3, category.id);
     for (const item of desk.shown) {
       const source = articles.find((piece) => piece.id === item.id);
       assert.ok(source);
@@ -205,7 +204,6 @@ test("a category shows three recent articles only when the corpus has them", () 
       assert.ok(MAX_ARTICLE_AGE_DAYS >= 540);
     }
   }
-  assert.ok(full >= 1);
 });
 
 test("phrase matching stays on word boundaries", () => {
@@ -215,11 +213,11 @@ test("phrase matching stays on word boundaries", () => {
   assert.equal(containsPhrase(normalize("the agents plan"), "agent"), true);
 });
 
-test("excerpt-backed subjects fill interaction, visual, product, content, and emerging", () => {
-  const expectOne = ["foundations", "interaction", "visual", "product", "content", "emerging"] as const;
-  for (const id of expectOne) {
+test("excerpt-backed subjects fill every category with at least three articles", () => {
+  for (const category of categories) {
+    const id = category.id;
     const ranked = rankCategory(id, articles, NOW);
-    assert.ok(ranked.qualifiedCount >= 1, `${id} ${ranked.qualifiedCount}`);
+    assert.ok(ranked.qualifiedCount >= 3, `${id} ${ranked.qualifiedCount}`);
     for (const item of ranked.pool) {
       if (!item.qualified) continue;
       assert.equal(classifyArticle(item.article).primary, id, item.article.title);
