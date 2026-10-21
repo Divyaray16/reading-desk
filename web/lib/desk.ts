@@ -1,7 +1,7 @@
 import { categoryById, type CategoryId } from "./categories.ts";
 import { articles, type Article } from "./corpus.ts";
 import { explain, type Explanation } from "./explain.ts";
-import { formatPublished } from "./day.ts";
+import { byNewestPublished, formatPublished } from "./day.ts";
 import { evaluateArticle, rankCategory, selectThree, type Feedback, type Scored } from "./rank.ts";
 import { sourceById } from "./sources.ts";
 
@@ -75,22 +75,26 @@ export function bookmarksFor(ids: readonly string[], library: readonly Article[]
   return bookmarks;
 }
 
-/** Show a stored day's articles without re-ranking them. */
+/** Show a stored day's articles without re-ranking them, newest published date first. */
 export function showCached(
   categoryId: CategoryId,
   ids: readonly string[],
   now: Date = new Date(),
   library: readonly Article[] = articles,
 ): Recommendation[] {
-  const shown: Recommendation[] = [];
+  const shown: { card: Recommendation; publishedAt: string }[] = [];
   for (const id of ids) {
     const article = library.find((item) => item.id === id);
     if (!article) continue;
     const scored = evaluateArticle(article, categoryId, now);
     const card = present({ ...scored, qualified: true }, categoryId);
-    if (card) shown.push(card);
+    if (card) shown.push({ card, publishedAt: article.publishedAt });
   }
-  return shown;
+  return byNewestPublished(shown, (row) => row.publishedAt).map((row) => row.card);
+}
+
+function inPublishedOrder(cards: readonly Recommendation[], publishedAt: ReadonlyMap<string, string>): Recommendation[] {
+  return byNewestPublished(cards, (card) => publishedAt.get(card.id) ?? "");
 }
 
 export function sameArticleSet(left: readonly string[], right: readonly string[]): boolean {
@@ -169,8 +173,9 @@ export function refreshDesk(
     );
   }
 
+  const publishedAt = new Map(eligible.map((item) => [item.article.id, item.article.publishedAt]));
   return {
-    shown,
+    shown: inPublishedOrder(shown, publishedAt),
     note: null,
     qualifiedCount: eligible.length,
   };
@@ -183,11 +188,12 @@ export function selectDesk(
   library: readonly Article[] = articles,
 ): Desk {
   const ranked = rankCategory(categoryId, library, now, feedback);
+  const publishedAt = new Map(ranked.shown.map((item) => [item.article.id, item.article.publishedAt]));
   const shown = ranked.shown
     .map((item) => present(item, categoryId))
     .filter((item): item is Recommendation => item !== null);
   return {
-    shown: shown.slice(0, CAP),
+    shown: inPublishedOrder(shown, publishedAt).slice(0, CAP),
     note: null,
     qualifiedCount: ranked.qualifiedCount,
   };

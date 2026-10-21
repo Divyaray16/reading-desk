@@ -3,8 +3,8 @@ import test from "node:test";
 import { ask, NO_MATCH } from "./ask.ts";
 import { classifyArticle } from "./classify.ts";
 import { articles, type Article } from "./corpus.ts";
-import { selectDesk } from "./desk.ts";
-import { searchArticles } from "./search.ts";
+import { CAP, selectDesk } from "./desk.ts";
+import { RESULT_CAP, searchArticles } from "./search.ts";
 
 const NOW = new Date("2026-10-19T12:00:00Z");
 
@@ -17,15 +17,40 @@ function titles(query: string): string[] {
 
 test("UX finds usability and experience writing, not an empty result", () => {
   const found = titles("UX");
-  assert.equal(found.length, 3);
+  assert.equal(found.length, RESULT_CAP);
   assert.ok(found.some((text) => /usability|user experience|accessibility|interaction design|ux/.test(text)));
 });
 
 test("user experience, usability, UI, and interaction design return articles", () => {
   for (const query of ["user experience", "usability", "UI", "interaction design"]) {
     const found = titles(query);
-    assert.ok(found.length >= 1 && found.length <= 3, query);
+    assert.ok(found.length >= 1 && found.length <= RESULT_CAP, query);
   }
+});
+
+test("a query with many matches returns ten articles from more than one publication", () => {
+  assert.equal(RESULT_CAP, 10);
+  assert.equal(CAP, 3);
+  for (const query of ["UX", "design systems"]) {
+    const hits = searchArticles(query, articles, NOW);
+    assert.equal(hits.length, 10, query);
+    const sources = new Set(hits.map((hit) => hit.article.sourceId));
+    assert.ok(sources.size >= 3, query);
+    const categories = new Set(hits.map((hit) => classifyArticle(hit.article).primary));
+    assert.ok(categories.size >= 1, query);
+    for (const hit of hits) {
+      assert.equal(hit.article.url.startsWith("https://"), true);
+      assert.equal(
+        articles.some((article) => article.id === hit.article.id && article.url === hit.article.url),
+        true,
+      );
+    }
+  }
+  const asked = ask("design systems", NOW);
+  assert.equal(asked.kind, "reads");
+  if (asked.kind !== "reads") return;
+  assert.equal(asked.articles.length, 10);
+  assert.ok(new Set(asked.articles.map((article) => article.publication)).size >= 3);
 });
 
 test("AI UX, agents, design systems, enterprise, and conversational queries return articles", () => {
@@ -133,8 +158,8 @@ test("search covers the whole library and does not narrow to one category", () =
   assert.equal(asked.kind, "reads");
   if (asked.kind !== "reads") return;
   assert.deepEqual(
-    asked.articles.map((article) => article.id),
-    hits.map((hit) => hit.article.id),
+    asked.articles.map((article) => article.id).sort(),
+    hits.map((hit) => hit.article.id).sort(),
   );
 });
 

@@ -25,11 +25,13 @@ import {
   type Expansion,
 } from "./terms.ts";
 
-export const RESULT_CAP = 3;
+/** Ask shows at most this many articles. The desk trio keeps its own cap of three. */
+export const RESULT_CAP = 10;
 
 const MIN_SCORE = 8;
 const EXPANSION_ONLY_MIN = 10;
-const SOURCE_BAND = 0.55;
+/** Prefer another publication only when its score stays close to the best remaining hit. */
+const SOURCE_BAND = 0.85;
 
 const DIRECT = {
   phraseTitle: 42,
@@ -294,6 +296,7 @@ function frequencyFor(rows: readonly Indexed[]): Map<string, number> {
   return frequency;
 }
 
+/** Fill to the search cap. A different source wins only when its score is close. */
 function diversify(hits: readonly SearchHit[]): SearchHit[] {
   const chosen: SearchHit[] = [];
   const blocked = (hit: SearchHit) =>
@@ -307,9 +310,9 @@ function diversify(hits: readonly SearchHit[]): SearchHit[] {
     const pool = hits.filter((hit) => !blocked(hit));
     const best = pool[0];
     if (!best) break;
-    const sourceUsed = chosen.some((other) => other.article.sourceId === best.article.sourceId);
-    const alternative = sourceUsed
-      ? pool.find((hit) => hit.article.sourceId !== best.article.sourceId && hit.score >= best.score * SOURCE_BAND)
+    const usedSources = new Set(chosen.map((other) => other.article.sourceId));
+    const alternative = usedSources.has(best.article.sourceId)
+      ? pool.find((hit) => !usedSources.has(hit.article.sourceId) && hit.score >= best.score * SOURCE_BAND)
       : undefined;
     chosen.push(alternative ?? best);
   }

@@ -7,7 +7,7 @@ import { categories, categoryById } from "./categories.ts";
 import { classifyArticle } from "./classify.ts";
 import { articles, type Article } from "./corpus.ts";
 import { explain } from "./explain.ts";
-import { formatPublished } from "./day.ts";
+import { byNewestPublished, formatPublished } from "./day.ts";
 import { searchArticles } from "./search.ts";
 import { sourceById } from "./sources.ts";
 import type { Recommendation } from "./desk.ts";
@@ -35,6 +35,7 @@ export function ask(
   if (hits.length === 0) return { kind: "none", text: NO_MATCH };
 
   const shown: Recommendation[] = [];
+  const published = new Map<string, string>();
   for (const hit of hits) {
     const source = sourceById(asText(hit.article.sourceId));
     if (!source || typeof hit.article.title !== "string" || typeof hit.article.url !== "string") continue;
@@ -60,6 +61,7 @@ export function ask(
     if (hit.matched.length > 0) {
       explanation.focus = `Matched ${hit.matched.slice(0, 3).join(", ")}.`;
     }
+    published.set(hit.article.id, publishedAt);
     shown.push({
       id: hit.article.id,
       title,
@@ -73,5 +75,5 @@ export function ask(
   }
 
   if (shown.length === 0) return { kind: "none", text: NO_MATCH };
-  return { kind: "reads", articles: shown };
+  return { kind: "reads", articles: byNewestPublished(shown, (article) => published.get(article.id) ?? "") };
 }

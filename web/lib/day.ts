@@ -26,3 +26,22 @@ export function formatPublished(raw: string): string | null {
     timeZone: "UTC",
   }).format(parsed);
 }
+
+/**
+ * Newest publishedAt first. Comparison uses the timestamp, not the display string.
+ * Missing or unparseable dates stay after every dated item and keep their previous order.
+ */
+export function byNewestPublished<T>(items: readonly T[], publishedAt: (item: T) => string): T[] {
+  const decorated = items.map((item, index) => ({
+    item,
+    index,
+    time: parsePublished(publishedAt(item))?.getTime() ?? null,
+  }));
+  decorated.sort((left, right) => {
+    if (left.time !== null && right.time !== null && left.time !== right.time) return right.time - left.time;
+    if (left.time !== null && right.time === null) return -1;
+    if (left.time === null && right.time !== null) return 1;
+    return left.index - right.index;
+  });
+  return decorated.map((row) => row.item);
+}

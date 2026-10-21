@@ -15,7 +15,7 @@ import { categoryArticleCounts } from "@/lib/rank";
 
 const SKIP_KEY = "reading-desk-skips";
 const USEFUL_KEY = "reading-desk-useful";
-const DAY_KEY = "reading-desk-day-v6";
+const DAY_KEY = "reading-desk-day-v7";
 
 type DayCache = { date: string; picks: Partial<Record<CategoryId, string[]>> };
 
@@ -262,8 +262,8 @@ export function Desk() {
       </section>
 
       {answer ? (
-        <div className="mt-8 flex items-baseline justify-between gap-4">
-          <p className="text-sm leading-relaxed text-muted-foreground" data-search-library="all">
+        <div className="mt-8 flex min-w-0 flex-wrap items-baseline justify-between gap-x-4 gap-y-2">
+          <p className="min-w-0 flex-1 basis-48 text-sm leading-relaxed break-words text-muted-foreground" data-search-library="all">
             Matches for “{asked}” across the whole library.
           </p>
           <button
@@ -311,7 +311,7 @@ export function Desk() {
           <EmptyState kicker="No match" title="Nothing in the library fits." body={answer.text} />
         ) : null}
         {answer?.kind === "reads" ? (
-          <ol className="mt-4 flex list-none flex-col gap-4 p-0">
+          <ol className="mt-4 flex min-w-0 list-none flex-col gap-4 p-0">
             {answer.articles.map((article, index) => (
               <ArticleItem
                 key={article.id}
@@ -640,12 +640,12 @@ function ArticleItem({
         <p
           className={
             primary
-              ? "text-[0.68rem] font-medium tracking-[0.18em] text-ember uppercase"
-              : "text-[0.68rem] font-medium tracking-[0.18em] text-muted-foreground uppercase"
+              ? "flex min-w-0 flex-wrap items-baseline gap-x-3 text-[0.68rem] font-medium tracking-[0.18em] text-ember uppercase"
+              : "flex min-w-0 flex-wrap items-baseline gap-x-3 text-[0.68rem] font-medium tracking-[0.18em] text-muted-foreground uppercase"
           }
         >
-          {number}
-          <span className="ml-3 tracking-[0.14em]">{article.publication}</span>
+          <span className="shrink-0">{number}</span>
+          <span className="min-w-0 tracking-[0.14em]">{article.publication}</span>
         </p>
         <h2
           className={
@@ -658,17 +658,17 @@ function ArticleItem({
             href={article.url}
             target="_blank"
             rel="noreferrer"
-            className="underline-offset-[0.14em] hover:underline focus-visible:underline"
+            className="break-words underline-offset-[0.14em] hover:underline focus-visible:underline"
           >
             {article.title}
           </a>
         </h2>
-        {byline ? <p className="mt-3 text-sm text-muted-foreground">{byline}</p> : null}
+        {byline ? <p className="mt-3 text-sm break-words text-muted-foreground">{byline}</p> : null}
         <p
           className={
             primary
-              ? "mt-4 max-w-[36rem] font-serif text-lg leading-snug text-pretty text-foreground sm:text-xl"
-              : "mt-3 max-w-[36rem] text-base leading-relaxed text-pretty text-foreground"
+              ? "mt-4 max-w-[36rem] font-serif text-lg leading-snug text-pretty break-words text-foreground sm:text-xl"
+              : "mt-3 max-w-[36rem] text-base leading-relaxed text-pretty break-words text-foreground"
           }
         >
           {article.explanation.text}

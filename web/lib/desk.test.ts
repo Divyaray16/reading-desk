@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { ask } from "./ask.ts";
 import { categories } from "./categories.ts";
 import type { Article } from "./corpus.ts";
 import { bookmarksFor, refreshDesk, replaceDayPick, selectDesk, showCached } from "./desk.ts";
@@ -108,6 +109,67 @@ test("refresh keeps skipped articles hidden and does not require clearing useful
   for (const item of refreshed.shown) {
     assert.equal(POOL.some((article) => article.id === item.id), true);
   }
+});
+
+test("shown articles put the later published date first and leave undated articles last", () => {
+  const excerpt =
+    "This synthetic fixture explains usability heuristics, information architecture, and a practical wayfinding pattern for navigation. It is not a retrieved article.";
+  function row(id: string, sourceId: string, title: string, publishedAt: string): Article {
+    return {
+      id,
+      sourceId,
+      title,
+      url: `https://www.nngroup.com/articles/${id}/`,
+      author: "Test Author",
+      publishedAt,
+      excerpt,
+      evidence: "excerpt",
+      retrievedAt: "2026-10-19T00:00:00Z",
+    };
+  }
+  const newer = row("date-july-9", "nng", "Zebra wayfinding checklist for navigation labels", "Thu, 09 Jul 2026 15:00:00 GMT");
+  const older = row("date-july-3", "smashing", "Alpha wayfinding checklist for form labels", "Fri, 03 Jul 2026 13:00:00 GMT");
+  const october = row("date-oct-3", "figma", "October wayfinding checklist for menu labels", "2026-10-03T08:00:00Z");
+  const undatedFirst = row("date-none-a", "alistapart", "Middle wayfinding checklist for page labels", "");
+  const undatedSecond = row("date-none-b", "baymard", "Other wayfinding checklist for icon labels", "not-a-date");
+  const trio = [older, undatedFirst, newer];
+
+  const selected = selectDesk("foundations", { skipped: [], useful: ["date-july-3", "date-none-a"] }, NOW, trio);
+  assert.deepEqual(idsOf(selected.shown), ["date-july-9", "date-july-3", "date-none-a"]);
+  assert.equal(selected.shown[0]?.date, "9 Jul 2026");
+  assert.equal(selected.shown[1]?.date, "3 Jul 2026");
+  assert.equal(selected.shown[2]?.date, null);
+
+  const refreshed = refreshDesk(
+    "foundations",
+    { skipped: [], useful: ["date-july-3", "date-none-a"] },
+    idsOf(selected.shown),
+    NOW,
+    trio,
+  );
+  assert.deepEqual(idsOf(refreshed.shown), ["date-july-9", "date-july-3", "date-none-a"]);
+
+  const stored = ["date-none-b", "date-july-3", "date-none-a", "date-july-9", "date-oct-3"];
+  const library = [october, older, undatedFirst, newer, undatedSecond];
+  const cached = showCached("foundations", stored, NOW, library);
+  assert.deepEqual(idsOf(cached), ["date-oct-3", "date-july-9", "date-july-3", "date-none-b", "date-none-a"]);
+  assert.ok(idsOf(cached).indexOf("date-july-9") < idsOf(cached).indexOf("date-july-3"));
+  assert.ok(idsOf(cached).indexOf("date-none-a") > idsOf(cached).indexOf("date-july-3"));
+
+  const asked = ask("wayfinding checklist", NOW, trio);
+  assert.equal(asked.kind, "reads");
+  if (asked.kind === "reads") {
+    assert.deepEqual(
+      asked.articles.map((article) => article.id),
+      ["date-july-9", "date-july-3", "date-none-a"],
+    );
+  }
+
+  const bookmarks = bookmarksFor(["date-july-9", "date-july-3"], trio);
+  assert.deepEqual(
+    bookmarks.map((item) => item.id),
+    ["date-july-3", "date-july-9"],
+  );
 });
 
 test("bookmarks keep the newest mark first and drop unknown ids", () => {
