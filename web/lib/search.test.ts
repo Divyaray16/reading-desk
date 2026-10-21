@@ -3,6 +3,7 @@ import test from "node:test";
 import { ask, NO_MATCH } from "./ask.ts";
 import { classifyArticle } from "./classify.ts";
 import { articles, type Article } from "./corpus.ts";
+import { byNewestPublished, parsePublished } from "./day.ts";
 import { CAP, selectDesk } from "./desk.ts";
 import { RESULT_CAP, searchArticles } from "./search.ts";
 
@@ -102,9 +103,11 @@ test("search reads the whole library and keeps real links", () => {
   }
 });
 
-test("an exact title phrase ranks first", () => {
-  const hits = searchArticles("Designing for AI Agents in 2026");
-  assert.match(hits[0]?.article.title ?? "", /Designing for AI Agents in 2026/);
+test("an exact title phrase is the strongest match", () => {
+  const hits = searchArticles("Designing for AI Agents in 2026", articles, NOW);
+  const exact = hits.find((hit) => /Designing for AI Agents in 2026/.test(hit.article.title));
+  assert.ok(exact);
+  assert.equal(exact.score, Math.max(...hits.map((hit) => hit.score)));
 });
 
 test("UX expands past the literal abbreviation", () => {
@@ -116,9 +119,62 @@ test("UX expands past the literal abbreviation", () => {
   assert.match(blob, /user experience|usability|accessibility|interaction/);
 });
 
-test("design systems ranks a real design-system title first", () => {
-  const hits = searchArticles("design systems");
-  assert.match(hits[0]?.article.title ?? "", /design system/i);
+test("design systems keeps a real design-system title as its strongest match", () => {
+  const hits = searchArticles("design systems", articles, NOW);
+  const best = Math.max(...hits.map((hit) => hit.score));
+  assert.ok(hits.some((hit) => hit.score === best && /design system/i.test(hit.article.title)));
+});
+
+test("search results with two different dates come out newest first", () => {
+  const excerpt =
+    "A practical usability note about user experience, interface design, and a checklist for navigation labels.";
+  function row(id: string, title: string, publishedAt: string): Article {
+    return {
+      id,
+      sourceId: "nng",
+      title,
+      url: `https://www.nngroup.com/articles/${id}/`,
+      author: "Test Author",
+      publishedAt,
+      excerpt,
+      evidence: "excerpt",
+      retrievedAt: "2026-10-19T00:00:00Z",
+    };
+  }
+  const older = row("search-date-older", "UX notes from the July case", "2025-07-23T14:10:22+00:00");
+  const newer = row("search-date-newer", "UX notes from the September case", "2026-09-24T20:44:00.000Z");
+  const undated = row("search-date-undated", "UX notes with no publication date", "");
+  const library = [older, undated, newer];
+  const hits = searchArticles("UX", library, NOW);
+  assert.deepEqual(
+    hits.map((hit) => hit.article.id),
+    ["search-date-newer", "search-date-older", "search-date-undated"],
+  );
+  const asked = ask("UX", NOW, library);
+  assert.equal(asked.kind, "reads");
+  if (asked.kind !== "reads") return;
+  assert.deepEqual(
+    asked.articles.map((article) => article.id),
+    ["search-date-newer", "search-date-older", "search-date-undated"],
+  );
+
+  const corpusHits = searchArticles("design systems", articles, NOW);
+  assert.ok(corpusHits.length >= 2);
+  const dated = new Set(
+    corpusHits.map((hit) => parsePublished(hit.article.publishedAt)?.toISOString() ?? "").filter((day) => day.length > 0),
+  );
+  assert.ok(dated.size >= 2);
+  assert.deepEqual(
+    corpusHits.map((hit) => hit.article.id),
+    byNewestPublished(corpusHits, (hit) => hit.article.publishedAt).map((hit) => hit.article.id),
+  );
+  const corpusAsked = ask("design systems", NOW);
+  assert.equal(corpusAsked.kind, "reads");
+  if (corpusAsked.kind !== "reads") return;
+  assert.deepEqual(
+    corpusAsked.articles.map((article) => article.id),
+    corpusHits.map((hit) => hit.article.id),
+  );
 });
 
 test("enterprise UX stays on enterprise product writing", () => {

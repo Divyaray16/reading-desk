@@ -12,6 +12,7 @@
 import { categoryById } from "./categories.ts";
 import { articleTags, classifyArticle } from "./classify.ts";
 import { articles, type Article } from "./corpus.ts";
+import { byNewestPublished } from "./day.ts";
 import { articleUrlOk, isRecentArticle, nearDuplicate } from "./rank.ts";
 import { sourceById } from "./sources.ts";
 import {
@@ -395,5 +396,5 @@ export function searchArticles(
   }
 
   hits.sort((a, b) => b.score - a.score || a.article.title.localeCompare(b.article.title));
-  return diversify(hits);
+  return byNewestPublished(diversify(hits), (hit) => asText(hit.article.publishedAt));
 }

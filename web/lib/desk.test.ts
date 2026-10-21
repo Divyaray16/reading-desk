@@ -2,7 +2,8 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { ask } from "./ask.ts";
 import { categories } from "./categories.ts";
-import type { Article } from "./corpus.ts";
+import { articles, type Article } from "./corpus.ts";
+import { byNewestPublished, parsePublished } from "./day.ts";
 import { bookmarksFor, refreshDesk, replaceDayPick, selectDesk, showCached } from "./desk.ts";
 
 const NOW = new Date("2026-10-19T12:00:00Z");
@@ -170,6 +171,56 @@ test("shown articles put the later published date first and leave undated articl
     bookmarks.map((item) => item.id),
     ["date-july-3", "date-july-9"],
   );
+});
+
+function publishedDays(items: readonly { id: string }[], library: readonly Article[]): string[] {
+  return items.map((item) => {
+    const article = library.find((row) => row.id === item.id);
+    assert.ok(article, item.id);
+    const parsed = parsePublished(article.publishedAt);
+    return parsed ? parsed.toISOString().slice(0, 10) : "";
+  });
+}
+
+test("the screenshot trio comes out 2026-09-24, 2026-09-11, then 2025-07-23", () => {
+  const titles = [
+    "An Holistic Framework for Shared Design Leadership",
+    "Building A UX ROI Case That Survives The Boardroom",
+    "What it takes to build great products now",
+  ];
+  const wanted = new Set(titles);
+  const library = articles.filter((article) => wanted.has(article.title));
+  assert.equal(library.length, 3);
+  const byTitle = new Map(library.map((article) => [article.title, article]));
+  const oldestFirst = titles.map((title) => byTitle.get(title));
+  assert.ok(oldestFirst.every((article): article is Article => Boolean(article)));
+  const stored = oldestFirst.map((article) => article.id);
+  assert.deepEqual(publishedDays(oldestFirst, library), ["2025-07-23", "2026-09-11", "2026-09-24"]);
+
+  const expected = ["2026-09-24", "2026-09-11", "2025-07-23"];
+  assert.deepEqual(publishedDays(showCached("product", stored, NOW, library), library), expected);
+  assert.deepEqual(publishedDays(selectDesk("product", EMPTY, NOW, library).shown, library), expected);
+  assert.deepEqual(publishedDays(refreshDesk("product", EMPTY, stored, NOW, library).shown, library), expected);
+
+  const live = selectDesk("product", EMPTY, NOW);
+  const liveDays = publishedDays(live.shown, articles);
+  assert.deepEqual(liveDays, byNewestPublished(liveDays, (day) => day));
+  if (live.shown.length === 3 && titles.every((title) => live.shown.some((item) => item.title === title))) {
+    assert.deepEqual(live.shown.map((item) => item.title), [
+      "What it takes to build great products now",
+      "Building A UX ROI Case That Survives The Boardroom",
+      "An Holistic Framework for Shared Design Leadership",
+    ]);
+    assert.deepEqual(liveDays, expected);
+  }
+});
+
+test("every category desk is newest published date first", () => {
+  for (const category of categories) {
+    const desk = selectDesk(category.id, EMPTY, NOW);
+    const stamps = desk.shown.map((item) => articles.find((article) => article.id === item.id)?.publishedAt ?? "");
+    assert.deepEqual(stamps, byNewestPublished(stamps, (stamp) => stamp), category.id);
+  }
 });
 
 test("bookmarks keep the newest mark first and drop unknown ids", () => {

@@ -8,16 +8,21 @@ import { Button } from "@/components/ui/button";
 import { ask, type AskResult } from "@/lib/ask";
 import { categories, DEFAULT_CATEGORY, type CategoryId } from "@/lib/categories";
 import { articles } from "@/lib/corpus";
-import { kolkataDay } from "@/lib/day";
+import { byNewestPublished, kolkataDay } from "@/lib/day";
 import { bookmarksFor, refreshDesk, replaceDayPick, sameArticleSet, selectDesk, showCached, type Recommendation } from "@/lib/desk";
 import { visitorLocalLabel } from "@/lib/local-time";
 import { categoryArticleCounts } from "@/lib/rank";
 
 const SKIP_KEY = "reading-desk-skips";
 const USEFUL_KEY = "reading-desk-useful";
-const DAY_KEY = "reading-desk-day-v7";
+const DAY_KEY = "reading-desk-day-v8";
 
 type DayCache = { date: string; picks: Partial<Record<CategoryId, string[]>> };
+
+function newestOnScreen(items: readonly Recommendation[]): Recommendation[] {
+  const publishedAt = new Map(articles.map((article) => [article.id, article.publishedAt]));
+  return byNewestPublished(items, (item) => publishedAt.get(item.id) ?? "");
+}
 
 function readIds(key: string): string[] {
   if (typeof window === "undefined") return [];
@@ -130,7 +135,9 @@ export function Desk() {
   const today = day?.date ?? kolkataDay();
   const cachedIds = day?.picks[active];
   const computed = selectDesk(active, { skipped: skipIds, useful: usefulIds });
-  const shown = (cachedIds ? showCached(active, cachedIds) : computed.shown).filter((item) => !skipIds.includes(item.id));
+  const shown = newestOnScreen(
+    (cachedIds ? showCached(active, cachedIds) : computed.shown).filter((item) => !skipIds.includes(item.id)),
+  );
 
   useEffect(() => {
     if (!ready || !day || skipped === null || useful === null) return;
@@ -312,7 +319,7 @@ export function Desk() {
         ) : null}
         {answer?.kind === "reads" ? (
           <ol className="mt-4 flex min-w-0 list-none flex-col gap-4 p-0">
-            {answer.articles.map((article, index) => (
+            {newestOnScreen(answer.articles).map((article, index) => (
               <ArticleItem
                 key={article.id}
                 article={article}
