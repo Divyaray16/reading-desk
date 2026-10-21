@@ -388,10 +388,6 @@ export function Desk() {
           </>
         ) : null}
       </div>
-
-      <p className="mt-14 border-t border-border pt-5 text-xs leading-relaxed text-muted-foreground">
-        Articles are retrieved from the approved sources and judged from their titles and excerpts. A known date older than 18 months stays off the desk. The desk does not invent a title, and it does not sign in to a model. The three stay put for the India calendar day unless you refresh.
-      </p>
     </main>
   );
 }
@@ -714,12 +710,6 @@ function ArticleItem({
           }
         >
           {article.explanation.text}
-        </p>
-        {article.explanation.focus ? (
-          <p className="mt-3 max-w-[36rem] text-sm leading-relaxed text-muted-foreground">{article.explanation.focus}</p>
-        ) : null}
-        <p className="mt-3 text-xs tracking-wide text-muted-foreground uppercase">
-          {article.evidence === "full_text" ? "Read in full" : "Assessed from the excerpt"}
         </p>
         {onSkip || onUseful ? (
           <div className="mt-5 flex items-center justify-end gap-3 border-t border-border pt-4">
