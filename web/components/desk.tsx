@@ -257,7 +257,7 @@ export function Desk() {
               onChange={(event) => setDraft(event.target.value)}
               placeholder="give me an AI UX article"
               autoComplete="off"
-              className="h-12 max-h-12 min-h-12 min-w-0 flex-1 rounded-xl border border-border bg-field px-3.5 text-base text-foreground shadow-[inset_0_1px_2px_rgba(0,0,0,0.45)] outline-none placeholder:text-[#b3a898] focus-visible:border-ember focus-visible:ring-2 focus-visible:ring-ember/35"
+              className="h-12 max-h-12 min-h-12 min-w-0 flex-1 rounded-xl border border-border bg-field px-3.5 text-base font-normal text-foreground shadow-[inset_0_1px_2px_rgba(0,0,0,0.45)] outline-none placeholder:font-light placeholder:text-[#9a8f82] focus-visible:border-ember focus-visible:ring-2 focus-visible:ring-ember/35"
             />
             <Button
               type="submit"
