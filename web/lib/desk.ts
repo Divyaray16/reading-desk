@@ -31,6 +31,14 @@ export type Desk = {
   qualifiedCount: number;
 };
 
+export type DeskPage = Desk & {
+  /** Zero-based page. The first page is the three newest eligible articles. */
+  page: number;
+  pageCount: number;
+  /** Skipped articles that still belong to this category. */
+  hiddenIds: string[];
+};
+
 export function present(item: Scored, categoryId: CategoryId): Recommendation | null {
   const source = sourceById(item.article.sourceId);
   if (!source) return null;
@@ -94,7 +102,8 @@ export function showCached(
 }
 
 function inPublishedOrder(cards: readonly Recommendation[], publishedAt: ReadonlyMap<string, string>): Recommendation[] {
-  return byNewestPublished(cards, (card) => publishedAt.get(card.id) ?? "");
+  const stable = [...cards].sort((a, b) => a.id.localeCompare(b.id));
+  return byNewestPublished(stable, (card) => publishedAt.get(card.id) ?? "");
 }
 
 export function sameArticleSet(left: readonly string[], right: readonly string[]): boolean {
@@ -181,20 +190,61 @@ export function refreshDesk(
   };
 }
 
+function eligibleCards(
+  categoryId: CategoryId,
+  feedback: Feedback,
+  now: Date,
+  library: readonly Article[],
+): { cards: Recommendation[]; qualifiedCount: number; hiddenIds: string[] } {
+  const ranked = rankCategory(categoryId, library, now, feedback);
+  const skipped = new Set(feedback.skipped);
+  const hiddenIds = ranked.pool.filter((item) => skipped.has(item.article.id)).map((item) => item.article.id);
+  const eligible = ranked.pool.filter((item) => !skipped.has(item.article.id));
+  // Tie-break on id so a useful mark cannot reshuffle equal dates.
+  eligible.sort((a, b) => a.article.id.localeCompare(b.article.id));
+  const ordered = byNewestPublished(eligible, (item) => item.article.publishedAt);
+  const cards: Recommendation[] = [];
+  for (const item of ordered) {
+    const card = present(item, categoryId);
+    if (!card || cards.some((existing) => existing.id === card.id)) continue;
+    cards.push(card);
+  }
+  return { cards, qualifiedCount: ranked.qualifiedCount, hiddenIds };
+}
+
+/**
+ * One page of a category. The eligible pool is newest published date first
+ * (undated last, 18-month gate unchanged), then cut into pages of three.
+ * Useful marks still affect ranking and do not change this order.
+ */
+export function pageDesk(
+  categoryId: CategoryId,
+  page = 0,
+  feedback: Feedback = { skipped: [], useful: [] },
+  now: Date = new Date(),
+  library: readonly Article[] = articles,
+): DeskPage {
+  const { cards, qualifiedCount, hiddenIds } = eligibleCards(categoryId, feedback, now, library);
+  const pageCount = Math.max(1, Math.ceil(cards.length / CAP));
+  const requested = Number.isFinite(page) ? Math.trunc(page) : 0;
+  const safePage = cards.length === 0 ? 0 : Math.min(Math.max(requested, 0), pageCount - 1);
+  return {
+    shown: cards.slice(safePage * CAP, safePage * CAP + CAP),
+    note: null,
+    qualifiedCount,
+    page: safePage,
+    pageCount,
+    hiddenIds,
+  };
+}
+
+/** First page: the three newest eligible articles. */
 export function selectDesk(
   categoryId: CategoryId,
   feedback: Feedback = { skipped: [], useful: [] },
   now: Date = new Date(),
   library: readonly Article[] = articles,
 ): Desk {
-  const ranked = rankCategory(categoryId, library, now, feedback);
-  const publishedAt = new Map(ranked.shown.map((item) => [item.article.id, item.article.publishedAt]));
-  const shown = ranked.shown
-    .map((item) => present(item, categoryId))
-    .filter((item): item is Recommendation => item !== null);
-  return {
-    shown: inPublishedOrder(shown, publishedAt).slice(0, CAP),
-    note: null,
-    qualifiedCount: ranked.qualifiedCount,
-  };
+  const { shown, note, qualifiedCount } = pageDesk(categoryId, 0, feedback, now, library);
+  return { shown, note, qualifiedCount };
 }

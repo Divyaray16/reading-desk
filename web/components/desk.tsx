@@ -2,22 +2,26 @@
 
 import { Popover } from "@base-ui/react/popover";
 import { Select } from "@base-ui/react/select";
-import { Bookmark, Check, ChevronDown, RefreshCw } from "lucide-react";
+import { Bookmark, Check, ChevronDown } from "lucide-react";
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { ask, type AskResult } from "@/lib/ask";
 import { categories, DEFAULT_CATEGORY, type CategoryId } from "@/lib/categories";
 import { articles } from "@/lib/corpus";
 import { byNewestPublished, kolkataDay } from "@/lib/day";
-import { bookmarksFor, refreshDesk, replaceDayPick, sameArticleSet, selectDesk, showCached, type Recommendation } from "@/lib/desk";
+import { bookmarksFor, pageDesk, type Recommendation } from "@/lib/desk";
 import { visitorLocalLabel } from "@/lib/local-time";
 import { categoryArticleCounts } from "@/lib/rank";
 
 const SKIP_KEY = "reading-desk-skips";
 const USEFUL_KEY = "reading-desk-useful";
-const DAY_KEY = "reading-desk-day-v8";
+const DAY_KEY = "reading-desk-day-v9";
 
-type DayCache = { date: string; picks: Partial<Record<CategoryId, string[]>> };
+type DayCache = { date: string; category: CategoryId; page: number };
+
+function isCategoryId(value: unknown): value is CategoryId {
+  return typeof value === "string" && categories.some((category) => category.id === value);
+}
 
 function newestOnScreen(items: readonly Recommendation[]): Recommendation[] {
   const publishedAt = new Map(articles.map((article) => [article.id, article.publishedAt]));
@@ -44,9 +48,11 @@ function readDay(): DayCache | null {
     if (!raw) return null;
     const parsed: unknown = JSON.parse(raw);
     if (!parsed || typeof parsed !== "object") return null;
-    const record = parsed as { date?: unknown; picks?: unknown };
-    if (typeof record.date !== "string" || !record.picks || typeof record.picks !== "object") return null;
-    return { date: record.date, picks: record.picks as DayCache["picks"] };
+    const record = parsed as { date?: unknown; category?: unknown; page?: unknown };
+    if (typeof record.date !== "string") return null;
+    const category = isCategoryId(record.category) ? record.category : DEFAULT_CATEGORY;
+    const page = typeof record.page === "number" && Number.isInteger(record.page) && record.page >= 0 ? record.page : 0;
+    return { date: record.date, category, page };
   } catch {
     return null;
   }
@@ -100,7 +106,9 @@ export function Desk() {
   const active: CategoryId = visible.some((category) => category.id === view) ? view : (visible[0]?.id ?? view);
 
   useEffect(() => {
-    if (active !== view) setView(active);
+    if (active === view) return;
+    setView(active);
+    setDay((current) => (current ? { ...current, category: active, page: 0 } : current));
   }, [active, view]);
 
   useEffect(() => {
@@ -108,7 +116,13 @@ export function Desk() {
     const stored = readDay();
     setSkipped(readIds(SKIP_KEY));
     setUseful(readIds(USEFUL_KEY));
-    setDay(stored && stored.date === today ? stored : { date: today, picks: {} });
+    if (!stored || stored.date !== today) {
+      setView(DEFAULT_CATEGORY);
+      setDay({ date: today, category: DEFAULT_CATEGORY, page: 0 });
+    } else {
+      setView(stored.category);
+      setDay(stored);
+    }
     setReady(true);
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const id = window.setTimeout(() => setIntroduced(true), reduceMotion ? 0 : 780);
@@ -133,27 +147,29 @@ export function Desk() {
   const skipIds = skipped ?? [];
   const usefulIds = useful ?? [];
   const today = day?.date ?? kolkataDay();
-  const cachedIds = day?.picks[active];
-  const computed = selectDesk(active, { skipped: skipIds, useful: usefulIds });
-  const shown = newestOnScreen(
-    (cachedIds ? showCached(active, cachedIds) : computed.shown).filter((item) => !skipIds.includes(item.id)),
-  );
+  const requestedPage = day?.category === active ? day.page : 0;
+  const paged = pageDesk(active, requestedPage, { skipped: skipIds, useful: usefulIds });
+  const shown = paged.shown;
 
   useEffect(() => {
-    if (!ready || !day || skipped === null || useful === null) return;
-    if (day.picks[active]) return;
-    const fresh = selectDesk(active, { skipped, useful });
+    if (!ready || !day || day.category !== active) return;
+    if (day.page === paged.page) return;
     setDay((current) => {
-      if (!current || current.picks[active]) return current;
-      return { ...current, picks: { ...current.picks, [active]: fresh.shown.map((item) => item.id) } };
+      if (!current || current.category !== active || current.page === paged.page) return current;
+      return { ...current, page: paged.page };
     });
-  }, [ready, active, day, skipped, useful]);
+  }, [ready, day, active, paged.page]);
 
   const viewLine = categories.find((item) => item.id === active)?.line ?? "";
-  const hiddenHere = (cachedIds ?? computed.shown.map((item) => item.id)).filter((id) => skipIds.includes(id)).length;
+  const hiddenHere = paged.hiddenIds.length;
 
   function choose(next: CategoryId) {
     setView(next);
+    setDay((current) => ({
+      date: current?.date ?? kolkataDay(),
+      category: next,
+      page: 0,
+    }));
     setAnswer(null);
     setAsked("");
     setDraft("");
@@ -176,28 +192,16 @@ export function Desk() {
   }
 
   function restore() {
-    const ids = new Set(cachedIds ?? computed.shown.map((item) => item.id));
-    setSkipped((current) => (current ?? readIds(SKIP_KEY)).filter((id) => !ids.has(id)));
+    const hidden = new Set(paged.hiddenIds);
+    setSkipped((current) => (current ?? readIds(SKIP_KEY)).filter((id) => !hidden.has(id)));
   }
 
-  const currentIds = cachedIds ?? shown.map((item) => item.id);
-  const upcoming = refreshDesk(active, { skipped: skipIds, useful: usefulIds }, currentIds);
-  const canRotate = !sameArticleSet(
-    upcoming.shown.map((item) => item.id),
-    shown.map((item) => item.id),
-  );
-
-  function refresh() {
-    const fresh = refreshDesk(active, { skipped: skipIds, useful: usefulIds }, currentIds);
+  function goTo(page: number) {
     setDay((current) => ({
       date: current?.date ?? today,
-      picks: replaceDayPick(current?.picks ?? {}, active, fresh.shown.map((item) => item.id)),
+      category: active,
+      page,
     }));
-    if (answer || asked || draft.trim()) {
-      setDraft("");
-      setAsked("");
-      setAnswer(null);
-    }
   }
 
   function submit(event: FormEvent<HTMLFormElement>) {
@@ -291,18 +295,6 @@ export function Desk() {
             <div className="min-w-0 flex-1">
               <CategorySelect value={active} options={visible} onValueChange={choose} />
             </div>
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              className="h-10 w-10 min-h-10 min-w-10 shrink-0 rounded-xl border border-border bg-field px-0 text-ember shadow-[inset_0_1px_2px_rgba(0,0,0,0.45)] hover:bg-foreground/8 hover:text-ember"
-              aria-label="Refresh articles"
-              title={canRotate ? "Refresh articles" : "No other articles in this category"}
-              disabled={!canRotate}
-              onClick={refresh}
-            >
-              <RefreshCw className="size-3.5" aria-hidden="true" />
-            </Button>
           </div>
           {hiddenHere > 0 ? (
             <button type="button" className="mt-2 text-xs text-muted-foreground underline-offset-4 hover:underline" onClick={restore}>
@@ -338,30 +330,56 @@ export function Desk() {
               <EmptyState
                 kicker="Skipped"
                 title="Nothing left on this desk."
-                body="You skipped the articles for this category. Restore them, or refresh for the next set."
+                body="You skipped the articles for this category. Restore them to see these reads again."
               />
             ) : null}
             {introduced && shown.length === 0 && hiddenHere === 0 ? (
               <EmptyState
                 kicker="Empty"
                 title="No article is ready for this category."
-                body="Refresh the desk. Nothing is invented to fill a gap."
+                body="Nothing is invented to fill a gap."
               />
             ) : null}
             {introduced && shown.length > 0 ? (
-              <ol className="desk-arrive mt-4 flex list-none flex-col gap-4 p-0">
-                {shown.map((article, index) => (
-                  <ArticleItem
-                    key={article.id}
-                    article={article}
-                    number={String(index + 1).padStart(2, "0")}
-                    primary={index === 0}
-                    useful={usefulIds.includes(article.id)}
-                    onSkip={() => skip(article.id)}
-                    onUseful={() => toggleBookmark(article.id)}
-                  />
-                ))}
-              </ol>
+              <>
+                <ol className="desk-arrive mt-4 flex list-none flex-col gap-4 p-0">
+                  {shown.map((article, index) => (
+                    <ArticleItem
+                      key={article.id}
+                      article={article}
+                      number={String(index + 1).padStart(2, "0")}
+                      primary={index === 0}
+                      useful={usefulIds.includes(article.id)}
+                      onSkip={() => skip(article.id)}
+                      onUseful={() => toggleBookmark(article.id)}
+                    />
+                  ))}
+                </ol>
+                <nav
+                  className="mt-5 flex items-center justify-between"
+                  aria-label="Earlier and later articles"
+                  data-desk-pager=""
+                >
+                  <button
+                    type="button"
+                    data-desk-previous=""
+                    className="rounded-sm text-sm text-ember underline-offset-4 outline-none hover:underline focus-visible:underline disabled:cursor-default disabled:text-muted-foreground/50 disabled:no-underline"
+                    disabled={paged.page <= 0}
+                    onClick={() => goTo(paged.page - 1)}
+                  >
+                    Previous
+                  </button>
+                  <button
+                    type="button"
+                    data-desk-next=""
+                    className="rounded-sm text-sm text-ember underline-offset-4 outline-none hover:underline focus-visible:underline disabled:cursor-default disabled:text-muted-foreground/50 disabled:no-underline"
+                    disabled={paged.page >= paged.pageCount - 1}
+                    onClick={() => goTo(paged.page + 1)}
+                  >
+                    Next
+                  </button>
+                </nav>
+              </>
             ) : null}
           </>
         ) : null}

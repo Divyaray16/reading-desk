@@ -4,7 +4,8 @@ import { ask } from "./ask.ts";
 import { categories } from "./categories.ts";
 import { articles, type Article } from "./corpus.ts";
 import { byNewestPublished, parsePublished } from "./day.ts";
-import { bookmarksFor, refreshDesk, replaceDayPick, selectDesk, showCached } from "./desk.ts";
+import { bookmarksFor, pageDesk, refreshDesk, replaceDayPick, selectDesk, showCached } from "./desk.ts";
+import { rankCategory } from "./rank.ts";
 
 const NOW = new Date("2026-10-19T12:00:00Z");
 const EMPTY = { skipped: [] as string[], useful: [] as string[] };
@@ -233,4 +234,64 @@ test("bookmarks keep the newest mark first and drop unknown ids", () => {
   assert.equal(bookmarks[0]?.url.startsWith("https://"), true);
   assert.equal(bookmarks[0]?.publication.length > 0, true);
   assert.equal(bookmarksFor([], POOL).length, 0);
+});
+
+test("the first page is the three newest and page 2 is the next three without repeats", () => {
+  const excerpt =
+    "This synthetic fixture explains usability heuristics, information architecture, and a practical wayfinding pattern for navigation. It is not a retrieved article.";
+  function row(id: string, sourceId: string, title: string, publishedAt: string): Article {
+    return {
+      id,
+      sourceId,
+      title,
+      url: `https://www.nngroup.com/articles/${id}/`,
+      author: "Test Author",
+      publishedAt,
+      excerpt,
+      evidence: "excerpt",
+      retrievedAt: "2026-10-19T00:00:00Z",
+    };
+  }
+  const library = [
+    row("p-may-05", "baymard", "Cedar inclusive design checklist for tactile ux", "2026-05-05T00:00:00Z"),
+    row("p-oct-10", "nng", "Zebra accessibility heuristics for navigation labels", "2026-10-10T00:00:00Z"),
+    row("p-undated", "alistapart", "Aspen wayfinding pattern for page menus", ""),
+    row("p-aug-15", "figma", "Quartz information architecture and wayfinding", "2026-08-15T00:00:00Z"),
+    row("p-stale", "smashing", "Old usability heuristic checklist for archives", "2024-01-01T00:00:00Z"),
+    row("p-sep-02", "smashing", "Harbor form design improves readability", "2026-09-02T00:00:00Z"),
+    row("p-jul-01", "nng", "Maple cognitive load when writing an error message", "2026-07-01T00:00:00Z"),
+    row("p-jun-20", "alistapart", "Birch usability heuristic checklist for icon labels", "2026-06-20T00:00:00Z"),
+  ];
+  const newest = ["p-oct-10", "p-sep-02", "p-aug-15"];
+  const following = ["p-jul-01", "p-jun-20", "p-may-05"];
+
+  const first = pageDesk("foundations", 0, EMPTY, NOW, library);
+  const second = pageDesk("foundations", 1, EMPTY, NOW, library);
+  const last = pageDesk("foundations", 2, EMPTY, NOW, library);
+  assert.deepEqual(idsOf(first.shown), newest);
+  assert.equal(first.shown.length, 3);
+  assert.equal(first.page, 0);
+  assert.deepEqual(idsOf(selectDesk("foundations", EMPTY, NOW, library).shown), newest);
+  assert.deepEqual(idsOf(second.shown), following);
+  assert.equal(second.shown.length, 3);
+  assert.equal(second.page, 1);
+  for (const id of following) assert.equal(newest.includes(id), false);
+  assert.deepEqual(idsOf(last.shown), ["p-undated"]);
+  assert.equal(last.pageCount, 3);
+  assert.equal(JSON.stringify([first, second, last]).toLowerCase().includes("empty place"), false);
+  const seen = [...newest, ...following, "p-undated"];
+  assert.equal(seen.includes("p-stale"), false);
+  assert.equal(new Set(seen).size, seen.length);
+
+  const marked = { skipped: [] as string[], useful: ["p-may-05"] };
+  assert.deepEqual(idsOf(pageDesk("foundations", 0, marked, NOW, library).shown), newest);
+  assert.deepEqual(idsOf(pageDesk("foundations", 1, marked, NOW, library).shown), following);
+  const plainRank = rankCategory("foundations", library, NOW, EMPTY).pool.findIndex((item) => item.article.id === "p-may-05");
+  const boostedRank = rankCategory("foundations", library, NOW, marked).pool.findIndex((item) => item.article.id === "p-may-05");
+  assert.ok(plainRank >= 0 && boostedRank >= 0 && boostedRank < plainRank);
+
+  const skipped = pageDesk("foundations", 0, { skipped: ["p-oct-10"], useful: [] }, NOW, library);
+  assert.deepEqual(idsOf(skipped.shown), ["p-sep-02", "p-aug-15", "p-jul-01"]);
+  assert.equal(skipped.shown.some((item) => item.id === "p-oct-10"), false);
+  assert.equal(skipped.hiddenIds.includes("p-oct-10"), true);
 });
