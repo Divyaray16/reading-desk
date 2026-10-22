@@ -8,9 +8,15 @@ const WHEN: Intl.DateTimeFormatOptions = {
   hourCycle: "h23",
 };
 
+/** Legacy English name still carried by the Asia/Calcutta link. */
+const CITY_NAMES: Readonly<Record<string, string>> = {
+  Calcutta: "Kolkata",
+};
+
 /**
  * Readable place from an IANA timezone id.
- * America/New_York → New York. Zones with no city (UTC, Etc/GMT) return null.
+ * America/New_York → New York. Asia/Kolkata and Asia/Calcutta → Kolkata.
+ * Zones with no city (UTC, Etc/GMT) return null.
  */
 export function placeFromTimeZone(timeZone: string | null | undefined): string | null {
   if (typeof timeZone !== "string") return null;
@@ -21,7 +27,8 @@ export function placeFromTimeZone(timeZone: string | null | undefined): string |
   const area = parts[0];
   if (area === "Etc" || area === "SystemV") return null;
   const city = parts[parts.length - 1]?.replace(/_/g, " ").trim() ?? "";
-  return city.length > 0 ? city : null;
+  if (city.length === 0) return null;
+  return CITY_NAMES[city] ?? city;
 }
 
 function formatWhen(now: Date, timeZone?: string): string {

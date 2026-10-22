@@ -13,16 +13,20 @@ test("a timezone id supplies the local clock and its city", () => {
     visitorLocalLabel(instant, "America/Argentina/Buenos_Aires"),
     "Friday, 16 October 2026 · 17:00 · Buenos Aires",
   );
-  assert.equal(
-    visitorLocalLabel(instant, "Asia/Kolkata"),
-    "Saturday, 17 October 2026 · 01:30 · Kolkata",
-  );
+  const kolkata = visitorLocalLabel(instant, "Asia/Kolkata");
+  assert.equal(kolkata, "Saturday, 17 October 2026 · 01:30 · Kolkata");
+  assert.equal(kolkata.includes("Calcutta"), false);
+  const legacy = visitorLocalLabel(instant, "Asia/Calcutta");
+  assert.equal(legacy, "Saturday, 17 October 2026 · 01:30 · Kolkata");
+  assert.equal(legacy.includes("Calcutta"), false);
 });
 
 test("place names keep hyphens and only turn underscores into spaces", () => {
   assert.equal(placeFromTimeZone("America/New_York"), "New York");
   assert.equal(placeFromTimeZone("America/Port-au-Prince"), "Port-au-Prince");
   assert.equal(placeFromTimeZone("  Europe/London  "), "London");
+  assert.equal(placeFromTimeZone("Asia/Kolkata"), "Kolkata");
+  assert.equal(placeFromTimeZone("Asia/Calcutta"), "Kolkata");
 });
 
 test("a timezone with no city still shows the time", () => {
