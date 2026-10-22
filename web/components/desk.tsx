@@ -237,7 +237,7 @@ export function Desk() {
           Reading Desk
         </h1>
         <p className="mt-4 max-w-[34rem] font-serif text-xl leading-snug text-pretty text-foreground/90 sm:text-[1.65rem]">
-          Three articles for the work in front of you.
+          Three articles for the morning.
         </p>
         <VisitorClock />
       </header>
@@ -245,7 +245,7 @@ export function Desk() {
       <section className="mt-10" aria-labelledby="ask-label">
         <form onSubmit={submit}>
           <label id="ask-label" htmlFor="ask" className="block font-serif text-2xl leading-snug text-balance">
-            Search about the work in front of you
+            Search for an article
           </label>
           <div className="desk-ask mt-4">
             <input
