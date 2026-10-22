@@ -7,25 +7,22 @@ import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { ask, type AskResult } from "@/lib/ask";
 import { categories, DEFAULT_CATEGORY, type CategoryId } from "@/lib/categories";
+import { categoryTagCounts } from "@/lib/classify";
 import { articles } from "@/lib/corpus";
-import { byNewestPublished, kolkataDay } from "@/lib/day";
+import { kolkataDay } from "@/lib/day";
 import { bookmarksFor, pageDesk, type Recommendation } from "@/lib/desk";
 import { visitorLocalLabel } from "@/lib/local-time";
 import { categoryArticleCounts } from "@/lib/rank";
+import { clearCategoryFilters, toggleCategoryFilter } from "@/lib/search";
 
 const SKIP_KEY = "reading-desk-skips";
 const USEFUL_KEY = "reading-desk-useful";
-const DAY_KEY = "reading-desk-day-v9";
+const DAY_KEY = "reading-desk-day-v10";
 
 type DayCache = { date: string; category: CategoryId; page: number };
 
 function isCategoryId(value: unknown): value is CategoryId {
   return typeof value === "string" && categories.some((category) => category.id === value);
-}
-
-function newestOnScreen(items: readonly Recommendation[]): Recommendation[] {
-  const publishedAt = new Map(articles.map((article) => [article.id, article.publishedAt]));
-  return byNewestPublished(items, (item) => publishedAt.get(item.id) ?? "");
 }
 
 function readIds(key: string): string[] {
@@ -98,7 +95,13 @@ export function Desk() {
   const [draft, setDraft] = useState("");
   const [asked, setAsked] = useState("");
   const [answer, setAnswer] = useState<AskResult | null>(null);
+  const [filters, setFilters] = useState<CategoryId[]>([]);
   const counts = useMemo(() => categoryArticleCounts(articles), []);
+  const tagCounts = useMemo(() => categoryTagCounts(articles), []);
+  const filterOptions = useMemo(
+    () => categories.filter((category) => (tagCounts[category.id] ?? 0) > 0),
+    [tagCounts],
+  );
   const visible = useMemo(
     () => categories.filter((category) => (counts[category.id] ?? 0) > 0),
     [counts],
@@ -173,6 +176,13 @@ export function Desk() {
     setAnswer(null);
     setAsked("");
     setDraft("");
+    setFilters([]);
+  }
+
+  function clearFilters() {
+    const next = clearCategoryFilters({ query: draft, categories: filters });
+    setDraft(next.query);
+    setFilters([...next.categories]);
   }
 
   function skip(id: string) {
@@ -209,7 +219,7 @@ export function Desk() {
     const question = draft.trim();
     if (!question) return;
     setAsked(question);
-    setAnswer(ask(question, new Date(), articles));
+    setAnswer(ask(question, new Date(), articles, filters));
   }
 
   useEffect(() => {
@@ -221,10 +231,10 @@ export function Desk() {
     }
     const id = window.setTimeout(() => {
       setAsked(question);
-      setAnswer(ask(question, new Date(), articles));
+      setAnswer(ask(question, new Date(), articles, filters));
     }, 250);
     return () => window.clearTimeout(id);
-  }, [draft]);
+  }, [draft, filters]);
 
   return (
     <main className="mx-auto w-full min-w-0 max-w-[42rem] px-5 py-12 sm:px-8 sm:py-16">
@@ -271,21 +281,63 @@ export function Desk() {
       </section>
 
       {answer ? (
-        <div className="mt-8 flex min-w-0 flex-wrap items-baseline justify-between gap-x-4 gap-y-2">
-          <p className="min-w-0 flex-1 basis-48 text-sm leading-relaxed break-words text-muted-foreground" data-search-library="all">
-            Matches for “{asked}” across the whole library.
+        <div className="mt-8" data-search-filters="">
+          <div className="flex min-w-0 flex-wrap items-baseline justify-between gap-x-4 gap-y-2">
+            <p
+              className="min-w-0 flex-1 basis-48 text-sm leading-relaxed break-words text-muted-foreground"
+              data-search-library={filters.length === 0 ? "all" : "filtered"}
+            >
+              {filters.length === 0
+                ? `Matches for “${asked}” across the whole library.`
+                : `Matches for “${asked}” in any selected category.`}
+            </p>
+            <button
+              type="button"
+              className="shrink-0 text-xs text-ember underline-offset-4 hover:underline"
+              onClick={() => {
+                setAnswer(null);
+                setAsked("");
+                setDraft("");
+                setFilters([]);
+              }}
+            >
+              Back to the desk
+            </button>
+          </div>
+          <div className="desk-filter mt-3">
+            <div className="min-w-0 flex-1">
+              <ResultCategoryFilter
+                selected={filters}
+                options={filterOptions}
+                onToggle={(id) => setFilters((current) => toggleCategoryFilter(current, id))}
+                onAll={clearFilters}
+              />
+            </div>
+            <button
+              type="button"
+              data-filter-all=""
+              className="shrink-0 rounded-sm text-sm text-ember underline-offset-4 outline-none hover:underline focus-visible:underline"
+              onClick={clearFilters}
+            >
+              All
+            </button>
+            <button
+              type="button"
+              data-clear-filters=""
+              className="shrink-0 rounded-sm text-sm text-ember underline-offset-4 outline-none hover:underline focus-visible:underline disabled:cursor-default disabled:text-muted-foreground/50 disabled:no-underline"
+              disabled={filters.length === 0}
+              onClick={clearFilters}
+            >
+              Clear filters
+            </button>
+          </div>
+          <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+            {filters.length === 0
+              ? "No category filter is applied to these results."
+              : `Filtering these results by ${filters
+                  .map((id) => categories.find((category) => category.id === id)?.label ?? id)
+                  .join(" or ")}.`}
           </p>
-          <button
-            type="button"
-            className="shrink-0 text-xs text-ember underline-offset-4 hover:underline"
-            onClick={() => {
-              setAnswer(null);
-              setAsked("");
-              setDraft("");
-            }}
-          >
-            Back to the desk
-          </button>
         </div>
       ) : (
         <div className="mt-8">
@@ -305,16 +357,17 @@ export function Desk() {
 
       <div aria-live="polite" data-blog-count={answer?.kind === "reads" ? answer.articles.length : shown.length} data-category={active} data-day={today}>
         {answer?.kind === "none" ? (
-          <EmptyState kicker="No match" title="Nothing in the library fits." body={answer.text} />
+          <EmptyState kicker="No match" title="No relevant articles were found." body={answer.text} />
         ) : null}
         {answer?.kind === "reads" ? (
           <ol className="mt-4 flex min-w-0 list-none flex-col gap-4 p-0">
-            {newestOnScreen(answer.articles).map((article, index) => (
+            {answer.articles.map((article, index) => (
               <ArticleItem
                 key={article.id}
                 article={article}
                 number={String(index + 1).padStart(2, "0")}
                 primary={index === 0}
+                showTags
                 useful={usefulIds.includes(article.id)}
                 onUseful={() => toggleBookmark(article.id)}
               />
@@ -473,6 +526,106 @@ function CategorySelect({
   );
 }
 
+function ResultCategoryFilter({
+  selected,
+  options,
+  onToggle,
+  onAll,
+}: {
+  selected: readonly CategoryId[];
+  options: readonly { id: CategoryId; label: string }[];
+  onToggle: (id: CategoryId) => void;
+  onAll: () => void;
+}) {
+  const [filter, setFilter] = useState("");
+  const query = filter.trim().toLowerCase();
+  const shown = options.filter((category) => category.label.toLowerCase().includes(query));
+  const summary =
+    selected.length === 0
+      ? "All categories"
+      : selected.length === 1
+        ? (options.find((category) => category.id === selected[0])?.label ?? "1 category")
+        : `${selected.length} categories`;
+
+  return (
+    <Popover.Root>
+      <Popover.Trigger
+        type="button"
+        data-result-filter=""
+        className={(state) =>
+          [
+            "group flex h-10 min-h-10 w-full min-w-0 items-center justify-between gap-2 rounded-xl border border-border bg-field px-3.5 text-left text-sm text-foreground shadow-[inset_0_1px_2px_rgba(0,0,0,0.45)] outline-none focus-visible:border-ember focus-visible:ring-2 focus-visible:ring-ember/35",
+            state.open ? "border-ember" : "",
+          ].join(" ")
+        }
+      >
+        <span className="sr-only">Filter these results</span>
+        <span className="min-w-0 flex-1 truncate">{summary}</span>
+        <ChevronDown className="size-4 shrink-0 text-ember transition-transform duration-150 group-data-[popup-open]:rotate-180" aria-hidden />
+      </Popover.Trigger>
+      <Popover.Portal>
+        <Popover.Positioner
+          className="z-50 outline-none"
+          side="bottom"
+          align="start"
+          sideOffset={6}
+          collisionPadding={16}
+          collisionAvoidance={{ side: "flip", align: "shift", fallbackAxisSide: "none" }}
+        >
+          <Popover.Popup className="box-border w-[min(var(--available-width),max(var(--anchor-width),28rem))] max-w-[var(--available-width)] origin-[var(--transform-origin)] rounded-xl border border-border bg-[#231f1b] text-foreground shadow-[inset_0_1px_0_rgba(255,236,214,0.06),0_18px_40px_-24px_rgba(0,0,0,0.9)] outline-none">
+            <div className="border-b border-border p-1.5">
+              <input
+                data-category-filter=""
+                value={filter}
+                onChange={(event) => setFilter(event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key !== "Escape") event.stopPropagation();
+                }}
+                placeholder="Find a category"
+                aria-label="Find a category"
+                autoComplete="off"
+                className="h-9 w-full rounded-lg border border-border bg-field px-2.5 text-sm text-foreground outline-none placeholder:text-[#b3a898] focus-visible:border-ember focus-visible:ring-2 focus-visible:ring-ember/35"
+              />
+            </div>
+            <div className="max-h-[min(22rem,var(--available-height))] overflow-y-auto overscroll-contain p-1.5 [scrollbar-color:#e0b08a_transparent] [scrollbar-width:thin]">
+              <button
+                type="button"
+                data-filter-all-row=""
+                className="flex min-h-10 w-full cursor-pointer items-center gap-2.5 rounded-lg px-2.5 py-2 text-left text-sm leading-snug text-foreground outline-none hover:bg-foreground/8 focus-visible:bg-foreground/8"
+                onClick={onAll}
+              >
+                <span className="flex size-4 shrink-0 items-center justify-center">
+                  {selected.length === 0 ? <Check className="size-3.5 text-ember" strokeWidth={2.4} aria-hidden /> : null}
+                </span>
+                All
+              </button>
+              {shown.map((category) => {
+                const on = selected.includes(category.id);
+                return (
+                  <button
+                    key={category.id}
+                    type="button"
+                    data-category-id={category.id}
+                    aria-pressed={on}
+                    className="flex min-h-10 w-full cursor-pointer items-center gap-2.5 rounded-lg px-2.5 py-2 text-left text-sm leading-snug text-foreground outline-none hover:bg-foreground/8 focus-visible:bg-foreground/8"
+                    onClick={() => onToggle(category.id)}
+                  >
+                    <span className="flex size-4 shrink-0 items-center justify-center">
+                      {on ? <Check className="size-3.5 text-ember" strokeWidth={2.4} aria-hidden /> : null}
+                    </span>
+                    {category.label}
+                  </button>
+                );
+              })}
+              {shown.length === 0 ? <p className="px-2.5 py-3 text-sm text-muted-foreground">No category matches.</p> : null}
+            </div>
+          </Popover.Popup>
+        </Popover.Positioner>
+      </Popover.Portal>
+    </Popover.Root>
+  );
+}
+
 function BookmarkMenu({ ids, onRemove }: { ids: readonly string[]; onRemove: (id: string) => void }) {
   const bookmarks = bookmarksFor(ids);
   const count = bookmarks.length;
@@ -607,6 +760,7 @@ function ArticleItem({
   article,
   number,
   primary,
+  showTags = false,
   useful,
   onSkip,
   onUseful,
@@ -614,11 +768,18 @@ function ArticleItem({
   article: Recommendation;
   number: string;
   primary: boolean;
+  showTags?: boolean;
   useful?: boolean;
   onSkip?: () => void;
   onUseful?: () => void;
 }) {
-  const byline = [readableAuthor(article.author), article.date].filter(Boolean).join(" · ");
+  const byline = [
+    readableAuthor(article.author),
+    article.date,
+    article.readingMinutes ? `${article.readingMinutes} min read` : "",
+  ]
+    .filter(Boolean)
+    .join(" · ");
   return (
     <li className="min-w-0 list-none" data-blog-id={article.id}>
       <article className={primary ? "desk-card desk-card-lead min-w-0 px-5 py-6 sm:px-7 sm:py-7" : "desk-card min-w-0 px-5 py-6 sm:px-7 sm:py-7"}>
@@ -658,6 +819,11 @@ function ArticleItem({
         >
           {article.explanation.text}
         </p>
+        {showTags && article.categories.length > 0 ? (
+          <p className="mt-3 text-xs leading-relaxed text-muted-foreground" data-article-categories="">
+            {article.categories.join(" · ")}
+          </p>
+        ) : null}
         {onSkip || onUseful ? (
           <div className="mt-5 flex items-center justify-end gap-3 border-t border-border pt-4">
             {onUseful ? (

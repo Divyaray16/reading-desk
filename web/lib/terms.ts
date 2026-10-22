@@ -107,6 +107,17 @@ export const EXPANSIONS: Record<string, readonly Expansion[]> = {
     { phrase: "agentic workflows", weight: 0.65 },
     { phrase: "orchestration", weight: 0.55 },
   ],
+  agentic: [
+    { phrase: "ai agents", weight: 0.72 },
+    { phrase: "ai agent", weight: 0.72 },
+    { phrase: "agentic workflows", weight: 0.66 },
+    { phrase: "autonomous agents", weight: 0.6 },
+  ],
+  hitl: [
+    { phrase: "human in the loop", weight: 0.92 },
+    { phrase: "human-in-the-loop", weight: 0.92 },
+  ],
+  "human in the loop": [{ phrase: "hitl", weight: 0.9 }],
 };
 
 const STOP = new Set(

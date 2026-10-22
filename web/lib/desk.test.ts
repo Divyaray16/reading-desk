@@ -37,16 +37,22 @@ function idsOf(items: { id: string }[]): string[] {
   return items.map((item) => item.id);
 }
 
-test("each category returns only https articles from the library", () => {
+test("each category with articles returns only https articles from the library", () => {
+  let filled = 0;
   for (const category of categories) {
     const desk = selectDesk(category.id, { skipped: [], useful: [] }, new Date("2026-10-19T12:00:00Z"));
-    assert.equal(desk.shown.length, 3);
+    assert.ok(desk.shown.length <= 3, category.id);
+    assert.equal(desk.shown.length, Math.min(3, desk.qualifiedCount), category.id);
+    if (desk.shown.length === 0) continue;
+    filled += 1;
     for (const article of desk.shown) {
       assert.equal(article.url.startsWith("https://"), true);
       assert.equal(article.explanation.text.length > 40, true);
       assert.notEqual(article.evidence, "full_text");
+      assert.equal(article.readingMinutes, null);
     }
   }
+  assert.ok(filled >= 1);
 });
 
 test("refresh yields a different set and the day cache keeps it", () => {

@@ -41,7 +41,7 @@ function article(partial: Partial<Article> & Pick<Article, "title" | "excerpt">)
   };
 }
 
-test("the desk has fifteen categories and needs-reevaluation is not one of them", () => {
+test("the desk has fifteen categories and needs review is not one of them", () => {
   assert.equal(categories.length, 15);
   assert.equal(new Set(categories.map((category) => category.label)).size, 15);
   assert.deepEqual(
@@ -51,32 +51,33 @@ test("the desk has fifteen categories and needs-reevaluation is not one of them"
   assert.equal(categories.some((category) => /needs review/i.test(category.label)), false);
 });
 
-test("a design-system article that mentions an agent stays with the system", () => {
+test("a design-system article that mentions an agent is tagged only for the system", () => {
   const piece = article({
     title: "How to lighten design system upkeep with the Figma agent",
     excerpt:
       "This note is about keeping a design system maintainable when an agent edits components. The system, the tokens, and the review path are the work. The agent is the tool used along the way, not the subject of a new workflow.",
   });
   const classified = classifyArticle(piece);
-  assert.equal(classified.status, "classified");
-  assert.equal(classified.primary, "systems");
+  assert.deepEqual(classified.tags, ["systems"]);
+  assert.equal("primary" in classified, false);
   assert.equal("secondary" in classified, false);
   assert.equal(articleTags(piece).includes("AI Agents"), false);
   assert.ok(articleTags(piece).includes("Figma"));
 });
 
-test("a passing keyword does not set the primary category", () => {
+test("a passing keyword does not add a category tag", () => {
   const piece = article({
     title: "A content model is not a design system",
     excerpt:
       "The essay argues that a content model and a design system solve different problems. It mentions an agent once, in a clause about a future demo, and then returns to components, tokens, and naming.",
   });
   const classified = classifyArticle(piece);
-  assert.equal(classified.primary, "systems");
+  assert.ok(classified.tags.includes("systems"));
+  assert.equal(classified.tags.includes("agentic"), false);
   assert.equal(articleTags(piece).includes("AI Agents"), false);
 });
 
-test("two subjects in equal measure stay in needs-reevaluation", () => {
+test("two real subjects both become tags", () => {
   const classified = classifyArticle(
     article({
       title: "Service design and the design system",
@@ -84,11 +85,12 @@ test("two subjects in equal measure stay in needs-reevaluation", () => {
         "This essay gives the same attention to service design and the design system. It explains service design and the design system in equal depth, and it never picks one as the point of the piece. Both service design and the design system stay in frame the whole way through.",
     }),
   );
-  assert.equal(classified.status, "needs-reevaluation");
-  assert.equal(classified.primary, null);
+  assert.ok(classified.tags.includes("service"));
+  assert.ok(classified.tags.includes("systems"));
+  assert.equal("primary" in classified, false);
 });
 
-test("a title without excerpt support is not classified", () => {
+test("a title without excerpt support stays untagged", () => {
   const classified = classifyArticle(
     article({
       title: "Usability heuristics for navigation",
@@ -96,11 +98,10 @@ test("a title without excerpt support is not classified", () => {
         "The team met for a planning offsite, compared calendars, and wrote down the publishing schedule for the next quarter. The notes mention the weather, the room, and the lunch order, and they stop there.",
     }),
   );
-  assert.equal(classified.status, "needs-reevaluation");
-  assert.equal(classified.primary, null);
+  assert.deepEqual(classified.tags, []);
 });
 
-test("model research without a design decision is tagged, not forced into a category", () => {
+test("model research without a design decision stays untagged and keeps technology tags", () => {
   const piece = article({
     title: "A transformer benchmark for gpu inference",
     excerpt:
@@ -108,8 +109,7 @@ test("model research without a design decision is tagged, not forced into a cate
   });
   const classified = classifyArticle(piece);
   const tags = articleTags(piece);
-  assert.equal(classified.status, "needs-reevaluation");
-  assert.equal(classified.primary, null);
+  assert.deepEqual(classified.tags, []);
   assert.ok(tags.includes("Transformer"));
   assert.ok(tags.includes("GPU"));
   assert.ok(tags.length <= TAG_CAP);
@@ -135,32 +135,30 @@ test("human in the loop and HITL are the same tag", () => {
   assert.ok(dashed.includes("Human-in-the-Loop"));
 });
 
-test("a short excerpt is marked for review instead of being filed", () => {
+test("a short excerpt stays untagged", () => {
   const classified = classifyArticle(
     article({
       title: "Usability heuristics",
       excerpt: "Too short to judge.",
     }),
   );
-  assert.equal(classified.status, "needs-reevaluation");
-  assert.equal(classified.primary, null);
+  assert.deepEqual(classified.tags, []);
 });
 
-test("every real article has one primary or needs-reevaluation, and tags stay separate", () => {
+test("every real article has a tag array, and technology tags stay separate from categories", () => {
   const labels = new Set(LABELS);
   const urls = new Set<string>();
+  const ids = new Set(categories.map((category) => category.id));
   assert.ok(articles.length > 200);
   for (const piece of articles) {
     assert.equal(urls.has(piece.url), false, piece.url);
     urls.add(piece.url);
     const classified = classifyArticle(piece);
+    assert.equal("primary" in classified, false);
     assert.equal("secondary" in classified, false);
-    assert.ok(classified.status === "classified" || classified.status === "needs-reevaluation");
-    if (classified.status === "needs-reevaluation") {
-      assert.equal(classified.primary, null);
-    } else {
-      assert.ok(categories.some((category) => category.id === classified.primary));
-    }
+    assert.ok(Array.isArray(classified.tags));
+    assert.equal(new Set(classified.tags).size, classified.tags.length, piece.title);
+    for (const id of classified.tags) assert.equal(ids.has(id), true, piece.title);
     const tags = articleTags(piece);
     assert.ok(tags.length <= TAG_CAP);
     for (const tag of tags) {
@@ -170,7 +168,9 @@ test("every real article has one primary or needs-reevaluation, and tags stay se
   }
   const real = articles.find((piece) => piece.title === "How to lighten design system upkeep with the Figma agent");
   assert.ok(real);
-  assert.equal(classifyArticle(real).primary, "systems");
+  const realTags = classifyArticle(real).tags;
+  assert.ok(realTags.includes("systems"));
+  assert.equal(realTags.includes("agentic"), false);
 });
 
 test("one publication can contribute to more than one category", () => {
@@ -182,28 +182,30 @@ test("one publication can contribute to more than one category", () => {
     }
   }
   const nngCategories = new Set(
-    articles
-      .filter((item) => item.sourceId === "nng")
-      .map((item) => classifyArticle(item).primary)
-      .filter((id): id is NonNullable<typeof id> => id !== null),
+    articles.filter((item) => item.sourceId === "nng").flatMap((item) => classifyArticle(item).tags),
   );
   assert.ok(nngCategories.size >= 2, [...nngCategories].join(","));
   assert.ok(homes.size >= 1);
 });
 
-test("every category shows exactly three recent articles", () => {
+test("a category page shows up to three recent articles and does not invent a third", () => {
+  let withArticles = 0;
   for (const category of categories) {
     const desk = selectDesk(category.id, { skipped: [], useful: [] }, NOW);
-    assert.ok(desk.qualifiedCount >= 3, `${category.id} ${desk.qualifiedCount}`);
-    assert.equal(desk.shown.length, 3, category.id);
+    assert.equal(desk.shown.length, Math.min(3, desk.qualifiedCount), category.id);
+    assert.equal(desk.note, null, category.id);
+    if (desk.qualifiedCount === 0) continue;
+    withArticles += 1;
+    assert.ok(desk.shown.length >= 1 && desk.shown.length <= 3, category.id);
     for (const item of desk.shown) {
       const source = articles.find((piece) => piece.id === item.id);
       assert.ok(source);
-      assert.equal(classifyArticle(source).primary, category.id, item.title);
+      assert.ok(classifyArticle(source).tags.includes(category.id), item.title);
       assert.equal(isRecentArticle(source.publishedAt, NOW), true, item.title);
       assert.ok(MAX_ARTICLE_AGE_DAYS >= 540);
     }
   }
+  assert.ok(withArticles >= 1);
 });
 
 test("phrase matching stays on word boundaries", () => {
@@ -213,14 +215,13 @@ test("phrase matching stays on word boundaries", () => {
   assert.equal(containsPhrase(normalize("the agents plan"), "agent"), true);
 });
 
-test("excerpt-backed subjects fill every category with at least three articles", () => {
+test("a category page only includes articles that carry that tag", () => {
   for (const category of categories) {
     const id = category.id;
     const ranked = rankCategory(id, articles, NOW);
-    assert.ok(ranked.qualifiedCount >= 3, `${id} ${ranked.qualifiedCount}`);
     for (const item of ranked.pool) {
       if (!item.qualified) continue;
-      assert.equal(classifyArticle(item.article).primary, id, item.article.title);
+      assert.ok(classifyArticle(item.article).tags.includes(id), item.article.title);
       assert.equal(item.article.evidence === "full_text", false, item.article.title);
     }
   }

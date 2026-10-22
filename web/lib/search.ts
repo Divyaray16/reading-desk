@@ -1,6 +1,7 @@
 /**
  * Keyword search over the retrieved article library.
- * No model and no network. Synonyms help recall; a direct hit still ranks higher.
+ * No model, no embeddings, and no network. Synonyms help recall; a direct hit still ranks higher.
+ * Category filters are optional. With none selected, the whole library is searched, including old articles.
  *
  * Direct weights, before the document-frequency factor (0.62–1):
  * exact phrase in the title 42, topic signals 16, excerpt 24, author or publication 9.
@@ -9,11 +10,11 @@
  * so a synonym stays below the same direct hit.
  */
 
-import { categoryById } from "./categories.ts";
+import { categoryById, type CategoryId } from "./categories.ts";
 import { articleTags, classifyArticle } from "./classify.ts";
 import { articles, type Article } from "./corpus.ts";
-import { byNewestPublished } from "./day.ts";
-import { articleUrlOk, isRecentArticle, nearDuplicate } from "./rank.ts";
+import { parsePublished } from "./day.ts";
+import { articleUrlOk, nearDuplicate } from "./rank.ts";
 import { sourceById } from "./sources.ts";
 import {
   EXPANSIONS,
@@ -30,7 +31,10 @@ import {
 export const RESULT_CAP = 10;
 
 const MIN_SCORE = 8;
-const EXPANSION_ONLY_MIN = 10;
+/** A strong synonym, including an abbreviation resolved through the tag label, can stand alone. */
+const EXPANSION_ONLY_MIN = 8;
+/** Inside one score band, newer published dates lead. A wider gap keeps the higher score first. */
+const RELEVANCE_BAND = 8;
 /** Prefer another publication only when its score stays close to the best remaining hit. */
 const SOURCE_BAND = 0.85;
 
@@ -103,9 +107,10 @@ function indexArticle(article: Article): Indexed | null {
   const publication = normalize(sourceById(asText(article.sourceId))?.name ?? "");
   if (title.length < 3 && excerpt.length < 20) return null;
   const classified = classifyArticle(article);
-  const label = classified.primary ? normalize(categoryById(classified.primary).label) : "";
+  const labels = classified.tags.map((id) => normalize(categoryById(id).label));
   const tags = articleTags(article).map((tag) => normalize(tag));
-  const topics = [label, ...tags].filter(Boolean).join(" ");
+  const keywords = classified.tags.flatMap((id) => classified.matched[id] ?? []).map((phrase) => normalize(phrase));
+  const topics = [...labels, ...tags, ...keywords].filter(Boolean).join(" ");
   return {
     article,
     title,
@@ -304,6 +309,7 @@ function diversify(hits: readonly SearchHit[]): SearchHit[] {
     chosen.some(
       (other) =>
         other.article.id === hit.article.id ||
+        other.article.url === hit.article.url ||
         normalize(other.article.title) === normalize(hit.article.title) ||
         nearDuplicate(other.article.title, hit.article.title),
     );
@@ -320,11 +326,46 @@ function diversify(hits: readonly SearchHit[]): SearchHit[] {
   return chosen;
 }
 
+export type CategoryFilterState = {
+  query: string;
+  categories: readonly CategoryId[];
+};
+
+/** Drop category filters and keep the query. */
+export function clearCategoryFilters(state: CategoryFilterState): CategoryFilterState {
+  return { query: state.query, categories: [] };
+}
+
+export function toggleCategoryFilter(selected: readonly CategoryId[], id: CategoryId): CategoryId[] {
+  return selected.includes(id) ? selected.filter((item) => item !== id) : [...selected, id];
+}
+
+function publishedTime(article: Article): number | null {
+  return parsePublished(asText(article.publishedAt))?.getTime() ?? null;
+}
+
+/** Relevance leads. Dates reorder only inside a close score band, newest first, undated last. */
+export function orderSearchHits(hits: readonly SearchHit[]): SearchHit[] {
+  return [...hits].sort((a, b) => {
+    const band = Math.floor(b.score / RELEVANCE_BAND) - Math.floor(a.score / RELEVANCE_BAND);
+    if (band !== 0) return band;
+    const aTime = publishedTime(a.article);
+    const bTime = publishedTime(b.article);
+    if (aTime !== null && bTime !== null && aTime !== bTime) return bTime - aTime;
+    if (aTime !== null && bTime === null) return -1;
+    if (aTime === null && bTime !== null) return 1;
+    if (a.score !== b.score) return b.score - a.score;
+    return a.article.title.localeCompare(b.article.title);
+  });
+}
+
 export function searchArticles(
   question: string,
   library: readonly Article[] = articles,
-  now: Date = new Date(),
+  _now: Date = new Date(),
+  categoryIds: readonly CategoryId[] = [],
 ): SearchHit[] {
+  void _now;
   const normalized = normalize(asText(question));
   const tokens = queryTokens(normalized);
   const phrases = phraseKeys(normalized);
@@ -334,10 +375,14 @@ export function searchArticles(
   const frequency = frequencyFor(rows);
   const plans = plansFor(normalized, tokens);
   const needed = requiredTokens(tokens.length);
+  const allowed = new Set(categoryIds);
   const hits: SearchHit[] = [];
 
   for (const row of rows) {
-    if (!isRecentArticle(asText(row.article.publishedAt), now)) continue;
+    if (allowed.size > 0) {
+      const tags = classifyArticle(row.article).tags;
+      if (!tags.some((id) => allowed.has(id))) continue;
+    }
     let direct = 0;
     const matched: string[] = [];
     const satisfied = tokens.map(() => false);
@@ -396,5 +441,5 @@ export function searchArticles(
   }
 
   hits.sort((a, b) => b.score - a.score || a.article.title.localeCompare(b.article.title));
-  return byNewestPublished(diversify(hits), (hit) => asText(hit.article.publishedAt));
+  return orderSearchHits(diversify(hits));
 }

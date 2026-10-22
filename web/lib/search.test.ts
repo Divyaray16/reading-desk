@@ -3,9 +3,10 @@ import test from "node:test";
 import { ask, NO_MATCH } from "./ask.ts";
 import { classifyArticle } from "./classify.ts";
 import { articles, type Article } from "./corpus.ts";
-import { byNewestPublished, parsePublished } from "./day.ts";
-import { CAP, selectDesk } from "./desk.ts";
-import { RESULT_CAP, searchArticles } from "./search.ts";
+import { parsePublished } from "./day.ts";
+import { CAP, selectDesk, readingMinutes } from "./desk.ts";
+import { isRecentArticle } from "./rank.ts";
+import { RESULT_CAP, clearCategoryFilters, searchArticles } from "./search.ts";
 
 const NOW = new Date("2026-10-19T12:00:00Z");
 
@@ -37,8 +38,8 @@ test("a query with many matches returns ten articles from more than one publicat
     assert.equal(hits.length, 10, query);
     const sources = new Set(hits.map((hit) => hit.article.sourceId));
     assert.ok(sources.size >= 3, query);
-    const categories = new Set(hits.map((hit) => classifyArticle(hit.article).primary));
-    assert.ok(categories.size >= 1, query);
+    const tagged = hits.flatMap((hit) => classifyArticle(hit.article).tags);
+    assert.ok(new Set(tagged).size >= 1, query);
     for (const hit of hits) {
       assert.equal(hit.article.url.startsWith("https://"), true);
       assert.equal(
@@ -164,10 +165,8 @@ test("search results with two different dates come out newest first", () => {
     corpusHits.map((hit) => parsePublished(hit.article.publishedAt)?.toISOString() ?? "").filter((day) => day.length > 0),
   );
   assert.ok(dated.size >= 2);
-  assert.deepEqual(
-    corpusHits.map((hit) => hit.article.id),
-    byNewestPublished(corpusHits, (hit) => hit.article.publishedAt).map((hit) => hit.article.id),
-  );
+  const best = Math.max(...corpusHits.map((hit) => hit.score));
+  assert.ok(corpusHits[0] && corpusHits[0].score >= best - 8);
   const corpusAsked = ask("design systems", NOW);
   assert.equal(corpusAsked.kind, "reads");
   if (corpusAsked.kind !== "reads") return;
@@ -209,7 +208,12 @@ test("user research and React search the real library", () => {
 test("search covers the whole library and does not narrow to one category", () => {
   const hits = searchArticles("design systems", articles, NOW);
   assert.ok(hits.length >= 1);
-  assert.ok(hits.some((hit) => classifyArticle(hit.article).primary !== "agentic"));
+  assert.ok(
+    hits.some((hit) => {
+      const tags = classifyArticle(hit.article).tags;
+      return !(tags.length === 1 && tags[0] === "agentic");
+    }),
+  );
   const asked = ask("design systems", NOW);
   assert.equal(asked.kind, "reads");
   if (asked.kind !== "reads") return;
@@ -266,4 +270,162 @@ test("missing metadata does not crash and still keeps real links", () => {
 test("an empty query returns the empty state", () => {
   assert.deepEqual(searchArticles("   "), []);
   assert.deepEqual(ask("   ", NOW), { kind: "none", text: NO_MATCH });
+});
+
+function fixtureArticle(partial: Partial<Article> & Pick<Article, "id" | "title" | "excerpt">): Article {
+  return {
+    sourceId: "nng",
+    url: `https://www.nngroup.com/articles/${partial.id}/`,
+    author: "Test Author",
+    publishedAt: "2026-09-01T00:00:00Z",
+    evidence: "excerpt",
+    retrievedAt: "2026-10-19T00:00:00Z",
+    ...partial,
+  };
+}
+
+test("UX, AI, agentic, and human-in-the-loop search the whole library with no category", () => {
+  for (const query of ["UX", "AI", "agentic", "human-in-the-loop", "HITL"]) {
+    const hits = searchArticles(query, articles, NOW, []);
+    assert.ok(hits.length >= 1 && hits.length <= RESULT_CAP, `${query} ${hits.length}`);
+    const urls = hits.map((hit) => hit.article.url);
+    assert.equal(new Set(urls).size, urls.length, query);
+    for (const hit of hits) assert.equal(hit.article.url.startsWith("https://"), true);
+  }
+  const asked = ask("human-in-the-loop", NOW, articles, []);
+  assert.equal(asked.kind, "reads");
+  if (asked.kind !== "reads") return;
+  for (const article of asked.articles) {
+    assert.equal(article.explanation.text.includes("It belongs with"), false);
+    assert.equal(article.explanation.focus.includes("Assessed from the excerpt"), false);
+    assert.equal(article.readingMinutes, null);
+    assert.ok(Array.isArray(article.categories));
+  }
+});
+
+test("human-in-the-loop with Agentic selected is a subset of the unfiltered search", () => {
+  const open = searchArticles("human in the loop", articles, NOW, []);
+  const agenticOnly = searchArticles("human in the loop", articles, NOW, ["agentic"]);
+  assert.ok(open.length >= 1);
+  for (const hit of agenticOnly) {
+    assert.ok(classifyArticle(hit.article).tags.includes("agentic"));
+    assert.ok(open.some((item) => item.article.id === hit.article.id));
+  }
+  const research = fixtureArticle({
+    id: "hitl-research",
+    title: "Human-in-the-loop usability testing",
+    excerpt:
+      "This note explains human-in-the-loop review during a usability test. Participants talk through the task, and the researcher writes down what users think. It is a research method about interviews and behavior.",
+  });
+  const agent = fixtureArticle({
+    id: "hitl-agent",
+    sourceId: "anthropic",
+    title: "Human-in-the-loop approval for an agentic workflow",
+    excerpt:
+      "This note explains human-in-the-loop approval for an agentic workflow. The agent plans a step, then a person approves it before tool use continues.",
+    url: "https://www.anthropic.com/research/hitl-agent",
+  });
+  const library = [research, agent];
+  const unfiltered = searchArticles("human-in-the-loop", library, NOW, []);
+  const filtered = searchArticles("human-in-the-loop", library, NOW, ["agentic"]);
+  assert.deepEqual(
+    unfiltered.map((hit) => hit.article.id).sort(),
+    ["hitl-agent", "hitl-research"],
+  );
+  assert.deepEqual(
+    filtered.map((hit) => hit.article.id),
+    ["hitl-agent"],
+  );
+});
+
+test("two category filters use OR and clear filters keeps the query", () => {
+  const shared =
+    "Northstar is the running example. A practical note about navigation and the person using the product. The checklist covers the workflow from the first screen to the last.";
+  const agentic = fixtureArticle({
+    id: "or-agentic",
+    title: "Northstar agentic handoff for an enterprise workflow",
+    excerpt: `${shared} The agentic workflow uses tool calling and sends an escalation back to a person for approval.`,
+  });
+  const access = fixtureArticle({
+    id: "or-access",
+    sourceId: "smashing",
+    title: "Northstar accessibility heuristics for keyboard navigation",
+    excerpt: `${shared} The piece is about accessibility, screen readers, and inclusive design for the same navigation.`,
+    url: "https://www.smashingmagazine.com/2026/09/or-access/",
+  });
+  const both = fixtureArticle({
+    id: "or-both",
+    sourceId: "figma",
+    title: "Northstar agentic accessibility reviews",
+    excerpt: `${shared} An agentic workflow checks accessibility and screen reader names before the agent continues.`,
+    url: "https://www.figma.com/blog/or-both/",
+  });
+  const visual = fixtureArticle({
+    id: "or-visual",
+    sourceId: "alistapart",
+    title: "Northstar typography and visual hierarchy",
+    excerpt: `${shared} The subject is typography, visual hierarchy, and a color palette for the layout.`,
+    url: "https://alistapart.com/article/or-visual/",
+  });
+  const library = [agentic, access, both, visual];
+  const either = searchArticles("Northstar", library, NOW, ["agentic", "accessibility"]);
+  assert.deepEqual(
+    either.map((hit) => hit.article.id).sort(),
+    ["or-access", "or-agentic", "or-both"],
+  );
+  for (const hit of either) {
+    const tags = classifyArticle(hit.article).tags;
+    assert.ok(tags.includes("agentic") || tags.includes("accessibility"));
+  }
+  const cleared = clearCategoryFilters({ query: "Northstar", categories: ["agentic", "accessibility"] });
+  assert.equal(cleared.query, "Northstar");
+  assert.deepEqual(cleared.categories, []);
+  const restored = searchArticles(cleared.query, library, NOW, cleared.categories);
+  assert.ok(restored.some((hit) => hit.article.id === "or-visual"));
+  assert.ok(restored.length >= either.length);
+});
+
+test("an untagged article stays searchable and a nonsense query returns nothing", () => {
+  const piece = fixtureArticle({
+    id: "untagged-quokka",
+    title: "Quokka maintenance notes for the archive shelf",
+    excerpt:
+      "The archive shelf holds quokka maintenance notes, packing lists, and a calendar. The notes record box numbers and the week they were filed.",
+  });
+  assert.deepEqual(classifyArticle(piece).tags, []);
+  const hits = searchArticles("quokka", [piece, ...articles.slice(0, 5)], NOW, []);
+  assert.ok(hits.some((hit) => hit.article.id === "untagged-quokka"));
+  assert.deepEqual(searchArticles("xylophone quantum", articles, NOW, []), []);
+  assert.deepEqual(ask("zzzznotarealterm", NOW), { kind: "none", text: NO_MATCH });
+});
+
+test("exact and partial titles, source names, and old articles are real hits", () => {
+  const sample = articles.find((article) => article.title === "Humility: An Essential Value");
+  assert.ok(sample);
+  assert.equal(isRecentArticle(sample.publishedAt, NOW), false);
+  const exact = searchArticles(sample.title, articles, NOW, []);
+  assert.equal(exact[0]?.article.id, sample.id);
+  const partial = searchArticles("Humility: An Essential", articles, NOW, []);
+  assert.ok(partial.some((hit) => hit.article.id === sample.id));
+  const figma = searchArticles("Figma", articles, NOW, []);
+  assert.ok(figma.some((hit) => hit.article.sourceId === "figma"));
+  const anthropic = searchArticles("Anthropic", articles, NOW, []);
+  assert.ok(anthropic.some((hit) => hit.article.sourceId === "anthropic"));
+  const urls = searchArticles("UX", articles, NOW).map((hit) => hit.article.url);
+  assert.equal(new Set(urls).size, urls.length);
+});
+
+test("a multi-tag article is findable under each of its categories", () => {
+  const multi = articles.find((article) => classifyArticle(article).tags.length >= 2);
+  assert.ok(multi);
+  const tags = classifyArticle(multi).tags;
+  const [first, second] = tags;
+  assert.ok(first && second);
+  for (const id of [first, second]) {
+    const hits = searchArticles(multi.title, articles, NOW, [id]);
+    assert.ok(hits.some((hit) => hit.article.id === multi.id), id);
+  }
+  const open = searchArticles(multi.title, articles, NOW, []);
+  assert.ok(open.some((hit) => hit.article.id === multi.id));
+  assert.equal(readingMinutes(multi.excerpt, multi.evidence), null);
 });

@@ -1,9 +1,9 @@
 /**
  * Editorial ranking. Score math, gates, and the final three are deterministic.
  * Semantic signals come from the category definition and the article text.
- * Ranking version 3 — 21 Oct 2026. Weights: relevance 35, actionability 25,
+ * Ranking version 4 — 22 Oct 2026. Weights: relevance 35, actionability 25,
  * depth 20, credibility 10, freshness 10. An article qualifies for a desk
- * only when that desk is its primary category.
+ * when that category is one of its tags. Search does not use the age gate.
  */
 
 import { categories, categoryById, type Category, type CategoryId } from "./categories.ts";
@@ -12,7 +12,7 @@ import { articles as corpusArticles, type Article, type Evidence } from "./corpu
 import { parsePublished } from "./day.ts";
 import { sourceById, type SourceType } from "./sources.ts";
 
-export const RANKING_VERSION = 3;
+export const RANKING_VERSION = 4;
 
 /** Known publication dates older than this stay in the library and stay out of the desk. */
 export const MAX_ARTICLE_AGE_DAYS = 548;
@@ -136,10 +136,10 @@ export function matchedSignals(article: Article, category: Category): string[] {
   return classifyArticle(article).matched[category.id] ?? [];
 }
 
-/** Only the primary category earns relevance. A passing keyword does not. */
+/** A category tag earns relevance. A passing keyword does not, because it never becomes a tag. */
 function relevanceScore(article: Article, category: Category): number {
   const classified = classifyArticle(article);
-  if (classified.status !== "classified" || classified.primary !== category.id) return 0;
+  if (!classified.tags.includes(category.id)) return 0;
   // The title agreeing with the category outranks a body-only match.
   return classified.titleStrong[category.id] ? 5 : 3;
 }
@@ -353,7 +353,7 @@ export function rankCategory(
   return { shown, qualifiedCount: unique.length, note: null, pool: unique };
 }
 
-/** Eligible recent articles whose primary category is that desk. Categories with zero stay hidden. */
+/** Eligible recent articles tagged with that desk. Categories with zero stay hidden. */
 export function categoryArticleCounts(
   library: readonly Article[] = corpusArticles,
   now: Date = new Date(),

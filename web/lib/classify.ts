@@ -1,9 +1,8 @@
 /**
- * One primary category, or needs-reevaluation.
- * The primary is the central subject of the excerpt, not the publication and not a stray word.
- * A thin excerpt, a title with nothing behind it in the excerpt, or two subjects too close
- * to call stay in needs-reevaluation. Needs reevaluation is not a category.
- * Tags live in tags.ts and never stand in for the primary.
+ * Category tags from the title and excerpt. Zero, one, or many.
+ * A tag is a subject the excerpt actually discusses. A passing mention does not qualify,
+ * and a thin excerpt is left untagged. Untagged is not a category.
+ * Technology labels live in tags.ts and are not category tags.
  */
 
 import { categories, type CategoryId } from "./categories.ts";
@@ -13,11 +12,9 @@ import { containsPhrase, normalize, sameWord } from "./terms.ts";
 
 export { articleTags };
 
-export type ClassificationStatus = "classified" | "needs-reevaluation";
-
 export type Classification = {
-  status: ClassificationStatus;
-  primary: CategoryId | null;
+  /** Subjects the excerpt supports, strongest first. Empty when nothing qualifies. */
+  tags: CategoryId[];
   matched: Partial<Record<CategoryId, string[]>>;
   titleStrong: Partial<Record<CategoryId, boolean>>;
 };
@@ -25,7 +22,6 @@ export type Classification = {
 const THIN_EXCERPT = 80;
 const SHORT_EXCERPT = 420;
 const MIN_SCORE = 4;
-const CLOSE_MARGIN = 1.6;
 
 const LOW_WEIGHT: Record<string, number> = {
   agent: 1.7,
@@ -144,30 +140,6 @@ function excerptBacksTitle(id: CategoryId, excerpt: string): boolean {
   return practice.some((phrase) => containsPhrase(excerpt, phrase));
 }
 
-function earliestWord(title: string, phrases: readonly string[]): number {
-  const words = title.split(" ").filter(Boolean);
-  let best = -1;
-  for (const phrase of phrases) {
-    const parts = phrase.split(" ").filter(Boolean);
-    if (!parts.length || words.length < parts.length) continue;
-    for (let start = 0; start <= words.length - parts.length; start += 1) {
-      let found = true;
-      for (let offset = 0; offset < parts.length; offset += 1) {
-        const word = words[start + offset];
-        const part = parts[offset];
-        if (!word || !part || !sameWord(word, part)) {
-          found = false;
-          break;
-        }
-      }
-      if (!found) continue;
-      if (best < 0 || start < best) best = start;
-      break;
-    }
-  }
-  return best;
-}
-
 /**
  * A long excerpt needs the title, the opening, a repeated phrase, a strong phrase
  * early in the piece, or two subject phrases. One late weak mention is not the subject.
@@ -284,6 +256,14 @@ function scoreCategory(
     );
     if (!designed) return empty(titlePhrases.length > 0);
   }
+  // A low-weight word, even in the title, is a passing mention until the excerpt itself carries it.
+  if (
+    excerptPhrases.length > 0 &&
+    excerptPhrases.every((phrase) => LOW_WEIGHT[phrase] !== undefined) &&
+    excerptScore < MIN_SCORE
+  ) {
+    return empty(titlePhrases.length > 0);
+  }
   return {
     id,
     excerptScore,
@@ -293,20 +273,6 @@ function scoreCategory(
   };
 }
 
-function tooClose(top: Hit, second: Hit | undefined, title: string): boolean {
-  if (!second || second.excerptScore <= 0 || second.score < MIN_SCORE) return false;
-  const margin = top.score - second.score;
-  if (margin >= CLOSE_MARGIN) return false;
-  if (top.score <= 0 || second.score / top.score < 0.8) return false;
-  if (top.titleStrong && !second.titleStrong && margin >= 1) return false;
-  if (top.titleStrong && second.titleStrong) {
-    const topAt = earliestWord(title, top.phrases);
-    const secondAt = earliestWord(title, second.phrases);
-    if (topAt >= 0 && secondAt >= topAt + 2) return false;
-  }
-  return true;
-}
-
 function classify(article: Pick<Article, "title" | "excerpt" | "evidence">): Classification {
   const rawTitle = typeof article.title === "string" ? article.title : "";
   const rawExcerpt = typeof article.excerpt === "string" ? article.excerpt : "";
@@ -314,23 +280,35 @@ function classify(article: Pick<Article, "title" | "excerpt" | "evidence">): Cla
   const excerpt = normalize(rawExcerpt);
   const allowed = activePhrases(rawTitle, rawExcerpt, title, excerpt);
   const hits = categories.map((category) => scoreCategory(rawTitle, rawExcerpt, title, excerpt, category.id, allowed));
+  const thin = excerpt.trim().length < THIN_EXCERPT;
+  const ranked = thin
+    ? []
+    : hits
+        .filter((hit) => hit.excerptScore > 0 && hit.score >= MIN_SCORE)
+        .sort(
+          (a, b) =>
+            b.score - a.score ||
+            categories.findIndex((item) => item.id === a.id) - categories.findIndex((item) => item.id === b.id),
+        );
   const matched: Classification["matched"] = {};
   const titleStrong: Classification["titleStrong"] = {};
-  for (const hit of hits) {
-    if (hit.phrases.length === 0) continue;
+  for (const hit of ranked) {
     matched[hit.id] = hit.phrases;
     titleStrong[hit.id] = hit.titleStrong;
   }
+  return { tags: ranked.map((hit) => hit.id), matched, titleStrong };
+}
 
-  const thin = excerpt.trim().length < THIN_EXCERPT;
-  const ranked = hits
-    .filter((hit) => hit.excerptScore > 0 && hit.score >= MIN_SCORE)
-    .sort((a, b) => b.score - a.score || categories.findIndex((item) => item.id === a.id) - categories.findIndex((item) => item.id === b.id));
-  const top = ranked[0];
-  if (thin || !top || tooClose(top, ranked[1], title)) {
-    return { status: "needs-reevaluation", primary: null, matched, titleStrong };
+/** How many stored articles carry each category. This does not apply the desk's age gate. */
+export function categoryTagCounts(
+  library: readonly Pick<Article, "title" | "excerpt" | "evidence">[],
+): Record<CategoryId, number> {
+  const counts = {} as Record<CategoryId, number>;
+  for (const category of categories) counts[category.id] = 0;
+  for (const article of library) {
+    for (const id of classifyArticle(article).tags) counts[id] += 1;
   }
-  return { status: "classified", primary: top.id, matched, titleStrong };
+  return counts;
 }
 
 export function classifyArticle(article: Pick<Article, "title" | "excerpt" | "evidence">): Classification {

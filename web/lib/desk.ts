@@ -1,5 +1,6 @@
 import { categoryById, type CategoryId } from "./categories.ts";
-import { articles, type Article } from "./corpus.ts";
+import { classifyArticle } from "./classify.ts";
+import { articles, type Article, type Evidence } from "./corpus.ts";
 import { explain, type Explanation } from "./explain.ts";
 import { byNewestPublished, formatPublished } from "./day.ts";
 import { evaluateArticle, rankCategory, selectThree, type Feedback, type Scored } from "./rank.ts";
@@ -14,9 +15,24 @@ export type Recommendation = {
   publication: string;
   author: string;
   date: string | null;
+  /** Every category label on the article. Empty when it is untagged. */
+  categories: string[];
+  /**
+   * Minutes computed from stored full text. Excerpt-only articles stay null
+   * so a blurb is never presented as the piece's reading time.
+   */
+  readingMinutes: number | null;
   explanation: Explanation;
   evidence: Scored["evidence"];
 };
+
+/** Reading time only when the stored text is the article, not a retrieved excerpt. */
+export function readingMinutes(excerpt: string, evidence: Evidence): number | null {
+  if (evidence !== "full_text") return null;
+  const words = excerpt.trim().split(/\s+/).filter(Boolean).length;
+  if (words < 50) return null;
+  return Math.max(1, Math.round(words / 230));
+}
 
 export type Bookmark = {
   id: string;
@@ -45,6 +61,7 @@ export function present(item: Scored, categoryId: CategoryId): Recommendation | 
   const category = categoryById(categoryId);
   const explanation = explain(item.article, category, item.matched);
   if (!explanation) return null;
+  const tags = classifyArticle(item.article).tags;
   return {
     id: item.article.id,
     title: item.article.title,
@@ -52,6 +69,8 @@ export function present(item: Scored, categoryId: CategoryId): Recommendation | 
     publication: source.name,
     author: item.article.author,
     date: formatPublished(item.article.publishedAt),
+    categories: tags.map((id) => categoryById(id).label),
+    readingMinutes: readingMinutes(item.article.excerpt, item.article.evidence),
     explanation,
     evidence: item.evidence,
   };
@@ -214,7 +233,8 @@ function eligibleCards(
 
 /**
  * One page of a category. The eligible pool is newest published date first
- * (undated last, 18-month gate unchanged), then cut into pages of three.
+ * (undated last). The desk still prefers recent work and leaves articles
+ * older than 18 months off these pages. Search does not use that gate.
  * Useful marks still affect ranking and do not change this order.
  */
 export function pageDesk(

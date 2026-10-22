@@ -1,7 +1,8 @@
 /**
- * Fifteen subject categories. They describe an article's contribution,
- * not the publication it came from. Every approved source may appear in any category.
- * needs-reevaluation is a holding state for thin or ambiguous excerpts. It is not a category.
+ * Fifteen subject categories. They describe what an article actually discusses,
+ * not the publication it came from. An article may carry zero, one, or many of
+ * these labels. There is no primary category, and an untagged article is not a
+ * sixteenth category. Every approved source may appear under any label its text supports.
  */
 
 export type CategoryId =
@@ -342,6 +343,7 @@ export const categories: readonly Category[] = [
   },
 ];
 
+/** Opening desk only. Search does not apply a category unless the reader selects one. */
 export const DEFAULT_CATEGORY: CategoryId = "foundations";
 
 export function categoryById(id: CategoryId): Category {
