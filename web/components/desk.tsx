@@ -237,7 +237,7 @@ export function Desk() {
           Reading Desk
         </h1>
         <p className="mt-4 max-w-[34rem] font-serif text-xl leading-snug text-pretty text-foreground/90 sm:text-[1.65rem]">
-          Three articles for the morning.
+          Discover something new in design, every morning.
         </p>
         <VisitorClock />
       </header>

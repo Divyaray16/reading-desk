@@ -67,7 +67,7 @@ export default async function OpenGraphImage() {
             lineHeight: 1.25,
           }}
         >
-          Three articles for the morning.
+          Discover something new in design, every morning.
         </div>
       </div>
     ),

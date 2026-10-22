@@ -17,10 +17,10 @@ const newsreader = Newsreader({
 export const metadata: Metadata = {
   metadataBase: new URL("https://readingdesk.vercel.app"),
   title: "Reading Desk",
-  description: "Three articles for the morning. No login.",
+  description: "Discover something new in design, every morning. No login.",
   openGraph: {
     title: "Reading Desk",
-    description: "Three articles for the morning. No login.",
+    description: "Discover something new in design, every morning. No login.",
     url: "https://readingdesk.vercel.app",
     siteName: "Reading Desk",
     type: "website",
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Reading Desk",
-    description: "Three articles for the morning. No login.",
+    description: "Discover something new in design, every morning. No login.",
   },
 };
 
