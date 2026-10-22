@@ -8,14 +8,38 @@ const WHEN: Intl.DateTimeFormatOptions = {
   hourCycle: "h23",
 };
 
-/** Legacy English name still carried by the Asia/Calcutta link. */
-const CITY_NAMES: Readonly<Record<string, string>> = {
-  Calcutta: "Kolkata",
+/**
+ * Deprecated English names still carried by IANA links and by Intl.
+ * The city in the timezone id is kept when it is already current.
+ * Lookup is lowercase so a legacy spelling in any case is renamed.
+ */
+const CURRENT_CITY_NAME: Readonly<Record<string, string>> = {
+  calcutta: "Kolkata",
+  bombay: "Mumbai",
+  madras: "Chennai",
+  bangalore: "Bengaluru",
+  trivandrum: "Thiruvananthapuram",
+  cochin: "Kochi",
+  poona: "Pune",
+  calicut: "Kozhikode",
+  saigon: "Ho Chi Minh City",
+  peking: "Beijing",
+  canton: "Guangzhou",
+  rangoon: "Yangon",
+  kiev: "Kyiv",
+  "ulan bator": "Ulaanbaatar",
+  godthab: "Nuuk",
+  katmandu: "Kathmandu",
 };
+
+function currentCityName(city: string): string {
+  return CURRENT_CITY_NAME[city.toLowerCase()] ?? city;
+}
 
 /**
  * Readable place from an IANA timezone id.
- * America/New_York → New York. Asia/Kolkata and Asia/Calcutta → Kolkata.
+ * America/New_York → New York. Asia/Kolkata → Kolkata.
+ * A legacy link uses the current city: Asia/Calcutta → Kolkata.
  * Zones with no city (UTC, Etc/GMT) return null.
  */
 export function placeFromTimeZone(timeZone: string | null | undefined): string | null {
@@ -28,7 +52,7 @@ export function placeFromTimeZone(timeZone: string | null | undefined): string |
   if (area === "Etc" || area === "SystemV") return null;
   const city = parts[parts.length - 1]?.replace(/_/g, " ").trim() ?? "";
   if (city.length === 0) return null;
-  return CITY_NAMES[city] ?? city;
+  return currentCityName(city);
 }
 
 function formatWhen(now: Date, timeZone?: string): string {
