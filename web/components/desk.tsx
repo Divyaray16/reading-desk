@@ -246,6 +246,9 @@ export function Desk() {
         <h1 className="mt-4 font-serif text-[2.85rem] leading-[0.98] tracking-[-0.03em] text-balance text-foreground sm:text-6xl">
           Reading Desk
         </h1>
+        <p className="mt-2 text-center text-[0.68rem] font-normal tracking-[0.14em] text-muted-foreground">
+          designed and built by Divyaray
+        </p>
         <p className="mt-4 max-w-[34rem] font-serif text-xl leading-snug text-pretty text-foreground/90 sm:text-[1.65rem]">
           Discover something new in design, every morning.
         </p>
