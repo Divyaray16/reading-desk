@@ -1,170 +1,880 @@
 [
   {
+    "sourceId": "nng",
+    "method": "feed",
+    "url": "https://www.nngroup.com/atom.xml",
+    "ok": false,
+    "items": 0,
+    "kept": 0,
+    "added": 0,
+    "checkedAt": "2026-11-12T22:09:39.469Z",
+    "error": "HTTP 404"
+  },
+  {
     "sourceId": "smashing",
     "method": "rss",
     "url": "https://www.smashingmagazine.com/feed/",
     "ok": true,
-    "items": 30
+    "items": 40,
+    "kept": 40,
+    "added": 10,
+    "checkedAt": "2026-11-12T22:09:39.469Z"
   },
   {
     "sourceId": "ux-collective",
     "method": "rss",
     "url": "https://uxdesign.cc/feed",
     "ok": true,
-    "items": 10
+    "items": 10,
+    "kept": 10,
+    "added": 10,
+    "checkedAt": "2026-11-12T22:09:39.469Z"
   },
   {
     "sourceId": "ux-planet",
     "method": "rss",
     "url": "https://uxplanet.org/feed",
     "ok": true,
-    "items": 10
+    "items": 10,
+    "kept": 10,
+    "added": 10,
+    "checkedAt": "2026-11-12T22:09:39.469Z"
   },
   {
     "sourceId": "alistapart",
     "method": "rss",
     "url": "https://alistapart.com/main/feed/",
     "ok": true,
-    "items": 20
+    "items": 20,
+    "kept": 20,
+    "added": 0,
+    "checkedAt": "2026-11-12T22:09:39.469Z"
+  },
+  {
+    "sourceId": "baymard",
+    "method": "rss",
+    "url": "https://baymard.com/blog/feed.xml",
+    "ok": true,
+    "items": 50,
+    "kept": 50,
+    "added": 46,
+    "checkedAt": "2026-11-12T22:09:39.469Z"
+  },
+  {
+    "sourceId": "uxmatters",
+    "method": "atom",
+    "url": "https://www.uxmatters.com/index.xml",
+    "ok": true,
+    "items": 10,
+    "kept": 10,
+    "added": 0,
+    "checkedAt": "2026-11-12T22:09:39.469Z"
+  },
+  {
+    "sourceId": "pair",
+    "method": "feed",
+    "url": "https://pair.withgoogle.com/atom.xml",
+    "ok": false,
+    "items": 0,
+    "kept": 0,
+    "added": 0,
+    "checkedAt": "2026-11-12T22:09:39.469Z",
+    "error": "HTTP 404"
+  },
+  {
+    "sourceId": "hax",
+    "method": "rss",
+    "url": "https://www.microsoft.com/en-us/haxtoolkit/feed/",
+    "ok": true,
+    "items": 11,
+    "kept": 0,
+    "added": 0,
+    "checkedAt": "2026-11-12T22:09:39.469Z"
+  },
+  {
+    "sourceId": "anthropic",
+    "method": "feed",
+    "url": "https://www.anthropic.com/atom.xml",
+    "ok": false,
+    "items": 0,
+    "kept": 0,
+    "added": 0,
+    "checkedAt": "2026-11-12T22:09:39.469Z",
+    "error": "HTTP 404"
+  },
+  {
+    "sourceId": "ibm-research",
+    "method": "rss",
+    "url": "https://research.ibm.com/rss",
+    "ok": true,
+    "items": 20,
+    "kept": 19,
+    "added": 18,
+    "checkedAt": "2026-11-12T22:09:39.469Z"
+  },
+  {
+    "sourceId": "amazon-science",
+    "method": "rss",
+    "url": "https://www.amazon.science/index.rss",
+    "ok": true,
+    "items": 25,
+    "kept": 25,
+    "added": 17,
+    "checkedAt": "2026-11-12T22:09:39.469Z"
+  },
+  {
+    "sourceId": "shumin",
+    "method": "feed",
+    "url": "https://shumin.design/atom.xml",
+    "ok": false,
+    "items": 0,
+    "kept": 0,
+    "added": 0,
+    "checkedAt": "2026-11-12T22:09:39.469Z",
+    "error": "HTTP 404"
+  },
+  {
+    "sourceId": "ibm-think",
+    "method": "feed",
+    "url": "https://www.ibm.com/atom.xml",
+    "ok": false,
+    "items": 0,
+    "kept": 0,
+    "added": 0,
+    "checkedAt": "2026-11-12T22:09:39.469Z",
+    "error": "HTTP 404"
   },
   {
     "sourceId": "figma",
-    "method": "rss",
+    "method": "atom",
     "url": "https://www.figma.com/blog/feed/atom.xml",
     "ok": true,
-    "items": 40
+    "items": 776,
+    "kept": 771,
+    "added": 731,
+    "checkedAt": "2026-11-12T22:09:39.469Z"
   },
   {
     "sourceId": "stripe",
     "method": "rss",
     "url": "https://stripe.com/blog/feed.rss",
     "ok": true,
-    "items": 10
+    "items": 10,
+    "kept": 10,
+    "added": 4,
+    "checkedAt": "2026-11-12T22:09:39.469Z"
+  },
+  {
+    "sourceId": "linear",
+    "method": "rss",
+    "url": "https://linear.app/rss/now.xml",
+    "ok": true,
+    "items": 65,
+    "kept": 65,
+    "added": 65,
+    "checkedAt": "2026-11-12T22:09:39.469Z"
   },
   {
     "sourceId": "bradfrost",
-    "method": "rss",
-    "url": "https://bradfrost.com/feed/",
+    "method": "atom",
+    "url": "https://bradfrost.com/feed/feed.xml",
     "ok": true,
-    "items": 20
+    "items": 20,
+    "kept": 20,
+    "added": 2,
+    "checkedAt": "2026-11-12T22:09:39.469Z"
   },
   {
     "sourceId": "lukew",
     "method": "rss",
     "url": "https://www.lukew.com/ff/rss/",
     "ok": true,
-    "items": 15
+    "items": 15,
+    "kept": 15,
+    "added": 4,
+    "checkedAt": "2026-11-12T22:09:39.469Z"
   },
   {
     "sourceId": "intercom",
     "method": "rss",
     "url": "https://www.intercom.com/blog/feed",
     "ok": true,
-    "items": 20
+    "items": 20,
+    "kept": 19,
+    "added": 1,
+    "checkedAt": "2026-11-12T22:09:39.469Z"
   },
   {
     "sourceId": "julie-zhuo",
     "method": "rss",
     "url": "https://lg.substack.com/feed",
     "ok": true,
-    "items": 20
+    "items": 20,
+    "kept": 20,
+    "added": 0,
+    "checkedAt": "2026-11-12T22:09:39.469Z"
   },
   {
     "sourceId": "nvidia",
-    "method": "rss",
+    "method": "atom",
     "url": "https://developer.nvidia.com/blog/feed",
-    "ok": false,
-    "error": "unbound prefix: line 29, column 2"
+    "ok": true,
+    "items": 100,
+    "kept": 100,
+    "added": 75,
+    "checkedAt": "2026-11-12T22:09:39.469Z"
   },
   {
-    "sourceId": "uxmatters",
+    "sourceId": "measuringu",
     "method": "rss",
-    "url": "https://www.uxmatters.com/index.xml",
-    "ok": true,
-    "items": 10
-  },
-  {
-    "sourceId": "nng",
-    "method": "sitemap+article-page",
-    "url": "https://www.nngroup.com/sitemap.xml",
-    "ok": true,
-    "items": 14,
-    "errors": 2
-  },
-  {
-    "sourceId": "anthropic",
-    "method": "sitemap+article-page",
-    "url": "https://www.anthropic.com/sitemap.xml",
-    "ok": true,
-    "items": 12,
-    "errors": 0
-  },
-  {
-    "sourceId": "linear",
-    "method": "sitemap+article-page",
-    "url": "https://linear.app/sitemap.xml",
+    "url": "https://measuringu.com/feed/",
     "ok": true,
     "items": 10,
-    "errors": 0
+    "kept": 10,
+    "added": 10,
+    "checkedAt": "2026-11-12T22:09:39.469Z"
   },
   {
-    "sourceId": "ibm-research",
-    "method": "sitemap+article-page",
-    "url": "https://research.ibm.com/sitemap-0.xml",
+    "sourceId": "ixdf",
+    "method": "rss",
+    "url": "https://ixdf.org/rss/site_news.xml",
     "ok": true,
-    "items": 8,
-    "errors": 0
+    "items": 20,
+    "kept": 20,
+    "added": 20,
+    "checkedAt": "2026-11-12T22:09:39.469Z"
   },
   {
-    "sourceId": "amazon-science",
-    "method": "index+article-page",
-    "url": "https://www.amazon.science/blog",
+    "sourceId": "usabilitygeek",
+    "method": "rss",
+    "url": "https://usabilitygeek.com/feed/",
     "ok": true,
-    "items": 8,
-    "errors": 0,
-    "links": 13
+    "items": 10,
+    "kept": 10,
+    "added": 10,
+    "checkedAt": "2026-11-12T22:09:39.469Z"
   },
   {
-    "sourceId": "shumin",
-    "method": "index+article-page",
-    "url": "https://shumin.design/blog",
+    "sourceId": "dovetail",
+    "method": "rss",
+    "url": "https://dovetail.com/blog/rss.xml",
+    "ok": true,
+    "items": 104,
+    "kept": 103,
+    "added": 103,
+    "checkedAt": "2026-11-12T22:09:39.469Z"
+  },
+  {
+    "sourceId": "usertesting",
+    "method": "rss",
+    "url": "https://www.usertesting.com/rss.xml",
+    "ok": true,
+    "items": 0,
+    "kept": 0,
+    "added": 0,
+    "checkedAt": "2026-11-12T22:09:39.469Z"
+  },
+  {
+    "sourceId": "user-interviews",
+    "method": "feed",
+    "url": "https://www.userinterviews.com/atom.xml",
     "ok": false,
     "items": 0,
-    "errors": 0,
-    "links": 0
+    "kept": 0,
+    "added": 0,
+    "checkedAt": "2026-11-12T22:09:39.469Z",
+    "error": "HTTP 500"
   },
   {
-    "sourceId": "baymard",
-    "method": "index+article-page",
-    "url": "https://baymard.com/blog",
-    "ok": true,
-    "items": 8,
-    "errors": 0,
-    "links": 15
-  },
-  {
-    "sourceId": "ibm-think",
-    "method": "index+article-page",
-    "url": "https://www.ibm.com/think",
-    "ok": true,
-    "items": 8,
-    "errors": 0,
-    "links": 16
-  },
-  {
-    "sourceId": "pair",
-    "method": "index",
-    "url": "https://pair.withgoogle.com/guidebook",
+    "sourceId": "ideo",
+    "method": "feed",
+    "url": "https://www.ideo.com/atom.xml",
     "ok": false,
-    "error": "No individual article URLs found on the public index.",
-    "items": 0
+    "items": 0,
+    "kept": 0,
+    "added": 0,
+    "checkedAt": "2026-11-12T22:09:39.469Z",
+    "error": "HTTP 404"
   },
   {
-    "sourceId": "hax",
-    "method": "index+article-page",
-    "url": "https://www.microsoft.com/en-us/haxtoolkit/",
+    "sourceId": "acm-interactions",
+    "method": "feed",
+    "url": "https://interactions.acm.org/atom.xml",
+    "ok": false,
+    "items": 0,
+    "kept": 0,
+    "added": 0,
+    "checkedAt": "2026-11-12T22:09:39.469Z",
+    "error": "HTTP 403"
+  },
+  {
+    "sourceId": "google-design",
+    "method": "feed",
+    "url": "https://design.google/atom.xml",
+    "ok": false,
+    "items": 0,
+    "kept": 0,
+    "added": 0,
+    "checkedAt": "2026-11-12T22:09:39.469Z",
+    "error": "HTTP 404"
+  },
+  {
+    "sourceId": "microsoft-design",
+    "method": "rss",
+    "url": "https://microsoft.design/feed/",
     "ok": true,
-    "items": 2,
-    "errors": 0
+    "items": 10,
+    "kept": 10,
+    "added": 10,
+    "checkedAt": "2026-11-12T22:09:39.469Z"
+  },
+  {
+    "sourceId": "carbon",
+    "method": "feed",
+    "url": "https://carbondesignsystem.com/atom.xml",
+    "ok": false,
+    "items": 0,
+    "kept": 0,
+    "added": 0,
+    "checkedAt": "2026-11-12T22:09:39.469Z",
+    "error": "HTTP 404"
+  },
+  {
+    "sourceId": "atlassian",
+    "method": "feed",
+    "url": "https://atlassian.design/atom.xml",
+    "ok": false,
+    "items": 0,
+    "kept": 0,
+    "added": 0,
+    "checkedAt": "2026-11-12T22:09:39.469Z",
+    "error": "HTTP 404"
+  },
+  {
+    "sourceId": "polaris",
+    "method": "feed",
+    "url": "https://polaris.shopify.com/atom.xml",
+    "ok": false,
+    "items": 0,
+    "kept": 0,
+    "added": 0,
+    "checkedAt": "2026-11-12T22:09:39.469Z",
+    "error": "Response was not RSS or Atom."
+  },
+  {
+    "sourceId": "material",
+    "method": "feed",
+    "url": "https://m3.material.io/atom.xml",
+    "ok": false,
+    "items": 0,
+    "kept": 0,
+    "added": 0,
+    "checkedAt": "2026-11-12T22:09:39.469Z",
+    "error": "HTTP 404"
+  },
+  {
+    "sourceId": "apple-hig",
+    "method": "feed",
+    "url": "https://developer.apple.com/atom.xml",
+    "ok": false,
+    "items": 0,
+    "kept": 0,
+    "added": 0,
+    "checkedAt": "2026-11-12T22:09:39.469Z",
+    "error": "HTTP 404"
+  },
+  {
+    "sourceId": "lightning",
+    "method": "feed",
+    "url": "https://www.lightningdesignsystem.com/atom.xml",
+    "ok": false,
+    "items": 0,
+    "kept": 0,
+    "added": 0,
+    "checkedAt": "2026-11-12T22:09:39.469Z",
+    "error": "HTTP 404"
+  },
+  {
+    "sourceId": "sap",
+    "method": "feed",
+    "url": "https://www.sap.com/atom.xml",
+    "ok": false,
+    "items": 0,
+    "kept": 0,
+    "added": 0,
+    "checkedAt": "2026-11-12T22:09:39.469Z",
+    "error": "HTTP 404"
+  },
+  {
+    "sourceId": "framer",
+    "method": "feed",
+    "url": "https://www.framer.com/atom.xml",
+    "ok": false,
+    "items": 0,
+    "kept": 0,
+    "added": 0,
+    "checkedAt": "2026-11-12T22:09:39.469Z",
+    "error": "HTTP 404"
+  },
+  {
+    "sourceId": "webflow",
+    "method": "feed",
+    "url": "https://webflow.com/atom.xml",
+    "ok": false,
+    "items": 0,
+    "kept": 0,
+    "added": 0,
+    "checkedAt": "2026-11-12T22:09:39.469Z",
+    "error": "HTTP 404"
+  },
+  {
+    "sourceId": "vercel",
+    "method": "feed",
+    "url": "https://vercel.com/atom.xml",
+    "ok": false,
+    "items": 0,
+    "kept": 0,
+    "added": 0,
+    "checkedAt": "2026-11-12T22:09:39.469Z",
+    "error": "Response was not RSS or Atom."
+  },
+  {
+    "sourceId": "builder",
+    "method": "rss",
+    "url": "https://www.builder.io/blog/feed/xml",
+    "ok": true,
+    "items": 30,
+    "kept": 30,
+    "added": 30,
+    "checkedAt": "2026-11-12T22:09:39.469Z"
+  },
+  {
+    "sourceId": "josh-comeau",
+    "method": "rss",
+    "url": "https://www.joshwcomeau.com/rss.xml",
+    "ok": true,
+    "items": 89,
+    "kept": 87,
+    "added": 87,
+    "checkedAt": "2026-11-12T22:09:39.469Z"
+  },
+  {
+    "sourceId": "codrops",
+    "method": "feed",
+    "url": "https://tympanus.net/atom.xml",
+    "ok": false,
+    "items": 0,
+    "kept": 0,
+    "added": 0,
+    "checkedAt": "2026-11-12T22:09:39.469Z",
+    "error": "HTTP 404"
+  },
+  {
+    "sourceId": "css-tricks",
+    "method": "rss",
+    "url": "https://css-tricks.com/feed/",
+    "ok": true,
+    "items": 15,
+    "kept": 15,
+    "added": 15,
+    "checkedAt": "2026-11-12T22:09:39.469Z"
+  },
+  {
+    "sourceId": "awwwards",
+    "method": "rss",
+    "url": "https://www.awwwards.com/feed/",
+    "ok": true,
+    "items": 30,
+    "kept": 28,
+    "added": 28,
+    "checkedAt": "2026-11-12T22:09:39.469Z"
+  },
+  {
+    "sourceId": "mobbin",
+    "method": "feed",
+    "url": "https://mobbin.com/atom.xml",
+    "ok": false,
+    "items": 0,
+    "kept": 0,
+    "added": 0,
+    "checkedAt": "2026-11-12T22:09:39.469Z",
+    "error": "HTTP 404"
+  },
+  {
+    "sourceId": "page-flows",
+    "method": "rss",
+    "url": "https://pageflows.com/feed/",
+    "ok": true,
+    "items": 20,
+    "kept": 0,
+    "added": 0,
+    "checkedAt": "2026-11-12T22:09:39.469Z"
+  },
+  {
+    "sourceId": "refactoring-ui",
+    "method": "feed",
+    "url": "https://www.refactoringui.com/atom.xml",
+    "ok": false,
+    "items": 0,
+    "kept": 0,
+    "added": 0,
+    "checkedAt": "2026-11-12T22:09:39.469Z",
+    "error": "HTTP 404"
+  },
+  {
+    "sourceId": "smart-interface",
+    "method": "rss",
+    "url": "https://smart-interface-design-patterns.com/feed.xml",
+    "ok": true,
+    "items": 141,
+    "kept": 140,
+    "added": 140,
+    "checkedAt": "2026-11-12T22:09:39.469Z"
+  },
+  {
+    "sourceId": "lenny",
+    "method": "rss",
+    "url": "https://www.lennysnewsletter.com/feed",
+    "ok": true,
+    "items": 20,
+    "kept": 20,
+    "added": 20,
+    "checkedAt": "2026-11-12T22:09:39.469Z"
+  },
+  {
+    "sourceId": "product-talk",
+    "method": "rss",
+    "url": "https://www.producttalk.org/rss/",
+    "ok": true,
+    "items": 15,
+    "kept": 15,
+    "added": 15,
+    "checkedAt": "2026-11-12T22:09:39.469Z"
+  },
+  {
+    "sourceId": "svpg",
+    "method": "rss",
+    "url": "https://www.svpg.com/feed/",
+    "ok": true,
+    "items": 15,
+    "kept": 15,
+    "added": 15,
+    "checkedAt": "2026-11-12T22:09:39.469Z"
+  },
+  {
+    "sourceId": "mind-the-product",
+    "method": "feed",
+    "url": "https://www.mindtheproduct.com/atom.xml",
+    "ok": false,
+    "items": 0,
+    "kept": 0,
+    "added": 0,
+    "checkedAt": "2026-11-12T22:09:39.469Z",
+    "error": "HTTP 404"
+  },
+  {
+    "sourceId": "first-round",
+    "method": "rss",
+    "url": "https://review.firstround.com/glossary/rss/",
+    "ok": true,
+    "items": 15,
+    "kept": 15,
+    "added": 15,
+    "checkedAt": "2026-11-12T22:09:39.469Z"
+  },
+  {
+    "sourceId": "sdn",
+    "method": "feed",
+    "url": "https://www.service-design-network.org/atom.xml",
+    "ok": false,
+    "items": 0,
+    "kept": 0,
+    "added": 0,
+    "checkedAt": "2026-11-12T22:09:39.469Z",
+    "error": "HTTP 404"
+  },
+  {
+    "sourceId": "service-design-tools",
+    "method": "feed",
+    "url": "https://servicedesigntools.org/atom.xml",
+    "ok": false,
+    "items": 0,
+    "kept": 0,
+    "added": 0,
+    "checkedAt": "2026-11-12T22:09:39.469Z",
+    "error": "HTTP 404"
+  },
+  {
+    "sourceId": "design-council",
+    "method": "feed",
+    "url": "https://www.designcouncil.org.uk/atom.xml",
+    "ok": false,
+    "items": 0,
+    "kept": 0,
+    "added": 0,
+    "checkedAt": "2026-11-12T22:09:39.469Z",
+    "error": "HTTP 404"
+  },
+  {
+    "sourceId": "thoughtworks",
+    "method": "feed",
+    "url": "https://www.thoughtworks.com/atom.xml",
+    "ok": false,
+    "items": 0,
+    "kept": 0,
+    "added": 0,
+    "checkedAt": "2026-11-12T22:09:39.469Z",
+    "error": "HTTP 404"
+  },
+  {
+    "sourceId": "systems-thinker",
+    "method": "rss",
+    "url": "https://thesystemsthinker.com/feed/",
+    "ok": true,
+    "items": 10,
+    "kept": 10,
+    "added": 10,
+    "checkedAt": "2026-11-12T22:09:39.469Z"
+  },
+  {
+    "sourceId": "anthropic-engineering",
+    "method": "feed",
+    "url": "https://www.anthropic.com/atom.xml",
+    "ok": false,
+    "items": 0,
+    "kept": 0,
+    "added": 0,
+    "checkedAt": "2026-11-12T22:09:39.469Z",
+    "error": "HTTP 404"
+  },
+  {
+    "sourceId": "openai-news",
+    "method": "feed",
+    "url": "https://openai.com/atom.xml",
+    "ok": false,
+    "items": 0,
+    "kept": 0,
+    "added": 0,
+    "checkedAt": "2026-11-12T22:09:39.469Z",
+    "error": "HTTP 403"
+  },
+  {
+    "sourceId": "openai-research",
+    "method": "feed",
+    "url": "https://openai.com/atom.xml",
+    "ok": false,
+    "items": 0,
+    "kept": 0,
+    "added": 0,
+    "checkedAt": "2026-11-12T22:09:39.469Z",
+    "error": "HTTP 403"
+  },
+  {
+    "sourceId": "openai-cookbook",
+    "method": "rss",
+    "url": "https://developers.openai.com/rss.xml",
+    "ok": true,
+    "items": 135,
+    "kept": 26,
+    "added": 26,
+    "checkedAt": "2026-11-12T22:09:39.469Z"
+  },
+  {
+    "sourceId": "deepmind",
+    "method": "feed",
+    "url": "https://deepmind.google/atom.xml",
+    "ok": false,
+    "items": 0,
+    "kept": 0,
+    "added": 0,
+    "checkedAt": "2026-11-12T22:09:39.469Z",
+    "error": "HTTP 404"
+  },
+  {
+    "sourceId": "microsoft-research",
+    "method": "rss",
+    "url": "https://www.microsoft.com/en-us/research/feed/",
+    "ok": true,
+    "items": 10,
+    "kept": 10,
+    "added": 10,
+    "checkedAt": "2026-11-12T22:09:39.469Z"
+  },
+  {
+    "sourceId": "huggingface",
+    "method": "rss",
+    "url": "https://huggingface.co/blog/feed.xml",
+    "ok": true,
+    "items": 906,
+    "kept": 0,
+    "added": 0,
+    "checkedAt": "2026-11-12T22:09:39.469Z"
+  },
+  {
+    "sourceId": "langchain",
+    "method": "rss",
+    "url": "https://www.langchain.com/blog/rss.xml",
+    "ok": true,
+    "items": 99,
+    "kept": 99,
+    "added": 99,
+    "checkedAt": "2026-11-12T22:09:39.469Z"
+  },
+  {
+    "sourceId": "llamaindex",
+    "method": "feed",
+    "url": "https://www.llamaindex.ai/atom.xml",
+    "ok": false,
+    "items": 0,
+    "kept": 0,
+    "added": 0,
+    "checkedAt": "2026-11-12T22:09:39.469Z",
+    "error": "HTTP 404"
+  },
+  {
+    "sourceId": "voiceflow",
+    "method": "rss",
+    "url": "https://www.voiceflow.com/rss.xml",
+    "ok": true,
+    "items": 422,
+    "kept": 421,
+    "added": 421,
+    "checkedAt": "2026-11-12T22:09:39.469Z"
+  },
+  {
+    "sourceId": "botpress",
+    "method": "feed",
+    "url": "https://botpress.com/atom.xml",
+    "ok": false,
+    "items": 0,
+    "kept": 0,
+    "added": 0,
+    "checkedAt": "2026-11-12T22:09:39.469Z",
+    "error": "HTTP 404"
+  },
+  {
+    "sourceId": "rasa",
+    "method": "feed",
+    "url": "https://rasa.com/atom.xml",
+    "ok": false,
+    "items": 0,
+    "kept": 0,
+    "added": 0,
+    "checkedAt": "2026-11-12T22:09:39.469Z",
+    "error": "HTTP 404"
+  },
+  {
+    "sourceId": "mit-technology-review",
+    "method": "rss",
+    "url": "https://www.technologyreview.com/feed",
+    "ok": true,
+    "items": 10,
+    "kept": 10,
+    "added": 10,
+    "checkedAt": "2026-11-12T22:09:39.469Z"
+  },
+  {
+    "sourceId": "content-design-london",
+    "method": "feed",
+    "url": "https://contentdesign.london/atom.xml",
+    "ok": false,
+    "items": 0,
+    "kept": 0,
+    "added": 0,
+    "checkedAt": "2026-11-12T22:09:39.469Z",
+    "error": "HTTP 404"
+  },
+  {
+    "sourceId": "govuk",
+    "method": "feed",
+    "url": "https://www.gov.uk/atom.xml",
+    "ok": false,
+    "items": 0,
+    "kept": 0,
+    "added": 0,
+    "checkedAt": "2026-11-12T22:09:39.469Z",
+    "error": "HTTP 404"
+  },
+  {
+    "sourceId": "mailchimp",
+    "method": "feed",
+    "url": "https://styleguide.mailchimp.com/atom.xml",
+    "ok": false,
+    "items": 0,
+    "kept": 0,
+    "added": 0,
+    "checkedAt": "2026-11-12T22:09:39.469Z",
+    "error": "HTTP 404"
+  },
+  {
+    "sourceId": "ux-writing-hub",
+    "method": "rss",
+    "url": "https://uxwritinghub.com/feed/",
+    "ok": true,
+    "items": 9,
+    "kept": 8,
+    "added": 8,
+    "checkedAt": "2026-11-12T22:09:39.469Z"
+  },
+  {
+    "sourceId": "google-style",
+    "method": "feed",
+    "url": "https://developers.google.com/atom.xml",
+    "ok": false,
+    "items": 0,
+    "kept": 0,
+    "added": 0,
+    "checkedAt": "2026-11-12T22:09:39.469Z",
+    "error": "HTTP 404"
+  },
+  {
+    "sourceId": "w3c-wai",
+    "method": "atom",
+    "url": "https://www.w3.org/WAI/feed.xml",
+    "ok": true,
+    "items": 10,
+    "kept": 10,
+    "added": 10,
+    "checkedAt": "2026-11-12T22:09:39.469Z"
+  },
+  {
+    "sourceId": "webaim",
+    "method": "rss",
+    "url": "https://webaim.org/blog/feed/",
+    "ok": true,
+    "items": 10,
+    "kept": 10,
+    "added": 10,
+    "checkedAt": "2026-11-12T22:09:39.469Z"
+  },
+  {
+    "sourceId": "a11y-project",
+    "method": "atom",
+    "url": "https://www.a11yproject.com/feed/feed.xml",
+    "ok": true,
+    "items": 65,
+    "kept": 60,
+    "added": 60,
+    "checkedAt": "2026-11-12T22:09:39.469Z"
+  },
+  {
+    "sourceId": "deque",
+    "method": "rss",
+    "url": "https://www.deque.com/feed/",
+    "ok": true,
+    "items": 10,
+    "kept": 10,
+    "added": 10,
+    "checkedAt": "2026-11-12T22:09:39.469Z"
+  },
+  {
+    "sourceId": "fable",
+    "method": "rss",
+    "url": "https://makeitfable.com/feed/",
+    "ok": true,
+    "items": 10,
+    "kept": 10,
+    "added": 10,
+    "checkedAt": "2026-11-12T22:09:39.469Z"
   }
 ]

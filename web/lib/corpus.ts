@@ -19,7 +19,7 @@ function isEvidence(value: string): value is Evidence {
   return value === "full_text" || value === "excerpt" || value === "metadata";
 }
 
-/** Verified articles retrieved on 2026-10-19. None were written by the agent. */
+/** Articles saved from public feeds and earlier retrievals. The agent does not invent these fields. */
 export const articles: Article[] = (raw as Article[]).filter((article) => {
   return (
     typeof article.id === "string" &&

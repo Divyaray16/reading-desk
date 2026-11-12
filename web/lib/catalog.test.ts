@@ -15,10 +15,10 @@ test("retrieved articles stay inside the approved registry", () => {
   for (const source of pending) {
     assert.equal(articles.some((article) => article.sourceId === source.id), false, source.id);
   }
-  for (const id of ["hax", "pair", "measuringu", "ixdf", "openai-research", "w3c-wai", "fable"]) {
+  for (const id of ["hax", "pair", "openai-research"]) {
     assert.equal(pending.some((source) => source.id === id), true, id);
   }
-  for (const id of ["nng", "figma", "anthropic", "smashing", "ux-collective"]) {
+  for (const id of ["nng", "figma", "anthropic", "smashing", "ux-collective", "measuringu", "ixdf", "w3c-wai", "fable"]) {
     assert.equal(pending.some((source) => source.id === id), false, id);
     assert.ok(articles.some((article) => article.sourceId === id), id);
   }

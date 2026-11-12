@@ -36,6 +36,15 @@ npm run dev
 
 Then open [http://127.0.0.1:47231](http://127.0.0.1:47231).
 
+The page reads [`web/lib/corpus/articles.json`](web/lib/corpus/articles.json). To fetch public RSS and Atom feeds into that file:
+
+```bash
+cd web
+npm run fetch-feeds
+```
+
+That command appends new articles and records feed failures in [`web/lib/corpus/retrieval-status.json`](web/lib/corpus/retrieval-status.json). It does not remove articles already stored. [`.github/workflows/morning-feed.yml`](.github/workflows/morning-feed.yml) runs the same command at `30 2 * * *` UTC (08:00 Asia/Kolkata) and pushes those two files to `main` when they change. The live site updates when that commit is deployed.
+
 ## Publications
 
 The desk only recommends posts from this map, plus blogs she adds:

@@ -1,0 +1,48 @@
+name: Morning feed
+
+on:
+  schedule:
+    # 08:00 Asia/Kolkata. India does not use daylight saving, so this is 02:30 UTC every day.
+    - cron: "30 2 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: morning-feed
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - name: Install web dependencies
+        working-directory: web
+        run: npm ci
+
+      - name: Fetch public feeds
+        working-directory: web
+        run: npm run fetch-feeds
+
+      - name: Commit corpus updates
+        run: |
+          git add -- web/lib/corpus/articles.json web/lib/corpus/retrieval-status.json
+          if git diff --cached --quiet; then
+            echo "No feed changes to commit."
+            exit 0
+          fi
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -m "Fetch morning articles from public feeds."
+          git push origin HEAD:main

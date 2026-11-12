@@ -174,18 +174,21 @@ test("every real article has a tag array, and technology tags stay separate from
 });
 
 test("one publication can contribute to more than one category", () => {
-  const homes = new Set<string>();
+  const homes = new Map<string, Set<string>>();
   for (const category of categories) {
     const desk = selectDesk(category.id, { skipped: [], useful: [] }, NOW);
     for (const item of desk.shown) {
-      if (item.publication === "Nielsen Norman Group") homes.add(category.id);
+      const found = homes.get(item.publication) ?? new Set<string>();
+      found.add(category.id);
+      homes.set(item.publication, found);
     }
   }
+  const repeated = [...homes.values()].filter((found) => found.size >= 2);
+  assert.ok(repeated.length >= 1);
   const nngCategories = new Set(
     articles.filter((item) => item.sourceId === "nng").flatMap((item) => classifyArticle(item).tags),
   );
   assert.ok(nngCategories.size >= 2, [...nngCategories].join(","));
-  assert.ok(homes.size >= 1);
 });
 
 test("a category page shows up to three recent articles and does not invent a third", () => {
