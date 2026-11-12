@@ -2,8 +2,9 @@ name: Morning feed
 
 on:
   schedule:
-    # 08:00 Asia/Kolkata. India does not use daylight saving, so this is 02:30 UTC every day.
-    - cron: "30 2 * * *"
+    # Hourly. The desk rolls at 08:00 in each visitor's timezone, so the library
+    # has to be fresh before 08:00 in New York as well as in Kolkata.
+    - cron: "0 * * * *"
   workflow_dispatch:
 
 permissions:

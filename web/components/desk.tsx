@@ -9,7 +9,7 @@ import { ask, type AskResult } from "@/lib/ask";
 import { categories, DEFAULT_CATEGORY, type CategoryId } from "@/lib/categories";
 import { categoryTagCounts } from "@/lib/classify";
 import { articles } from "@/lib/corpus";
-import { kolkataDay } from "@/lib/day";
+import { readingDay } from "@/lib/day";
 import { bookmarksFor, pageDesk, type Recommendation } from "@/lib/desk";
 import { visitorLocalLabel } from "@/lib/local-time";
 import { categoryArticleCounts } from "@/lib/rank";
@@ -17,7 +17,7 @@ import { clearCategoryFilters, toggleCategoryFilter } from "@/lib/search";
 
 const SKIP_KEY = "reading-desk-skips";
 const USEFUL_KEY = "reading-desk-useful";
-const DAY_KEY = "reading-desk-day-v10";
+const DAY_KEY = "reading-desk-day-v11";
 
 type DayCache = { date: string; category: CategoryId; page: number };
 
@@ -115,7 +115,7 @@ export function Desk() {
   }, [active, view]);
 
   useEffect(() => {
-    const today = kolkataDay();
+    const today = readingDay(new Date(), browserTimeZone());
     const stored = readDay();
     setSkipped(readIds(SKIP_KEY));
     setUseful(readIds(USEFUL_KEY));
@@ -147,9 +147,21 @@ export function Desk() {
     window.localStorage.setItem(DAY_KEY, JSON.stringify(day));
   }, [day]);
 
+  useEffect(() => {
+    const roll = () => {
+      const next = readingDay(new Date(), browserTimeZone());
+      setDay((current) => {
+        if (!current || current.date === next) return current;
+        return { ...current, date: next, page: 0 };
+      });
+    };
+    const id = window.setInterval(roll, 60_000);
+    return () => window.clearInterval(id);
+  }, []);
+
   const skipIds = skipped ?? [];
   const usefulIds = useful ?? [];
-  const today = day?.date ?? kolkataDay();
+  const today = day?.date ?? readingDay(new Date(), browserTimeZone());
   const requestedPage = day?.category === active ? day.page : 0;
   const paged = pageDesk(active, requestedPage, { skipped: skipIds, useful: usefulIds });
   const shown = paged.shown;
@@ -169,7 +181,7 @@ export function Desk() {
   function choose(next: CategoryId) {
     setView(next);
     setDay((current) => ({
-      date: current?.date ?? kolkataDay(),
+      date: current?.date ?? readingDay(new Date(), browserTimeZone()),
       category: next,
       page: 0,
     }));

@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { categories } from "./categories.ts";
 import { articles, type Article } from "./corpus.ts";
-import { kolkataDay } from "./day.ts";
+import { kolkataDay, readingDay } from "./day.ts";
 import { selectDesk } from "./desk.ts";
 import {
   articleUrlOk,
@@ -214,6 +214,16 @@ test("articles older than 18 months are left off the desk", () => {
 test("the India calendar day, not UTC, decides the cache date", () => {
   assert.equal(kolkataDay(new Date("2026-10-19T18:29:00Z")), "2026-10-19");
   assert.equal(kolkataDay(new Date("2026-10-19T18:30:00Z")), "2026-10-20");
+});
+
+test("the reading day rolls at 8:00 in the visitor's timezone", () => {
+  const beforeNewYork = new Date("2026-11-13T12:30:00Z");
+  const atNewYork = new Date("2026-11-13T13:00:00Z");
+  assert.equal(readingDay(beforeNewYork, "America/New_York"), "2026-11-12");
+  assert.equal(readingDay(atNewYork, "America/New_York"), "2026-11-13");
+  assert.equal(readingDay(beforeNewYork, "Asia/Kolkata"), "2026-11-13");
+  assert.equal(readingDay(new Date("2026-11-13T02:29:00Z"), "Asia/Kolkata"), "2026-11-12");
+  assert.equal(readingDay(new Date("2026-11-13T02:30:00Z"), "Asia/Kolkata"), "2026-11-13");
 });
 
 test("selection is stable for the same inputs", () => {

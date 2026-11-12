@@ -1,4 +1,4 @@
-/** Calendar day in India. Daily caches use this, not UTC. */
+/** Calendar day in India. Kept for the morning-feed clock, not the visitor's desk day. */
 export function kolkataDay(now: Date = new Date()): string {
   return new Intl.DateTimeFormat("en-CA", {
     timeZone: "Asia/Kolkata",
@@ -6,6 +6,30 @@ export function kolkataDay(now: Date = new Date()): string {
     month: "2-digit",
     day: "2-digit",
   }).format(now);
+}
+
+const READING_START_HOUR = 8;
+
+/**
+ * The desk's reading date in the visitor's timezone.
+ * The date rolls at 08:00 local. At 07:59 it is still yesterday.
+ * At 08:00 it is today. New York and Kolkata can differ at the same instant.
+ */
+export function readingDay(now: Date = new Date(), timeZone?: string | null): string {
+  const zone = typeof timeZone === "string" && timeZone.trim() ? timeZone.trim() : "UTC";
+  const shifted = new Date(now.getTime() - READING_START_HOUR * 60 * 60 * 1000);
+  const format = (id: string) =>
+    new Intl.DateTimeFormat("en-CA", {
+      timeZone: id,
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).format(shifted);
+  try {
+    return format(zone);
+  } catch {
+    return format("UTC");
+  }
 }
 
 export function parsePublished(raw: string): Date | null {
