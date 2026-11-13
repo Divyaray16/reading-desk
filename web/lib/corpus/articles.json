@@ -27454,5 +27454,71 @@
     "evidence": "excerpt",
     "id": "fable-makeitfable-com-article-cognitive-accessibility-pilot-case-study",
     "retrievedAt": "2026-11-12T22:09:39.469Z"
+  },
+  {
+    "sourceId": "ux-collective",
+    "title": "AI is the new old design material",
+    "url": "https://uxdesign.cc/ai-is-the-new-old-design-material-0e7f83540c9a?source=rss----138adf9c44c---4",
+    "publishedAt": "Fri, 13 Nov 2026 02:33:09 GMT",
+    "author": "Patrick Neeman",
+    "excerpt": "A long workbench where hand tools, a stack of paper, and an open laptop share the same surface. Creative makers and builders have always learned their medium by working with it, from grinding pigments to HTML. Models are the next material, and you need to learn them by building. The field keeps arguing about whether designers should code, as if that question were new. It’s not new. Art and design have always been taught through materials, going back centuries. In the 1390s, the painter Cennino Cennini wrote a handbook that’s still translated today on grinding pigments, and that history still runs through my own family as builders and creators. My mother, Jean Neeman , ground her own pigments as a conservator for the Los Angeles Museum of Art, the Getty and Hearst Castle , and I watched her repair Chinese statues that were over 600 years old with original materials to restore history.",
+    "evidence": "excerpt",
+    "id": "ux-collective-uxdesign-cc-ai-is-the-new-old-design-material-0e7f83540c9a-source-rss-emigy3",
+    "retrievedAt": "2026-11-13T07:39:24.103Z"
+  },
+  {
+    "sourceId": "openai-cookbook",
+    "title": "Model optimization",
+    "url": "https://developers.openai.com/tracks/model-optimization/",
+    "publishedAt": "Fri, 11 Jul 2025 00:00:00 GMT",
+    "author": "",
+    "excerpt": "Fine-tune, distill, and optimize models for the best performance and cost.",
+    "evidence": "excerpt",
+    "id": "openai-cookbook-developers-openai-com-tracks-model-optimization",
+    "retrievedAt": "2026-11-13T07:39:24.103Z"
+  },
+  {
+    "sourceId": "openai-cookbook",
+    "title": "OpenAI Developers plugin",
+    "url": "https://developers.openai.com/learn/developers-codex-plugin/",
+    "publishedAt": "Thu, 30 Apr 2026 00:00:00 GMT",
+    "author": "",
+    "excerpt": "Install and use the OpenAI Developers plugin in Codex, Claude Code, or Cursor to set up API access, use current OpenAI docs, and troubleshoot OpenAI API issues.",
+    "evidence": "excerpt",
+    "id": "openai-cookbook-developers-openai-com-learn-developers-codex-plugin",
+    "retrievedAt": "2026-11-13T07:39:24.103Z"
+  },
+  {
+    "sourceId": "openai-cookbook",
+    "title": "Docs MCP",
+    "url": "https://developers.openai.com/learn/docs-mcp/",
+    "publishedAt": "Tue, 06 Jan 2026 00:00:00 GMT",
+    "author": "",
+    "excerpt": "Quickstart for connecting to OpenAI's developer docs MCP server from common coding agents and editors. - mcp, tools, docs",
+    "evidence": "excerpt",
+    "id": "openai-cookbook-developers-openai-com-learn-docs-mcp",
+    "retrievedAt": "2026-11-13T07:39:24.103Z"
+  },
+  {
+    "sourceId": "openai-cookbook",
+    "title": "API deployment checklist",
+    "url": "https://developers.openai.com/api/docs/guides/deployment-checklist/",
+    "publishedAt": "Fri, 17 Apr 2026 00:00:00 GMT",
+    "author": "",
+    "excerpt": "Review Responses API settings for production quality, latency, cost, reliability, and data handling.",
+    "evidence": "excerpt",
+    "id": "openai-cookbook-developers-openai-com-api-docs-guides-deployment-checklist",
+    "retrievedAt": "2026-11-13T07:39:24.103Z"
+  },
+  {
+    "sourceId": "openai-cookbook",
+    "title": "Building agents",
+    "url": "https://developers.openai.com/tracks/building-agents/",
+    "publishedAt": "Fri, 11 Jul 2025 00:00:00 GMT",
+    "author": "",
+    "excerpt": "Learn how to build agents: Foundational concepts to practical implementation",
+    "evidence": "excerpt",
+    "id": "openai-cookbook-developers-openai-com-tracks-building-agents",
+    "retrievedAt": "2026-11-13T07:39:24.103Z"
   }
 ]
