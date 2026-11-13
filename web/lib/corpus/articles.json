@@ -27619,5 +27619,49 @@
     "evidence": "excerpt",
     "id": "mit-technology-review-technologyreview-com-2026-11-13-1148498-silicon-valley-claims-h1u4oq",
     "retrievedAt": "2026-11-13T15:57:18.048Z"
+  },
+  {
+    "sourceId": "nvidia",
+    "title": "Run GPU-Powered Black Hole Interferometry with NVIDIA cuPhoton",
+    "url": "https://developer.nvidia.com/blog/run-gpu-powered-black-hole-interferometry-with-nvidia-cuphoton/",
+    "publishedAt": "2026-11-13T21:17:17Z",
+    "author": "Akhilesh Mishra",
+    "excerpt": "Imaging black holes is challenging because they are distant and appear tiny in the sky—for example, M87*’s observed ring spans just 42 microarcseconds. The...",
+    "evidence": "excerpt",
+    "id": "nvidia-developer-nvidia-com-blog-run-gpu-powered-black-hole-interferometry-with-nvi-4swgk9",
+    "retrievedAt": "2026-11-13T21:52:47.075Z"
+  },
+  {
+    "sourceId": "nvidia",
+    "title": "Run Native DLA Inference in Python on NVIDIA Jetson AGX Orin Using cuDLA",
+    "url": "https://developer.nvidia.com/blog/run-native-dla-inference-in-python-on-nvidia-jetson-agx-orin-using-cudla/",
+    "publishedAt": "2026-11-13T18:57:10Z",
+    "author": "Nikshay Shrivastava",
+    "excerpt": "AI applications at the edge often need to run multiple neural networks within limited compute and power budgets. NVIDIA Deep Learning Accelerator (DLA)...",
+    "evidence": "excerpt",
+    "id": "nvidia-developer-nvidia-com-blog-run-native-dla-inference-in-python-on-nvidia-jetso-86kalc",
+    "retrievedAt": "2026-11-13T21:52:47.075Z"
+  },
+  {
+    "sourceId": "nvidia",
+    "title": "When One GPU Isn’t Enough: Serving GLM-5.3 Across Two NVIDIA DGX Stations with vLLM",
+    "url": "https://developer.nvidia.com/blog/when-one-gpu-isnt-enough-serving-glm-5-3-across-two-nvidia-dgx-stations-with-vllm/",
+    "publishedAt": "2026-11-13T17:00:00Z",
+    "author": "Fatima Fall",
+    "excerpt": "Running a frontier-scale model locally means keeping all its weights in GPU memory; the largest models no longer fit on one machine. Two NVIDIA DGX Stations...",
+    "evidence": "excerpt",
+    "id": "nvidia-developer-nvidia-com-blog-when-one-gpu-isnt-enough-serving-glm-5-3-across-tw-5wjyul",
+    "retrievedAt": "2026-11-13T21:52:47.075Z"
+  },
+  {
+    "sourceId": "nvidia",
+    "title": "Adapt Human Motion for Robots with NVIDIA SOMA Retargeter",
+    "url": "https://developer.nvidia.com/blog/adapt-human-motion-for-robots-with-nvidia-soma-retargeter/",
+    "publishedAt": "2026-11-13T17:00:00Z",
+    "author": "John Malaska",
+    "excerpt": "Human motion offers roboticists a great starting point for teaching humanoid robots how to move. A human demonstration captures the coordination and timing...",
+    "evidence": "excerpt",
+    "id": "nvidia-developer-nvidia-com-blog-adapt-human-motion-for-robots-with-nvidia-soma-retargeter",
+    "retrievedAt": "2026-11-13T21:52:47.075Z"
   }
 ]
