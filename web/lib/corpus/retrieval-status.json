@@ -7,7 +7,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z",
+    "checkedAt": "2026-11-14T15:37:56.149Z",
     "error": "HTTP 404"
   },
   {
@@ -18,7 +18,7 @@
     "items": 40,
     "kept": 40,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z"
+    "checkedAt": "2026-11-14T15:37:56.149Z"
   },
   {
     "sourceId": "ux-collective",
@@ -28,7 +28,7 @@
     "items": 10,
     "kept": 10,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z"
+    "checkedAt": "2026-11-14T15:37:56.149Z"
   },
   {
     "sourceId": "ux-planet",
@@ -38,7 +38,7 @@
     "items": 10,
     "kept": 10,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z"
+    "checkedAt": "2026-11-14T15:37:56.149Z"
   },
   {
     "sourceId": "alistapart",
@@ -48,7 +48,7 @@
     "items": 20,
     "kept": 20,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z"
+    "checkedAt": "2026-11-14T15:37:56.149Z"
   },
   {
     "sourceId": "baymard",
@@ -58,7 +58,7 @@
     "items": 50,
     "kept": 50,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z"
+    "checkedAt": "2026-11-14T15:37:56.149Z"
   },
   {
     "sourceId": "uxmatters",
@@ -68,7 +68,7 @@
     "items": 10,
     "kept": 10,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z"
+    "checkedAt": "2026-11-14T15:37:56.149Z"
   },
   {
     "sourceId": "pair",
@@ -78,7 +78,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z",
+    "checkedAt": "2026-11-14T15:37:56.149Z",
     "error": "HTTP 404"
   },
   {
@@ -89,7 +89,7 @@
     "items": 11,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z"
+    "checkedAt": "2026-11-14T15:37:56.149Z"
   },
   {
     "sourceId": "anthropic",
@@ -99,7 +99,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z",
+    "checkedAt": "2026-11-14T15:37:56.149Z",
     "error": "HTTP 404"
   },
   {
@@ -110,7 +110,7 @@
     "items": 20,
     "kept": 19,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z"
+    "checkedAt": "2026-11-14T15:37:56.149Z"
   },
   {
     "sourceId": "amazon-science",
@@ -120,7 +120,7 @@
     "items": 25,
     "kept": 25,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z"
+    "checkedAt": "2026-11-14T15:37:56.149Z"
   },
   {
     "sourceId": "shumin",
@@ -130,7 +130,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z",
+    "checkedAt": "2026-11-14T15:37:56.149Z",
     "error": "HTTP 404"
   },
   {
@@ -141,7 +141,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z",
+    "checkedAt": "2026-11-14T15:37:56.149Z",
     "error": "HTTP 404"
   },
   {
@@ -152,7 +152,7 @@
     "items": 777,
     "kept": 772,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z"
+    "checkedAt": "2026-11-14T15:37:56.149Z"
   },
   {
     "sourceId": "stripe",
@@ -162,7 +162,7 @@
     "items": 10,
     "kept": 10,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z"
+    "checkedAt": "2026-11-14T15:37:56.149Z"
   },
   {
     "sourceId": "linear",
@@ -172,7 +172,7 @@
     "items": 65,
     "kept": 65,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z"
+    "checkedAt": "2026-11-14T15:37:56.149Z"
   },
   {
     "sourceId": "bradfrost",
@@ -182,7 +182,7 @@
     "items": 20,
     "kept": 20,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z"
+    "checkedAt": "2026-11-14T15:37:56.149Z"
   },
   {
     "sourceId": "lukew",
@@ -192,7 +192,7 @@
     "items": 15,
     "kept": 15,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z"
+    "checkedAt": "2026-11-14T15:37:56.149Z"
   },
   {
     "sourceId": "intercom",
@@ -202,17 +202,18 @@
     "items": 20,
     "kept": 19,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z"
+    "checkedAt": "2026-11-14T15:37:56.149Z"
   },
   {
     "sourceId": "julie-zhuo",
-    "method": "rss",
-    "url": "https://lg.substack.com/feed",
-    "ok": true,
-    "items": 20,
-    "kept": 20,
+    "method": "feed",
+    "url": "https://lg.substack.com/feed.xml",
+    "ok": false,
+    "items": 0,
+    "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z"
+    "checkedAt": "2026-11-14T15:37:56.149Z",
+    "error": "HTTP 403"
   },
   {
     "sourceId": "nvidia",
@@ -222,7 +223,7 @@
     "items": 100,
     "kept": 100,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z"
+    "checkedAt": "2026-11-14T15:37:56.149Z"
   },
   {
     "sourceId": "measuringu",
@@ -232,7 +233,7 @@
     "items": 10,
     "kept": 10,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z"
+    "checkedAt": "2026-11-14T15:37:56.149Z"
   },
   {
     "sourceId": "ixdf",
@@ -242,7 +243,7 @@
     "items": 20,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z"
+    "checkedAt": "2026-11-14T15:37:56.149Z"
   },
   {
     "sourceId": "usabilitygeek",
@@ -252,7 +253,7 @@
     "items": 10,
     "kept": 10,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z"
+    "checkedAt": "2026-11-14T15:37:56.149Z"
   },
   {
     "sourceId": "dovetail",
@@ -262,7 +263,7 @@
     "items": 104,
     "kept": 103,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z"
+    "checkedAt": "2026-11-14T15:37:56.149Z"
   },
   {
     "sourceId": "usertesting",
@@ -272,7 +273,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z"
+    "checkedAt": "2026-11-14T15:37:56.149Z"
   },
   {
     "sourceId": "user-interviews",
@@ -282,7 +283,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z",
+    "checkedAt": "2026-11-14T15:37:56.149Z",
     "error": "HTTP 500"
   },
   {
@@ -293,7 +294,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z",
+    "checkedAt": "2026-11-14T15:37:56.149Z",
     "error": "HTTP 404"
   },
   {
@@ -304,7 +305,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z",
+    "checkedAt": "2026-11-14T15:37:56.149Z",
     "error": "HTTP 403"
   },
   {
@@ -315,7 +316,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z",
+    "checkedAt": "2026-11-14T15:37:56.149Z",
     "error": "HTTP 404"
   },
   {
@@ -326,7 +327,7 @@
     "items": 10,
     "kept": 10,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z"
+    "checkedAt": "2026-11-14T15:37:56.149Z"
   },
   {
     "sourceId": "carbon",
@@ -336,7 +337,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z",
+    "checkedAt": "2026-11-14T15:37:56.149Z",
     "error": "HTTP 404"
   },
   {
@@ -347,7 +348,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z",
+    "checkedAt": "2026-11-14T15:37:56.149Z",
     "error": "HTTP 404"
   },
   {
@@ -358,7 +359,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z",
+    "checkedAt": "2026-11-14T15:37:56.149Z",
     "error": "Response was not RSS or Atom."
   },
   {
@@ -369,7 +370,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z",
+    "checkedAt": "2026-11-14T15:37:56.149Z",
     "error": "HTTP 404"
   },
   {
@@ -380,7 +381,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z",
+    "checkedAt": "2026-11-14T15:37:56.149Z",
     "error": "HTTP 404"
   },
   {
@@ -391,7 +392,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z",
+    "checkedAt": "2026-11-14T15:37:56.149Z",
     "error": "HTTP 404"
   },
   {
@@ -402,7 +403,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z",
+    "checkedAt": "2026-11-14T15:37:56.149Z",
     "error": "HTTP 404"
   },
   {
@@ -413,7 +414,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z",
+    "checkedAt": "2026-11-14T15:37:56.149Z",
     "error": "HTTP 404"
   },
   {
@@ -424,7 +425,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z",
+    "checkedAt": "2026-11-14T15:37:56.149Z",
     "error": "HTTP 404"
   },
   {
@@ -435,7 +436,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z",
+    "checkedAt": "2026-11-14T15:37:56.149Z",
     "error": "Response was not RSS or Atom."
   },
   {
@@ -446,7 +447,7 @@
     "items": 30,
     "kept": 30,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z"
+    "checkedAt": "2026-11-14T15:37:56.149Z"
   },
   {
     "sourceId": "josh-comeau",
@@ -456,7 +457,7 @@
     "items": 89,
     "kept": 87,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z"
+    "checkedAt": "2026-11-14T15:37:56.149Z"
   },
   {
     "sourceId": "codrops",
@@ -466,7 +467,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z",
+    "checkedAt": "2026-11-14T15:37:56.149Z",
     "error": "HTTP 404"
   },
   {
@@ -477,7 +478,7 @@
     "items": 15,
     "kept": 15,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z"
+    "checkedAt": "2026-11-14T15:37:56.149Z"
   },
   {
     "sourceId": "awwwards",
@@ -486,8 +487,8 @@
     "ok": true,
     "items": 30,
     "kept": 28,
-    "added": 1,
-    "checkedAt": "2026-11-14T08:53:22.309Z"
+    "added": 0,
+    "checkedAt": "2026-11-14T15:37:56.149Z"
   },
   {
     "sourceId": "mobbin",
@@ -497,18 +498,19 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z",
+    "checkedAt": "2026-11-14T15:37:56.149Z",
     "error": "HTTP 404"
   },
   {
     "sourceId": "page-flows",
-    "method": "rss",
-    "url": "https://pageflows.com/feed/",
-    "ok": true,
-    "items": 20,
+    "method": "feed",
+    "url": "https://pageflows.com/feed.xml",
+    "ok": false,
+    "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z"
+    "checkedAt": "2026-11-14T15:37:56.149Z",
+    "error": "HTTP 403"
   },
   {
     "sourceId": "refactoring-ui",
@@ -518,7 +520,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z",
+    "checkedAt": "2026-11-14T15:37:56.149Z",
     "error": "HTTP 404"
   },
   {
@@ -529,7 +531,7 @@
     "items": 141,
     "kept": 140,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z"
+    "checkedAt": "2026-11-14T15:37:56.149Z"
   },
   {
     "sourceId": "lenny",
@@ -539,7 +541,7 @@
     "items": 20,
     "kept": 20,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z"
+    "checkedAt": "2026-11-14T15:37:56.149Z"
   },
   {
     "sourceId": "product-talk",
@@ -549,7 +551,7 @@
     "items": 15,
     "kept": 15,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z"
+    "checkedAt": "2026-11-14T15:37:56.149Z"
   },
   {
     "sourceId": "svpg",
@@ -559,7 +561,7 @@
     "items": 15,
     "kept": 15,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z"
+    "checkedAt": "2026-11-14T15:37:56.149Z"
   },
   {
     "sourceId": "mind-the-product",
@@ -569,7 +571,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z",
+    "checkedAt": "2026-11-14T15:37:56.149Z",
     "error": "HTTP 404"
   },
   {
@@ -580,7 +582,7 @@
     "items": 15,
     "kept": 15,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z"
+    "checkedAt": "2026-11-14T15:37:56.149Z"
   },
   {
     "sourceId": "sdn",
@@ -590,7 +592,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z",
+    "checkedAt": "2026-11-14T15:37:56.149Z",
     "error": "HTTP 404"
   },
   {
@@ -601,7 +603,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z",
+    "checkedAt": "2026-11-14T15:37:56.149Z",
     "error": "HTTP 404"
   },
   {
@@ -612,7 +614,7 @@
     "items": 10,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z"
+    "checkedAt": "2026-11-14T15:37:56.149Z"
   },
   {
     "sourceId": "thoughtworks",
@@ -622,7 +624,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z",
+    "checkedAt": "2026-11-14T15:37:56.149Z",
     "error": "HTTP 404"
   },
   {
@@ -633,7 +635,7 @@
     "items": 10,
     "kept": 10,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z"
+    "checkedAt": "2026-11-14T15:37:56.149Z"
   },
   {
     "sourceId": "anthropic-engineering",
@@ -643,7 +645,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z",
+    "checkedAt": "2026-11-14T15:37:56.149Z",
     "error": "HTTP 404"
   },
   {
@@ -654,7 +656,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z",
+    "checkedAt": "2026-11-14T15:37:56.149Z",
     "error": "HTTP 403"
   },
   {
@@ -665,7 +667,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z",
+    "checkedAt": "2026-11-14T15:37:56.149Z",
     "error": "HTTP 403"
   },
   {
@@ -676,7 +678,7 @@
     "items": 135,
     "kept": 32,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z"
+    "checkedAt": "2026-11-14T15:37:56.149Z"
   },
   {
     "sourceId": "deepmind",
@@ -686,7 +688,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z",
+    "checkedAt": "2026-11-14T15:37:56.149Z",
     "error": "HTTP 404"
   },
   {
@@ -697,7 +699,7 @@
     "items": 10,
     "kept": 10,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z"
+    "checkedAt": "2026-11-14T15:37:56.149Z"
   },
   {
     "sourceId": "huggingface",
@@ -707,7 +709,7 @@
     "items": 907,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z"
+    "checkedAt": "2026-11-14T15:37:56.149Z"
   },
   {
     "sourceId": "langchain",
@@ -717,7 +719,7 @@
     "items": 99,
     "kept": 99,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z"
+    "checkedAt": "2026-11-14T15:37:56.149Z"
   },
   {
     "sourceId": "llamaindex",
@@ -727,7 +729,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z",
+    "checkedAt": "2026-11-14T15:37:56.149Z",
     "error": "HTTP 404"
   },
   {
@@ -738,7 +740,7 @@
     "items": 422,
     "kept": 421,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z"
+    "checkedAt": "2026-11-14T15:37:56.149Z"
   },
   {
     "sourceId": "botpress",
@@ -748,7 +750,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z",
+    "checkedAt": "2026-11-14T15:37:56.149Z",
     "error": "HTTP 404"
   },
   {
@@ -759,7 +761,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z",
+    "checkedAt": "2026-11-14T15:37:56.149Z",
     "error": "HTTP 404"
   },
   {
@@ -770,7 +772,7 @@
     "items": 10,
     "kept": 10,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z"
+    "checkedAt": "2026-11-14T15:37:56.149Z"
   },
   {
     "sourceId": "content-design-london",
@@ -780,7 +782,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z",
+    "checkedAt": "2026-11-14T15:37:56.149Z",
     "error": "HTTP 404"
   },
   {
@@ -791,7 +793,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z",
+    "checkedAt": "2026-11-14T15:37:56.149Z",
     "error": "HTTP 404"
   },
   {
@@ -802,7 +804,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z",
+    "checkedAt": "2026-11-14T15:37:56.149Z",
     "error": "HTTP 404"
   },
   {
@@ -813,7 +815,7 @@
     "items": 9,
     "kept": 8,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z"
+    "checkedAt": "2026-11-14T15:37:56.149Z"
   },
   {
     "sourceId": "google-style",
@@ -823,7 +825,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z",
+    "checkedAt": "2026-11-14T15:37:56.149Z",
     "error": "HTTP 404"
   },
   {
@@ -834,7 +836,7 @@
     "items": 10,
     "kept": 10,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z"
+    "checkedAt": "2026-11-14T15:37:56.149Z"
   },
   {
     "sourceId": "webaim",
@@ -844,7 +846,7 @@
     "items": 10,
     "kept": 10,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z"
+    "checkedAt": "2026-11-14T15:37:56.149Z"
   },
   {
     "sourceId": "a11y-project",
@@ -854,7 +856,7 @@
     "items": 65,
     "kept": 60,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z"
+    "checkedAt": "2026-11-14T15:37:56.149Z"
   },
   {
     "sourceId": "deque",
@@ -864,7 +866,7 @@
     "items": 10,
     "kept": 10,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z"
+    "checkedAt": "2026-11-14T15:37:56.149Z"
   },
   {
     "sourceId": "fable",
@@ -874,6 +876,6 @@
     "items": 10,
     "kept": 10,
     "added": 0,
-    "checkedAt": "2026-11-14T08:53:22.309Z"
+    "checkedAt": "2026-11-14T15:37:56.149Z"
   }
 ]
