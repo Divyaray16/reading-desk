@@ -27663,5 +27663,60 @@
     "evidence": "excerpt",
     "id": "nvidia-developer-nvidia-com-blog-adapt-human-motion-for-robots-with-nvidia-soma-retargeter",
     "retrievedAt": "2026-11-13T21:52:47.075Z"
+  },
+  {
+    "sourceId": "ux-collective",
+    "title": "Decision theatre or decision design?",
+    "url": "https://uxdesign.cc/decision-theatre-or-decision-design-f1604f178685?source=rss----138adf9c44c---4",
+    "publishedAt": "Fri, 13 Nov 2026 23:51:42 GMT",
+    "author": "Patrizia Bertini",
+    "excerpt": "AI has made information easy, but it has not made decisions simple. As machines produce more than we can read, our job is shifting from building knowledge to owning decisions. Are we ready? In a 2025 survey by BetterUp Labs and the Stanford Social Media Lab, 40% of US desk workers said they had received workslop in the previous month: AI-generated work that looks polished but does not move the task forward. Respondents reported spending nearly two hours, on average, dealing with each incident. Imagine a team of ten, each receiving one piece of workslop a month. That is roughly 20 hours, more than two working days, spent cleaning up someone else’s shortcut. We have never produced so much data, so many documents, decks and summaries. And we have never produced so much digital waste . This is a productivity problem, but it is also a symptom . The question is not how much faster we can",
+    "evidence": "excerpt",
+    "id": "ux-collective-uxdesign-cc-decision-theatre-or-decision-design-f1604f178685-source-r-o8gaml",
+    "retrievedAt": "2026-11-14T01:59:34.115Z"
+  },
+  {
+    "sourceId": "ux-collective",
+    "title": "Schrödinger’s Huang: Nvidia could not be everything to everybody",
+    "url": "https://uxdesign.cc/schr%C3%B6dingers-huang-d1da36bff88c?source=rss----138adf9c44c---4",
+    "publishedAt": "Fri, 13 Nov 2026 23:51:27 GMT",
+    "author": "Neel Dozome",
+    "excerpt": "A cautionary tale for Asian capital attempting to operate technology businesses on both sides of the Pacific simultaneously Continue reading on UX Collective »",
+    "evidence": "excerpt",
+    "id": "ux-collective-uxdesign-cc-schr-c3-b6dingers-huang-d1da36bff88c-source-rss-138adf9c44c-4",
+    "retrievedAt": "2026-11-14T01:59:34.115Z"
+  },
+  {
+    "sourceId": "figma",
+    "title": "AI’s role in the creative process",
+    "url": "https://www.figma.com/blog/ai-role-in-the-creative-process/",
+    "publishedAt": "2026-11-13T20:00:00.000Z",
+    "author": "",
+    "excerpt": "Which parts of the creative process can AI do for us—and which do we insist on keeping for ourselves?",
+    "evidence": "excerpt",
+    "id": "figma-figma-com-blog-ai-role-in-the-creative-process",
+    "retrievedAt": "2026-11-14T01:59:34.115Z"
+  },
+  {
+    "sourceId": "nvidia",
+    "title": "Faster Scientific Simulations with New FP64 Algorithms in NVIDIA cuBLAS",
+    "url": "https://developer.nvidia.com/blog/faster-scientific-simulations-with-new-fp64-algorithms-in-nvidia-cublas/",
+    "publishedAt": "2026-11-13T22:13:51Z",
+    "author": "Cole Brower",
+    "excerpt": "Many scientific simulations, from molecular chemistry to materials science, spend the majority of their execution time computing high-precision dense general...",
+    "evidence": "excerpt",
+    "id": "nvidia-developer-nvidia-com-blog-faster-scientific-simulations-with-new-fp64-algori-wy8i2e",
+    "retrievedAt": "2026-11-14T01:59:34.115Z"
+  },
+  {
+    "sourceId": "openai-cookbook",
+    "title": "Latency optimization guide",
+    "url": "https://developers.openai.com/api/docs/guides/latency-optimization",
+    "publishedAt": "Mon, 21 Jul 2025 00:00:00 GMT",
+    "author": "",
+    "excerpt": "Measure time to first token and end-to-end latency in your application.",
+    "evidence": "excerpt",
+    "id": "openai-cookbook-developers-openai-com-api-docs-guides-latency-optimization",
+    "retrievedAt": "2026-11-14T01:59:34.115Z"
   }
 ]
