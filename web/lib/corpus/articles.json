@@ -27729,5 +27729,16 @@
     "evidence": "excerpt",
     "id": "awwwards-awwwards-com-sites-preymaker",
     "retrievedAt": "2026-11-14T08:53:22.309Z"
+  },
+  {
+    "sourceId": "langchain",
+    "title": "Goal Engineering",
+    "url": "https://www.langchain.com/blog/goal-engineering",
+    "publishedAt": "Sat, 14 Nov 2026 16:00:01 GMT",
+    "author": "",
+    "excerpt": "The future of agents is them taking on open ended goals and driving towards completion of those goals. Learn more.",
+    "evidence": "excerpt",
+    "id": "langchain-langchain-com-blog-goal-engineering",
+    "retrievedAt": "2026-11-14T20:28:21.618Z"
   }
 ]
