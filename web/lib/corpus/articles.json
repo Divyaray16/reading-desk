@@ -28059,5 +28059,27 @@
     "evidence": "excerpt",
     "id": "mit-technology-review-technologyreview-com-2026-11-16-1148624-the-open-source-movem-qxaobh",
     "retrievedAt": "2026-11-17T01:51:01.137Z"
+  },
+  {
+    "sourceId": "awwwards",
+    "title": "Sweet Tape",
+    "url": "https://www.awwwards.com/sites/sweet-tape",
+    "publishedAt": "Tue, 17 Nov 2026 00:00:00 +0000",
+    "author": "",
+    "excerpt": "Reimagine an everyday tape essential as something more thoughtful, expressive, and full of heart.",
+    "evidence": "excerpt",
+    "id": "awwwards-awwwards-com-sites-sweet-tape",
+    "retrievedAt": "2026-11-17T10:18:50.480Z"
+  },
+  {
+    "sourceId": "smart-interface",
+    "title": "Agentic Journey Maps And Agentic Experience Design",
+    "url": "https://smart-interface-design-patterns.com/articles/agentic-experience-design/",
+    "publishedAt": "Tue, 17 Nov 2026 00:00:00 +0000",
+    "author": "Vitaly Friedman",
+    "excerpt": "<p>So we know how to design <strong>user journey maps</strong>. But what if swamps of AI agents flood our products and get stuck, lost, \"confused\" or simply make wrong decisions? How do we design agentic experiences? And what would an <strong>agentic journey map</strong> look like?</p> <p>At first, it might seem obvious. We make our products <strong>\"AI-ready\"</strong> by allowing AI to interact with them efficiently — making services structured, accessible and machine-readable. But we also need to design <strong>discovery, recovery</strong>, oversight, handoffs and approval flows with humans.</p> <figure class=\"c-article__image u-flow--xs\"> <a href=\"https://www.agentexperiences.com/\"> <img src=\"https://res.cloudinary.com/indysigner/image/fetch/c_fill/f_auto,q_auto/https://main--smart-interface-design-patterns.netlify.app/static/img/blog/agentic-experience-design/1.jpg\" alt=\"Agentic",
+    "evidence": "excerpt",
+    "id": "smart-interface-smart-interface-design-patterns-com-articles-agentic-experience-design",
+    "retrievedAt": "2026-11-17T10:18:50.480Z"
   }
 ]
