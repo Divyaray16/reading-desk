@@ -27982,5 +27982,82 @@
     "evidence": "excerpt",
     "id": "mit-technology-review-technologyreview-com-2026-11-16-1146070-building-ai-that-can-yvt2so",
     "retrievedAt": "2026-11-16T18:00:49.492Z"
+  },
+  {
+    "sourceId": "ux-collective",
+    "title": "Why bother paying for software anymore?",
+    "url": "https://uxdesign.cc/why-bother-paying-for-software-anymore-e1f76093f772?source=rss----138adf9c44c---4",
+    "publishedAt": "Mon, 16 Nov 2026 21:27:14 GMT",
+    "author": "Ed Orozco",
+    "excerpt": "And why design is the answer AI bros didn’t expect. Continue reading on UX Collective »",
+    "evidence": "excerpt",
+    "id": "ux-collective-uxdesign-cc-why-bother-paying-for-software-anymore-e1f76093f772-sourc-wdrwws",
+    "retrievedAt": "2026-11-17T01:51:01.137Z"
+  },
+  {
+    "sourceId": "ux-collective",
+    "title": "UI edge cases: A reference guide",
+    "url": "https://uxdesign.cc/ui-edge-cases-a-reference-guide-e778061588ef?source=rss----138adf9c44c---4",
+    "publishedAt": "Mon, 16 Nov 2026 21:20:24 GMT",
+    "author": "Adir SL",
+    "excerpt": "A practical reference guide for catching UI edge cases before they ship — organized by category, with how to test, how to detect them in the wild, and how to design a fix. With examples. UI edge cases: A reference guide, a banner image. Introduction One day my colleague and I were at a workshop in a client’s office about agentic workflows in UI Design and Development when suddenly the client asked us a very good question. “If we, designers and developers, are left to check the AI’s code for all the small but important edge cases it might miss — why don’t we give a document or a list of UI edge cases to the AI to begin with?” Indeed a very good question, so my colleague and I tasked ourselves with finding a document like this so we could send it to our client. But we couldn’t find anything that was generic enough to fit every client and specific enough to include all the little cases we",
+    "evidence": "excerpt",
+    "id": "ux-collective-uxdesign-cc-ui-edge-cases-a-reference-guide-e778061588ef-source-rss-1-ghy4tw",
+    "retrievedAt": "2026-11-17T01:51:01.137Z"
+  },
+  {
+    "sourceId": "ux-planet",
+    "title": "Information Visualization: 6 Essential Rules Every Designer Should Know",
+    "url": "https://uxplanet.org/information-visualization-6-essential-rules-every-designer-should-know-b1a13ddd4b66?source=rss----819cc2aaeee0---4",
+    "publishedAt": "Mon, 16 Nov 2026 20:32:11 GMT",
+    "author": "uxplanet.org",
+    "excerpt": "How to turn complex data into clear, meaningful, and actionable visualizations We live in a world where organizations collect enormous amounts of data. But collecting data and understanding it are two very different things. And this problem becomes even more noticable in the context of dashboards that org create: a dashboard might contain dozens of charts and hundreds of data points, yet still fail to answer the fundamental question: What should I do with this information? And, unfortunately, with the rise of AI tools this problem becomes more and more important because data visualization design now is easier than ever, but not many people who create dashboards understand the principles behind good visualization. Information visualization is a discipline that aims to answer this question. In this article, I’ll explain what information visualization is and share 6 practical rules for",
+    "evidence": "excerpt",
+    "id": "ux-planet-uxplanet-org-information-visualization-6-essential-rules-every-designer-s-mw87m1",
+    "retrievedAt": "2026-11-17T01:51:01.137Z"
+  },
+  {
+    "sourceId": "nvidia",
+    "title": "Accelerate Molecular Dynamics Simulations with Accurate, Flexible Primitives Using NVIDIA cuPotential",
+    "url": "https://developer.nvidia.com/blog/accelerate-molecular-dynamics-simulations-with-accurate-flexible-primitives-using-nvidia-cupotential/",
+    "publishedAt": "2026-11-16T22:30:00Z",
+    "author": "Yutong Zhao",
+    "excerpt": "Molecular dynamics (MD) is an indispensable tool across physics, chemistry, biology, and materials science. Owing to its arithmetic structure, particularly the...",
+    "evidence": "excerpt",
+    "id": "nvidia-developer-nvidia-com-blog-accelerate-molecular-dynamics-simulations-with-acc-7cc6qu",
+    "retrievedAt": "2026-11-17T01:51:01.137Z"
+  },
+  {
+    "sourceId": "langchain",
+    "title": "From tasks to goals",
+    "url": "https://www.langchain.com/blog/from-tasks-to-goals",
+    "publishedAt": "Mon, 16 Nov 2026 23:53:29 GMT",
+    "author": "",
+    "excerpt": "LangChain CEO and Co-founder Harrison Chase shares how we're moving from task-specific agents to goal-focused agents. Learn more.",
+    "evidence": "excerpt",
+    "id": "langchain-langchain-com-blog-from-tasks-to-goals",
+    "retrievedAt": "2026-11-17T01:51:01.137Z"
+  },
+  {
+    "sourceId": "langchain",
+    "title": "Why we rebuilt LangSmith around the agent",
+    "url": "https://www.langchain.com/blog/we-rebuilt-langsmith-around-the-agent",
+    "publishedAt": "Mon, 16 Nov 2026 18:37:11 GMT",
+    "author": "",
+    "excerpt": "We reorganized LangSmith around a single agent record. Build, run, improve, and govern every agent from one place, on any framework or runtime.",
+    "evidence": "excerpt",
+    "id": "langchain-langchain-com-blog-we-rebuilt-langsmith-around-the-agent",
+    "retrievedAt": "2026-11-17T01:51:01.137Z"
+  },
+  {
+    "sourceId": "mit-technology-review",
+    "title": "The open-source movement wants Jensen Huang back",
+    "url": "https://www.technologyreview.com/2026/11/16/1148624/the-open-source-movement-wants-jensen-huang-back/",
+    "publishedAt": "Mon, 16 Nov 2026 18:38:47 +0000",
+    "author": "James O'Donnell",
+    "excerpt": "This story originally appeared in The Algorithm, our weekly newsletter on AI. To get stories like this in your inbox first, sign up here. On Friday, a petition to reinstate Jensen Huang as CEO of Nvidia began circulating on social media, and by Monday it listed some notable signatories, including Elon Musk and several influential Nvidia…",
+    "evidence": "excerpt",
+    "id": "mit-technology-review-technologyreview-com-2026-11-16-1148624-the-open-source-movem-qxaobh",
+    "retrievedAt": "2026-11-17T01:51:01.137Z"
   }
 ]
