@@ -28081,5 +28081,170 @@
     "evidence": "excerpt",
     "id": "smart-interface-smart-interface-design-patterns-com-articles-agentic-experience-design",
     "retrievedAt": "2026-11-17T10:18:50.480Z"
+  },
+  {
+    "sourceId": "smashing",
+    "title": "Meet AI 2027 Conference (Dec 1)",
+    "url": "https://smashingmagazine.com/2026/11/online-smashingconf-ai-2027/",
+    "publishedAt": "Tue, 17 Nov 2026 12:00:00 GMT",
+    "author": "hello@smashingmagazine.com (Iris Lješnjanin)",
+    "excerpt": "Roll up your sleeves! Meet shiny new [AI 2027 Conference](https://smashingconf.com/ai-2027-conference), a friendly online conference on AI-ready design systems, AI + Figma and AI design patterns. What to expect in 2027 and where teams are getting AI right. [Jump to tickets.](https://smashingconf.com/ai-2027-conference/registration)",
+    "evidence": "excerpt",
+    "id": "smashing-smashingmagazine-com-2026-11-online-smashingconf-ai-2027",
+    "retrievedAt": "2026-11-17T19:40:04.916Z"
+  },
+  {
+    "sourceId": "smashing",
+    "title": "AI Sped Up The Build: How Can Accessibility Testing Keep Up?",
+    "url": "https://smashingmagazine.com/2026/11/ai-sped-up-build-how-can-accessibility-testing-keep-up/",
+    "publishedAt": "Tue, 17 Nov 2026 08:00:00 GMT",
+    "author": "hello@smashingmagazine.com (Andrew Chung)",
+    "excerpt": "AI has sped up how teams design and build, but quality assurance (QA) testing hasn’t kept pace, and the web may be getting less accessible. Drawing on new research, Andrew Chung explains what separates the teams whose accessibility efforts are keeping up, and how to embed human judgment into AI-enabled workflows without slowing delivery.",
+    "evidence": "excerpt",
+    "id": "smashing-smashingmagazine-com-2026-11-ai-sped-up-build-how-can-accessibility-testin-v7kjtt",
+    "retrievedAt": "2026-11-17T19:40:04.916Z"
+  },
+  {
+    "sourceId": "ux-planet",
+    "title": "Jev can 10x your Claude Code",
+    "url": "https://uxplanet.org/jev-can-10x-your-claude-code-ddb5752a5db2?source=rss----819cc2aaeee0---4",
+    "publishedAt": "Tue, 17 Nov 2026 13:57:50 GMT",
+    "author": "Nick Babich",
+    "excerpt": "Jev is a new AI model from a co-inventor of ChatGPT, and this model has created a lot of buzz in the product design & development space… Continue reading on UX Planet »",
+    "evidence": "excerpt",
+    "id": "ux-planet-uxplanet-org-jev-can-10x-your-claude-code-ddb5752a5db2-source-rss-819cc2aaeee0-4",
+    "retrievedAt": "2026-11-17T19:40:04.916Z"
+  },
+  {
+    "sourceId": "ibm-research",
+    "title": "How low-SWaP radar is making sophisticated sensing smarter",
+    "url": "https://research.ibm.com/blog/how-low-sWaP-radar-is-making-sensing-smarter",
+    "publishedAt": "Tue, 17 Nov 2026 12:00:00 GMT",
+    "author": "",
+    "excerpt": "Low size, weight, and power are key to useful radar systems, and it takes more than one breakthrough component to make them work.",
+    "evidence": "excerpt",
+    "id": "ibm-research-research-ibm-com-blog-how-low-swap-radar-is-making-sensing-smarter",
+    "retrievedAt": "2026-11-17T19:40:04.916Z"
+  },
+  {
+    "sourceId": "nvidia",
+    "title": "Co-Designing Sparse Attention for Efficient Long-Context Inference",
+    "url": "https://developer.nvidia.com/blog/co-designing-sparse-attention-for-efficient-long-context-inference/",
+    "publishedAt": "2026-11-17T17:30:00Z",
+    "author": "Timmy Liu",
+    "excerpt": "Agentic workloads, long documents, and large codebases are pushing context lengths from tens of thousands of tokens to hundreds of thousands. At those lengths,...",
+    "evidence": "excerpt",
+    "id": "nvidia-developer-nvidia-com-blog-co-designing-sparse-attention-for-efficient-long-c-aehall",
+    "retrievedAt": "2026-11-17T19:40:04.916Z"
+  },
+  {
+    "sourceId": "nvidia",
+    "title": "Integrating QPUs into Supercomputing Centers Using Slurm HRES Plugins",
+    "url": "https://developer.nvidia.com/blog/integrating-qpus-into-supercomputing-centers-using-slurm-hres-plugins/",
+    "publishedAt": "2026-11-17T17:00:00Z",
+    "author": "Stefano Mensa",
+    "excerpt": "Quantum processors are being integrated into supercomputing centers worldwide. National programs in North America, Europe, and Asia are driving the installation...",
+    "evidence": "excerpt",
+    "id": "nvidia-developer-nvidia-com-blog-integrating-qpus-into-supercomputing-centers-using-gcpu2w",
+    "retrievedAt": "2026-11-17T19:40:04.916Z"
+  },
+  {
+    "sourceId": "lenny",
+    "title": "35 premium tools free for a year—now with OpenRouter, LangChain, Sentry, TextExpander, and Ploy 💥",
+    "url": "https://www.lennysnewsletter.com/p/35-premium-tools-free-for-a-yearnow",
+    "publishedAt": "Tue, 17 Nov 2026 18:02:02 GMT",
+    "author": "Lenny Rachitsky",
+    "excerpt": "Over $40,000 in value, exclusively for Lenny’s Newsletter subscribers",
+    "evidence": "excerpt",
+    "id": "lenny-lennysnewsletter-com-p-35-premium-tools-free-for-a-yearnow",
+    "retrievedAt": "2026-11-17T19:40:04.916Z"
+  },
+  {
+    "sourceId": "product-talk",
+    "title": "The Sharing Gap - All Things Product Podcast with Teresa Torres & Petra Wille",
+    "url": "https://www.producttalk.org/the-sharing-gap-all-things-product-podcast-with-teresa-torres-petra-wille/",
+    "publishedAt": "Tue, 17 Nov 2026 14:00:00 GMT",
+    "author": "Teresa Torres",
+    "excerpt": "Listen to this episode on: Spotify | Apple Podcasts Why has everyone stopped sharing their real product work — and what do we lose when the field goes quiet? Petra Wille and Teresa Torres return to the never-ending social-media question, this time from a trend angle: the genuinely useful",
+    "evidence": "excerpt",
+    "id": "product-talk-producttalk-org-the-sharing-gap-all-things-product-podcast-with-teresa-wpxm3b",
+    "retrievedAt": "2026-11-17T19:40:04.916Z"
+  },
+  {
+    "sourceId": "microsoft-research",
+    "title": "Can AI help build a healthier future?",
+    "url": "https://www.microsoft.com/en-us/research/podcast/can-ai-help-build-a-healthier-future/",
+    "publishedAt": "Tue, 17 Nov 2026 16:52:17 +0000",
+    "author": "Doug Burger, Ava Amini, Eric Horvitz, Dr. Eric Topol",
+    "excerpt": "What can AI enable in medicine, and how do we get there? Microsoft Research lead Doug Burger, Microsoft Principal Research Manager Ava Amini, Microsoft Chief Scientific Officer Eric Horvitz, and physician-scientist Eric Topol of Scripps Research explore these questions and more. The post Can AI help build a healthier future? appeared first on Microsoft Research .",
+    "evidence": "excerpt",
+    "id": "microsoft-research-microsoft-com-en-us-research-podcast-can-ai-help-build-a-healthi-7zzws3",
+    "retrievedAt": "2026-11-17T19:40:04.916Z"
+  },
+  {
+    "sourceId": "langchain",
+    "title": "Protect sensitive data in your traces: new controls in LangSmith",
+    "url": "https://www.langchain.com/blog/protect-sensitive-data-in-your-traces-new-controls-in-langsmith",
+    "publishedAt": "Tue, 17 Nov 2026 18:00:02 GMT",
+    "author": "",
+    "excerpt": "New controls are now in LangSmith to help teams manage access to sensitive trace data. Learn more.",
+    "evidence": "excerpt",
+    "id": "langchain-langchain-com-blog-protect-sensitive-data-in-your-traces-new-controls-in-n33gux",
+    "retrievedAt": "2026-11-17T19:40:04.916Z"
+  },
+  {
+    "sourceId": "langchain",
+    "title": "What We’ve Learned Building Proactive Agents",
+    "url": "https://www.langchain.com/blog/what-weve-learned-building-proactive-agents",
+    "publishedAt": "Tue, 17 Nov 2026 16:49:24 GMT",
+    "author": "",
+    "excerpt": "Proactive agents work toward goals in the background and check in when they need you. What we've learned about memory and UX from building GTM Agent and Robin.",
+    "evidence": "excerpt",
+    "id": "langchain-langchain-com-blog-what-weve-learned-building-proactive-agents",
+    "retrievedAt": "2026-11-17T19:40:04.916Z"
+  },
+  {
+    "sourceId": "mit-technology-review",
+    "title": "Roundtables: Inside the Quest for Cognitive Immortality",
+    "url": "https://www.technologyreview.com/2026/11/17/1148049/roundtables-inside-the-quest-for-cognitive-immortality/",
+    "publishedAt": "Tue, 17 Nov 2026 18:46:47 +0000",
+    "author": "MIT Technology Review",
+    "excerpt": "Listen to the session or watch below In an effort to reach an elusive continuity of the self, some far-thinking technologists are working on ways to keep your brain going—even beyond death. Science editor Mary Beth Griggs and senior editor for biomedicine Antonio Regalado explore possible paths to keep your mind going, including gradual brain…",
+    "evidence": "excerpt",
+    "id": "mit-technology-review-technologyreview-com-2026-11-17-1148049-roundtables-inside-th-1lzvr3",
+    "retrievedAt": "2026-11-17T19:40:04.916Z"
+  },
+  {
+    "sourceId": "mit-technology-review",
+    "title": "Hydropower hit record lows in the US Southwest this summer",
+    "url": "https://www.technologyreview.com/2026/11/17/1148742/hydropower-drought-colorado-river/",
+    "publishedAt": "Tue, 17 Nov 2026 17:52:10 +0000",
+    "author": "Casey Crownhart",
+    "excerpt": "The US Southwest generated 28% less electricity via hydropower between April and August than the 10-year average, according to new data from the US Energy Information Administration. Most hydropower plants in the US rely on dams to hold back water, creating reservoirs. The water can be released through turbines, generating electricity on demand. But an…",
+    "evidence": "excerpt",
+    "id": "mit-technology-review-technologyreview-com-2026-11-17-1148742-hydropower-drought-co-tebtyb",
+    "retrievedAt": "2026-11-17T19:40:04.916Z"
+  },
+  {
+    "sourceId": "mit-technology-review",
+    "title": "Research Reports",
+    "url": "https://www.technologyreview.com/2026/11/17/1148203/research-reports/",
+    "publishedAt": "Tue, 17 Nov 2026 14:39:46 +0000",
+    "author": "MIT Technology Review",
+    "excerpt": "To access a report, click on the corresponding image below.",
+    "evidence": "excerpt",
+    "id": "mit-technology-review-technologyreview-com-2026-11-17-1148203-research-reports",
+    "retrievedAt": "2026-11-17T19:40:04.916Z"
+  },
+  {
+    "sourceId": "mit-technology-review",
+    "title": "The Download: Jensen Huang’s open-source dilemma and cognitive immortality",
+    "url": "https://www.technologyreview.com/2026/11/17/1148679/the-download-jensen-huang-open-source-ai-cognitive-immortality/",
+    "publishedAt": "Tue, 17 Nov 2026 13:10:00 +0000",
+    "author": "Thomas Macaulay",
+    "excerpt": "This is today’s edition of The Download, our weekday newsletter that provides a daily dose of what’s going on in the world of technology. The open-source movement wants Jensen Huang back A petition to reinstate Jensen Huang as Nvidia CEO has attracted more than 115,000 signatures, including Elon Musk, but comb through the names, and…",
+    "evidence": "excerpt",
+    "id": "mit-technology-review-technologyreview-com-2026-11-17-1148679-the-download-jensen-h-e8gl4j",
+    "retrievedAt": "2026-11-17T19:40:04.916Z"
   }
 ]

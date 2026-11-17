@@ -7,7 +7,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z",
+    "checkedAt": "2026-11-17T19:40:04.916Z",
     "error": "HTTP 404"
   },
   {
@@ -17,8 +17,8 @@
     "ok": true,
     "items": 40,
     "kept": 40,
-    "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z"
+    "added": 2,
+    "checkedAt": "2026-11-17T19:40:04.916Z"
   },
   {
     "sourceId": "ux-collective",
@@ -28,7 +28,7 @@
     "items": 10,
     "kept": 10,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z"
+    "checkedAt": "2026-11-17T19:40:04.916Z"
   },
   {
     "sourceId": "ux-planet",
@@ -37,8 +37,8 @@
     "ok": true,
     "items": 10,
     "kept": 10,
-    "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z"
+    "added": 1,
+    "checkedAt": "2026-11-17T19:40:04.916Z"
   },
   {
     "sourceId": "alistapart",
@@ -48,7 +48,7 @@
     "items": 20,
     "kept": 20,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z"
+    "checkedAt": "2026-11-17T19:40:04.916Z"
   },
   {
     "sourceId": "baymard",
@@ -58,7 +58,7 @@
     "items": 50,
     "kept": 50,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z"
+    "checkedAt": "2026-11-17T19:40:04.916Z"
   },
   {
     "sourceId": "uxmatters",
@@ -68,7 +68,7 @@
     "items": 10,
     "kept": 10,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z"
+    "checkedAt": "2026-11-17T19:40:04.916Z"
   },
   {
     "sourceId": "pair",
@@ -78,7 +78,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z",
+    "checkedAt": "2026-11-17T19:40:04.916Z",
     "error": "HTTP 404"
   },
   {
@@ -89,7 +89,7 @@
     "items": 11,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z"
+    "checkedAt": "2026-11-17T19:40:04.916Z"
   },
   {
     "sourceId": "anthropic",
@@ -99,7 +99,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z",
+    "checkedAt": "2026-11-17T19:40:04.916Z",
     "error": "HTTP 404"
   },
   {
@@ -109,8 +109,8 @@
     "ok": true,
     "items": 20,
     "kept": 19,
-    "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z"
+    "added": 1,
+    "checkedAt": "2026-11-17T19:40:04.916Z"
   },
   {
     "sourceId": "amazon-science",
@@ -120,7 +120,7 @@
     "items": 25,
     "kept": 25,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z"
+    "checkedAt": "2026-11-17T19:40:04.916Z"
   },
   {
     "sourceId": "shumin",
@@ -130,7 +130,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z",
+    "checkedAt": "2026-11-17T19:40:04.916Z",
     "error": "HTTP 404"
   },
   {
@@ -141,7 +141,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z",
+    "checkedAt": "2026-11-17T19:40:04.916Z",
     "error": "HTTP 404"
   },
   {
@@ -152,7 +152,7 @@
     "items": 778,
     "kept": 773,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z"
+    "checkedAt": "2026-11-17T19:40:04.916Z"
   },
   {
     "sourceId": "stripe",
@@ -162,18 +162,17 @@
     "items": 10,
     "kept": 10,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z"
+    "checkedAt": "2026-11-17T19:40:04.916Z"
   },
   {
     "sourceId": "linear",
-    "method": "feed",
-    "url": "https://linear.app/atom.xml",
-    "ok": false,
-    "items": 0,
-    "kept": 0,
+    "method": "rss",
+    "url": "https://linear.app/rss/now.xml",
+    "ok": true,
+    "items": 65,
+    "kept": 65,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z",
-    "error": "Response was not RSS or Atom."
+    "checkedAt": "2026-11-17T19:40:04.916Z"
   },
   {
     "sourceId": "bradfrost",
@@ -183,7 +182,7 @@
     "items": 20,
     "kept": 20,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z"
+    "checkedAt": "2026-11-17T19:40:04.916Z"
   },
   {
     "sourceId": "lukew",
@@ -193,7 +192,7 @@
     "items": 15,
     "kept": 15,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z"
+    "checkedAt": "2026-11-17T19:40:04.916Z"
   },
   {
     "sourceId": "intercom",
@@ -203,7 +202,7 @@
     "items": 20,
     "kept": 19,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z"
+    "checkedAt": "2026-11-17T19:40:04.916Z"
   },
   {
     "sourceId": "julie-zhuo",
@@ -213,7 +212,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z",
+    "checkedAt": "2026-11-17T19:40:04.916Z",
     "error": "HTTP 403"
   },
   {
@@ -223,8 +222,8 @@
     "ok": true,
     "items": 100,
     "kept": 100,
-    "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z"
+    "added": 2,
+    "checkedAt": "2026-11-17T19:40:04.916Z"
   },
   {
     "sourceId": "measuringu",
@@ -234,7 +233,7 @@
     "items": 10,
     "kept": 10,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z"
+    "checkedAt": "2026-11-17T19:40:04.916Z"
   },
   {
     "sourceId": "ixdf",
@@ -244,7 +243,7 @@
     "items": 20,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z"
+    "checkedAt": "2026-11-17T19:40:04.916Z"
   },
   {
     "sourceId": "usabilitygeek",
@@ -254,7 +253,7 @@
     "items": 10,
     "kept": 10,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z"
+    "checkedAt": "2026-11-17T19:40:04.916Z"
   },
   {
     "sourceId": "dovetail",
@@ -264,7 +263,7 @@
     "items": 104,
     "kept": 103,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z"
+    "checkedAt": "2026-11-17T19:40:04.916Z"
   },
   {
     "sourceId": "usertesting",
@@ -274,7 +273,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z"
+    "checkedAt": "2026-11-17T19:40:04.916Z"
   },
   {
     "sourceId": "user-interviews",
@@ -284,7 +283,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z",
+    "checkedAt": "2026-11-17T19:40:04.916Z",
     "error": "HTTP 500"
   },
   {
@@ -295,7 +294,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z",
+    "checkedAt": "2026-11-17T19:40:04.916Z",
     "error": "HTTP 404"
   },
   {
@@ -306,7 +305,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z",
+    "checkedAt": "2026-11-17T19:40:04.916Z",
     "error": "HTTP 403"
   },
   {
@@ -317,7 +316,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z",
+    "checkedAt": "2026-11-17T19:40:04.916Z",
     "error": "HTTP 404"
   },
   {
@@ -328,7 +327,7 @@
     "items": 10,
     "kept": 10,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z"
+    "checkedAt": "2026-11-17T19:40:04.916Z"
   },
   {
     "sourceId": "carbon",
@@ -338,7 +337,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z",
+    "checkedAt": "2026-11-17T19:40:04.916Z",
     "error": "HTTP 404"
   },
   {
@@ -349,7 +348,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z",
+    "checkedAt": "2026-11-17T19:40:04.916Z",
     "error": "HTTP 404"
   },
   {
@@ -360,7 +359,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z",
+    "checkedAt": "2026-11-17T19:40:04.916Z",
     "error": "Response was not RSS or Atom."
   },
   {
@@ -371,7 +370,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z",
+    "checkedAt": "2026-11-17T19:40:04.916Z",
     "error": "HTTP 404"
   },
   {
@@ -382,7 +381,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z",
+    "checkedAt": "2026-11-17T19:40:04.916Z",
     "error": "HTTP 404"
   },
   {
@@ -393,7 +392,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z",
+    "checkedAt": "2026-11-17T19:40:04.916Z",
     "error": "HTTP 404"
   },
   {
@@ -404,7 +403,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z",
+    "checkedAt": "2026-11-17T19:40:04.916Z",
     "error": "HTTP 404"
   },
   {
@@ -415,7 +414,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z",
+    "checkedAt": "2026-11-17T19:40:04.916Z",
     "error": "HTTP 404"
   },
   {
@@ -426,7 +425,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z",
+    "checkedAt": "2026-11-17T19:40:04.916Z",
     "error": "HTTP 404"
   },
   {
@@ -437,7 +436,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z",
+    "checkedAt": "2026-11-17T19:40:04.916Z",
     "error": "Response was not RSS or Atom."
   },
   {
@@ -448,7 +447,7 @@
     "items": 30,
     "kept": 30,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z"
+    "checkedAt": "2026-11-17T19:40:04.916Z"
   },
   {
     "sourceId": "josh-comeau",
@@ -458,7 +457,7 @@
     "items": 89,
     "kept": 87,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z"
+    "checkedAt": "2026-11-17T19:40:04.916Z"
   },
   {
     "sourceId": "codrops",
@@ -468,7 +467,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z",
+    "checkedAt": "2026-11-17T19:40:04.916Z",
     "error": "HTTP 404"
   },
   {
@@ -479,7 +478,7 @@
     "items": 15,
     "kept": 15,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z"
+    "checkedAt": "2026-11-17T19:40:04.916Z"
   },
   {
     "sourceId": "awwwards",
@@ -488,8 +487,8 @@
     "ok": true,
     "items": 30,
     "kept": 28,
-    "added": 1,
-    "checkedAt": "2026-11-17T10:18:50.480Z"
+    "added": 0,
+    "checkedAt": "2026-11-17T19:40:04.916Z"
   },
   {
     "sourceId": "mobbin",
@@ -499,7 +498,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z",
+    "checkedAt": "2026-11-17T19:40:04.916Z",
     "error": "HTTP 404"
   },
   {
@@ -510,7 +509,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z",
+    "checkedAt": "2026-11-17T19:40:04.916Z",
     "error": "HTTP 403"
   },
   {
@@ -521,7 +520,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z",
+    "checkedAt": "2026-11-17T19:40:04.916Z",
     "error": "HTTP 404"
   },
   {
@@ -531,8 +530,8 @@
     "ok": true,
     "items": 142,
     "kept": 141,
-    "added": 1,
-    "checkedAt": "2026-11-17T10:18:50.480Z"
+    "added": 0,
+    "checkedAt": "2026-11-17T19:40:04.916Z"
   },
   {
     "sourceId": "lenny",
@@ -541,8 +540,8 @@
     "ok": true,
     "items": 20,
     "kept": 20,
-    "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z"
+    "added": 1,
+    "checkedAt": "2026-11-17T19:40:04.916Z"
   },
   {
     "sourceId": "product-talk",
@@ -551,8 +550,8 @@
     "ok": true,
     "items": 15,
     "kept": 15,
-    "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z"
+    "added": 1,
+    "checkedAt": "2026-11-17T19:40:04.916Z"
   },
   {
     "sourceId": "svpg",
@@ -562,7 +561,7 @@
     "items": 15,
     "kept": 15,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z"
+    "checkedAt": "2026-11-17T19:40:04.916Z"
   },
   {
     "sourceId": "mind-the-product",
@@ -572,7 +571,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z",
+    "checkedAt": "2026-11-17T19:40:04.916Z",
     "error": "HTTP 404"
   },
   {
@@ -583,7 +582,7 @@
     "items": 15,
     "kept": 15,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z"
+    "checkedAt": "2026-11-17T19:40:04.916Z"
   },
   {
     "sourceId": "sdn",
@@ -593,7 +592,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z",
+    "checkedAt": "2026-11-17T19:40:04.916Z",
     "error": "HTTP 404"
   },
   {
@@ -604,7 +603,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z",
+    "checkedAt": "2026-11-17T19:40:04.916Z",
     "error": "HTTP 404"
   },
   {
@@ -615,7 +614,7 @@
     "items": 10,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z"
+    "checkedAt": "2026-11-17T19:40:04.916Z"
   },
   {
     "sourceId": "thoughtworks",
@@ -625,7 +624,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z",
+    "checkedAt": "2026-11-17T19:40:04.916Z",
     "error": "HTTP 404"
   },
   {
@@ -636,7 +635,7 @@
     "items": 10,
     "kept": 10,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z"
+    "checkedAt": "2026-11-17T19:40:04.916Z"
   },
   {
     "sourceId": "anthropic-engineering",
@@ -646,7 +645,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z",
+    "checkedAt": "2026-11-17T19:40:04.916Z",
     "error": "HTTP 404"
   },
   {
@@ -657,7 +656,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z",
+    "checkedAt": "2026-11-17T19:40:04.916Z",
     "error": "HTTP 403"
   },
   {
@@ -668,7 +667,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z",
+    "checkedAt": "2026-11-17T19:40:04.916Z",
     "error": "HTTP 403"
   },
   {
@@ -679,7 +678,7 @@
     "items": 135,
     "kept": 32,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z"
+    "checkedAt": "2026-11-17T19:40:04.916Z"
   },
   {
     "sourceId": "deepmind",
@@ -689,7 +688,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z",
+    "checkedAt": "2026-11-17T19:40:04.916Z",
     "error": "HTTP 404"
   },
   {
@@ -699,8 +698,8 @@
     "ok": true,
     "items": 10,
     "kept": 10,
-    "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z"
+    "added": 1,
+    "checkedAt": "2026-11-17T19:40:04.916Z"
   },
   {
     "sourceId": "huggingface",
@@ -710,7 +709,7 @@
     "items": 908,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z"
+    "checkedAt": "2026-11-17T19:40:04.916Z"
   },
   {
     "sourceId": "langchain",
@@ -719,8 +718,8 @@
     "ok": true,
     "items": 99,
     "kept": 99,
-    "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z"
+    "added": 2,
+    "checkedAt": "2026-11-17T19:40:04.916Z"
   },
   {
     "sourceId": "llamaindex",
@@ -730,7 +729,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z",
+    "checkedAt": "2026-11-17T19:40:04.916Z",
     "error": "HTTP 404"
   },
   {
@@ -741,7 +740,7 @@
     "items": 422,
     "kept": 421,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z"
+    "checkedAt": "2026-11-17T19:40:04.916Z"
   },
   {
     "sourceId": "botpress",
@@ -751,7 +750,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z",
+    "checkedAt": "2026-11-17T19:40:04.916Z",
     "error": "HTTP 404"
   },
   {
@@ -762,7 +761,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z",
+    "checkedAt": "2026-11-17T19:40:04.916Z",
     "error": "HTTP 404"
   },
   {
@@ -772,8 +771,8 @@
     "ok": true,
     "items": 10,
     "kept": 10,
-    "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z"
+    "added": 4,
+    "checkedAt": "2026-11-17T19:40:04.916Z"
   },
   {
     "sourceId": "content-design-london",
@@ -783,7 +782,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z",
+    "checkedAt": "2026-11-17T19:40:04.916Z",
     "error": "HTTP 404"
   },
   {
@@ -794,7 +793,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z",
+    "checkedAt": "2026-11-17T19:40:04.916Z",
     "error": "HTTP 404"
   },
   {
@@ -805,7 +804,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z",
+    "checkedAt": "2026-11-17T19:40:04.916Z",
     "error": "HTTP 404"
   },
   {
@@ -816,7 +815,7 @@
     "items": 9,
     "kept": 8,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z"
+    "checkedAt": "2026-11-17T19:40:04.916Z"
   },
   {
     "sourceId": "google-style",
@@ -826,7 +825,7 @@
     "items": 0,
     "kept": 0,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z",
+    "checkedAt": "2026-11-17T19:40:04.916Z",
     "error": "HTTP 404"
   },
   {
@@ -837,7 +836,7 @@
     "items": 10,
     "kept": 10,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z"
+    "checkedAt": "2026-11-17T19:40:04.916Z"
   },
   {
     "sourceId": "webaim",
@@ -847,7 +846,7 @@
     "items": 10,
     "kept": 10,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z"
+    "checkedAt": "2026-11-17T19:40:04.916Z"
   },
   {
     "sourceId": "a11y-project",
@@ -857,7 +856,7 @@
     "items": 65,
     "kept": 60,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z"
+    "checkedAt": "2026-11-17T19:40:04.916Z"
   },
   {
     "sourceId": "deque",
@@ -867,7 +866,7 @@
     "items": 10,
     "kept": 10,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z"
+    "checkedAt": "2026-11-17T19:40:04.916Z"
   },
   {
     "sourceId": "fable",
@@ -877,6 +876,6 @@
     "items": 10,
     "kept": 10,
     "added": 0,
-    "checkedAt": "2026-11-17T10:18:50.480Z"
+    "checkedAt": "2026-11-17T19:40:04.916Z"
   }
 ]
