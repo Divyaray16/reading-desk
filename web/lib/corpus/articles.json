@@ -28246,5 +28246,60 @@
     "evidence": "excerpt",
     "id": "mit-technology-review-technologyreview-com-2026-11-17-1148679-the-download-jensen-h-e8gl4j",
     "retrievedAt": "2026-11-17T19:40:04.916Z"
+  },
+  {
+    "sourceId": "ux-collective",
+    "title": "What is a researcher’s worth?",
+    "url": "https://uxdesign.cc/what-is-a-researchers-worth-ea14c95c6d12?source=rss----138adf9c44c---4",
+    "publishedAt": "Tue, 17 Nov 2026 23:26:24 GMT",
+    "author": "Matt Rafalow, PhD",
+    "excerpt": "Why the debate over research isn’t a technology story – and why effortless AI makes human friction our scarcest asset. Image created by author, with Midjourney. We’re no stranger to this question. For many years, research practitioners have talked with one another about how to “mature” teams so that they understand the value of our work in bringing success to their ventures. Or when we share the results of our research, we are peppered with questions about whether the findings are real, whether the methods are too weak or lack representativeness, or whether our subjects are even telling the truth when they express to us what they need. But it’s not just research practitioners. Researchers in academia have been stripped of the funding they need to advance science. Academic departments have shuttered, and scholars’ voices have been dismissed as part of major civic scientific efforts, like",
+    "evidence": "excerpt",
+    "id": "ux-collective-uxdesign-cc-what-is-a-researchers-worth-ea14c95c6d12-source-rss-138ad-92t8vz",
+    "retrievedAt": "2026-11-18T02:11:21.895Z"
+  },
+  {
+    "sourceId": "ux-collective",
+    "title": "Everyone knows sparkles mean AI. Use them to make design audits easier",
+    "url": "https://uxdesign.cc/everyone-knows-sparkles-mean-ai-use-them-to-make-design-audits-easier-bdacc76cef11?source=rss----138adf9c44c---4",
+    "publishedAt": "Tue, 17 Nov 2026 23:25:21 GMT",
+    "author": "Kai Wong",
+    "excerpt": "How to decipher your PM’s AI-generated mockup without losing hours Continue reading on UX Collective »",
+    "evidence": "excerpt",
+    "id": "ux-collective-uxdesign-cc-everyone-knows-sparkles-mean-ai-use-them-to-make-design-a-5n7stc",
+    "retrievedAt": "2026-11-18T02:11:21.895Z"
+  },
+  {
+    "sourceId": "ux-planet",
+    "title": "Anthropic Just Released New Rules of Claude Code",
+    "url": "https://uxplanet.org/anthropic-just-released-new-rules-of-claude-code-d3adc96d4867?source=rss----819cc2aaeee0---4",
+    "publishedAt": "Tue, 17 Nov 2026 21:01:18 GMT",
+    "author": "Nick Babich",
+    "excerpt": "Things move fast in the AI space, and what we considered best practices for Claude Code just a few months ago may already be outdated with… Continue reading on UX Planet »",
+    "evidence": "excerpt",
+    "id": "ux-planet-uxplanet-org-anthropic-just-released-new-rules-of-claude-code-d3adc96d486-xw5fzo",
+    "retrievedAt": "2026-11-18T02:11:21.895Z"
+  },
+  {
+    "sourceId": "measuringu",
+    "title": "Do AI and Human Moderators Uncover the Same Facts?",
+    "url": "https://measuringu.com/do-ai-and-human-moderators-uncover-the-same-facts/",
+    "publishedAt": "Tue, 17 Nov 2026 23:46:31 +0000",
+    "author": "Jeff Sauro, PhD • Lucas Plabst, PhD • Eva Sundberg, MPH • Jim Lewis, PhD",
+    "excerpt": "With participant time being so precious, you want to be sure you get the most out of each session. How do you know if a moderator missed something? It’s usually hard to know what was missed, which makes measuring the effectiveness of moderators (both human and AI) difficult. We’ve made a first pass at measuring […]",
+    "evidence": "excerpt",
+    "id": "measuringu-measuringu-com-do-ai-and-human-moderators-uncover-the-same-facts",
+    "retrievedAt": "2026-11-18T02:11:21.895Z"
+  },
+  {
+    "sourceId": "langchain",
+    "title": "How to Choose the Right Sandbox for AI Agents",
+    "url": "https://www.langchain.com/blog/how-to-choose-the-right-sandbox-for-your-agent",
+    "publishedAt": "Wed, 18 Nov 2026 00:46:14 GMT",
+    "author": "",
+    "excerpt": "Learn how to choose a secure sandbox for AI agents, with guidance on filesystem isolation, network access, resource limits, and microVMs.",
+    "evidence": "excerpt",
+    "id": "langchain-langchain-com-blog-how-to-choose-the-right-sandbox-for-your-agent",
+    "retrievedAt": "2026-11-18T02:11:21.895Z"
   }
 ]
