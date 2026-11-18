@@ -28301,5 +28301,27 @@
     "evidence": "excerpt",
     "id": "langchain-langchain-com-blog-how-to-choose-the-right-sandbox-for-your-agent",
     "retrievedAt": "2026-11-18T02:11:21.895Z"
+  },
+  {
+    "sourceId": "awwwards",
+    "title": "PSP Production",
+    "url": "https://www.awwwards.com/sites/psp-production",
+    "publishedAt": "Wed, 18 Nov 2026 00:00:00 +0000",
+    "author": "",
+    "excerpt": "PSP Production is a senior-led film & commercial studio in Portugal & Spain with 25+ years of experience and a portfolio of Porsche, BMW, Netflix's Money Heist & FBI International.",
+    "evidence": "excerpt",
+    "id": "awwwards-awwwards-com-sites-psp-production",
+    "retrievedAt": "2026-11-18T11:15:13.266Z"
+  },
+  {
+    "sourceId": "mit-technology-review",
+    "title": "This smell startup says its AI nose is as good as a human’s",
+    "url": "https://www.technologyreview.com/2026/11/18/1148816/smell-startup-osmo-ai-nose-good-as-humans/",
+    "publishedAt": "Wed, 18 Nov 2026 10:20:30 +0000",
+    "author": "Amit Katwala",
+    "excerpt": "In a lab near Newark Airport in New Jersey, a team of around 30 experienced human sniffers are slowly working their way through every odor on Earth. Their careful notes—“nutty,” “peachy,” “marine”—are cross-referenced with a chemical analysis to create a rich set of training data for what AI startup Osmo calls the world’s first foundation…",
+    "evidence": "excerpt",
+    "id": "mit-technology-review-technologyreview-com-2026-11-18-1148816-smell-startup-osmo-ai-le062d",
+    "retrievedAt": "2026-11-18T11:15:13.266Z"
   }
 ]
