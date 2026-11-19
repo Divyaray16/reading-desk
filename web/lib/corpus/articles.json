@@ -28532,5 +28532,137 @@
     "evidence": "excerpt",
     "id": "mit-technology-review-technologyreview-com-2026-11-19-1148922-sila-panasonic-battery-deal",
     "retrievedAt": "2026-11-19T11:13:37.635Z"
+  },
+  {
+    "sourceId": "ux-collective",
+    "title": "Send the Firefighters to the Fires",
+    "url": "https://uxdesign.cc/send-the-firefighters-to-the-fires-6cd7b1893ae7?source=rss----138adf9c44c---4",
+    "publishedAt": "Thu, 19 Nov 2026 12:54:05 GMT",
+    "author": "Francis Wu",
+    "excerpt": "Send the firefighters to the fires Enterprise software keeps forgetting a century of good advice about what deserves our attention. House fire in New Zealand neighborhood If a user’s job is to fix what’s broken, the screen should show what’s broken first. Sounds pretty obvious. It’s also not new. Frederick Taylor argued for it in 1903. Xerox PARC designed for it in the ’90s. Industrial control rooms wrote it into a standard. Yet enterprise software keeps forgetting this. Imagine a fire department that dispatches trucks in the order houses were built. Or by date last renovated. Every house gets a visit eventually, and some of them happen to be on fire. That’s pretty absurd, right? Yet I’ve seen the equivalent more times than I care to remember. A lot of enterprise work boils down to one job: here’s a collection of things, some of them have problems, go fix the problems. Devices out of",
+    "evidence": "excerpt",
+    "id": "ux-collective-uxdesign-cc-send-the-firefighters-to-the-fires-6cd7b1893ae7-source-rs-h7mf1k",
+    "retrievedAt": "2026-11-19T20:04:42.768Z"
+  },
+  {
+    "sourceId": "ux-planet",
+    "title": "How to Use Claude Code Effectively and Save Tokens",
+    "url": "https://uxplanet.org/how-to-use-claude-code-effectively-and-save-tokens-d0368bc72a18?source=rss----819cc2aaeee0---4",
+    "publishedAt": "Thu, 19 Nov 2026 13:54:47 GMT",
+    "author": "Nick Babich",
+    "excerpt": "Claude Code can consume a surprising number of tokens, especially during long sessions, complex tasks, and workflows involving multiple AI… Continue reading on UX Planet »",
+    "evidence": "excerpt",
+    "id": "ux-planet-uxplanet-org-how-to-use-claude-code-effectively-and-save-tokens-d0368bc72-dgruye",
+    "retrievedAt": "2026-11-19T20:04:42.768Z"
+  },
+  {
+    "sourceId": "bradfrost",
+    "title": "Manuela Costa · Design Systems & AI",
+    "url": "https://bradfrost.com/links/post/manuela-costa-design-systems-ai/",
+    "publishedAt": "2026-11-19T00:00:00Z",
+    "author": "",
+    "excerpt": "<p><a href=\"https://www.manulcosta.com/\">Manuela Costa's</a> website is such fun!</p>",
+    "evidence": "excerpt",
+    "id": "bradfrost-bradfrost-com-links-post-manuela-costa-design-systems-ai",
+    "retrievedAt": "2026-11-19T20:04:42.768Z"
+  },
+  {
+    "sourceId": "lukew",
+    "title": "Design by Playground",
+    "url": "https://www.lukew.com/ff/2172/design-by-playground",
+    "publishedAt": "Thu, 19 Nov 2026 14:00:00 +0000",
+    "author": "info@lukew.com (Luke Wroblewski)",
+    "excerpt": "For all the years there's been software designers, there's been a dominant software design tool: Photoshop, Sketch, Figma. Increasingly though, designers are making their own highly specific (and disposable) design tools using AI coding agents. Let's call it \"design by playground.\" So what's a playground? If you've been a front end developer, a playground isn't a new concept. Effectively, you create a tool that allows you to manipulate variables and see their outcomes on an interface in real time. You can use a playground to see a bunch of variants at once (long text, short text, no text), play with options (big text, bold text, red text), and actually interact with designs. The advantages over static mockups are obvious, no matter how good you are at Figma. A playground can pull in real content and data, so long names, missing images, and other edge cases get thought about upfront",
+    "evidence": "excerpt",
+    "id": "lukew-lukew-com-ff-2172-design-by-playground",
+    "retrievedAt": "2026-11-19T20:04:42.768Z"
+  },
+  {
+    "sourceId": "nvidia",
+    "title": "Enabling Real-Time AI for Scientific Instruments with GPU-Native Data Acquisition",
+    "url": "https://developer.nvidia.com/blog/enabling-real-time-ai-for-scientific-instruments-with-gpu-native-data-acquisition/",
+    "publishedAt": "2026-11-19T17:00:00Z",
+    "author": "Cara Laasch",
+    "excerpt": "In science and industry, analyzing sensor measurements in real time can enable AI to adjust processes, guide experiments, and search for better operating...",
+    "evidence": "excerpt",
+    "id": "nvidia-developer-nvidia-com-blog-enabling-real-time-ai-for-scientific-instruments-w-rne1ad",
+    "retrievedAt": "2026-11-19T20:04:42.768Z"
+  },
+  {
+    "sourceId": "nvidia",
+    "title": "Build Tool-Calling Parsers in Rust with AI Agents",
+    "url": "https://developer.nvidia.com/blog/build-tool-calling-parsers-in-rust-with-ai-agents/",
+    "publishedAt": "2026-11-19T16:30:46Z",
+    "author": "Keiven Chang",
+    "excerpt": "A tool call can arrive in pieces, an argument can be cut short, or model-specific markup can leak into the answer. A frontend parser turns that output, received...",
+    "evidence": "excerpt",
+    "id": "nvidia-developer-nvidia-com-blog-build-tool-calling-parsers-in-rust-with-ai-agents",
+    "retrievedAt": "2026-11-19T20:04:42.768Z"
+  },
+  {
+    "sourceId": "css-tricks",
+    "title": "scroll-state()",
+    "url": "https://css-tricks.com/almanac/functions/s/scroll-state/",
+    "publishedAt": "Thu, 19 Nov 2026 14:57:54 +0000",
+    "author": "John Rhea",
+    "excerpt": "The CSS scroll-state() query, surprisingly, has nothing to do with whether you’re doom-scrolling in a state of existential dread. It does, however, allow you to change the CSS used based on scrolling behavior. scroll-state() originally handwritten and published with love on CSS-Tricks . You should really get the newsletter as well.",
+    "evidence": "excerpt",
+    "id": "css-tricks-css-tricks-com-almanac-functions-s-scroll-state",
+    "retrievedAt": "2026-11-19T20:04:42.768Z"
+  },
+  {
+    "sourceId": "langchain",
+    "title": "LangSmith Tool Gateway: Secure, governed tool use for agents",
+    "url": "https://www.langchain.com/blog/langsmith-tool-gateway",
+    "publishedAt": "Thu, 19 Nov 2026 15:51:28 GMT",
+    "author": "",
+    "excerpt": "LangSmith Tool Gateway, now in Public Beta, handles credentials, identity, and access for every agent tool call, with policies, approvals, and traces.",
+    "evidence": "excerpt",
+    "id": "langchain-langchain-com-blog-langsmith-tool-gateway",
+    "retrievedAt": "2026-11-19T20:04:42.768Z"
+  },
+  {
+    "sourceId": "voiceflow",
+    "title": "Customer Portal vs AI Agent: The Real CX Front Door",
+    "url": "https://www.voiceflow.com/blog/customer-portal/",
+    "publishedAt": "Thu, 19 Nov 2026 00:00:00 GMT",
+    "author": "",
+    "excerpt": "A customer portal organizes self-service info; an AI agent front door is what actually resolves requests and lifts deflection past the plateau.",
+    "evidence": "excerpt",
+    "id": "voiceflow-voiceflow-com-blog-customer-portal",
+    "retrievedAt": "2026-11-19T20:04:42.768Z"
+  },
+  {
+    "sourceId": "voiceflow",
+    "title": "Voice of the Customer: Score Transcripts, Not Surveys",
+    "url": "https://www.voiceflow.com/blog/voice-of-the-customer/",
+    "publishedAt": "Wed, 18 Nov 2026 00:00:00 GMT",
+    "author": "",
+    "excerpt": "Turn every support transcript into voice-of-customer data, with a phased program that beats slow, biased surveys.",
+    "evidence": "excerpt",
+    "id": "voiceflow-voiceflow-com-blog-voice-of-the-customer",
+    "retrievedAt": "2026-11-19T20:04:42.768Z"
+  },
+  {
+    "sourceId": "mit-technology-review",
+    "title": "The Download: a living liver, a billion-dollar battery deal, and AI hype",
+    "url": "https://www.technologyreview.com/2026/11/19/1148979/the-download-liver-kept-alive-sila-battery-deal-ai-hype/",
+    "publishedAt": "Thu, 19 Nov 2026 13:10:00 +0000",
+    "author": "Thomas Macaulay",
+    "excerpt": "This is today’s edition of The Download, our weekday newsletter that provides a daily dose of what’s going on in the world of technology. A human liver has been kept alive outside the body for a record seven weeks Researchers in Australia claim they’ve kept a human liver alive on life support outside the body…",
+    "evidence": "excerpt",
+    "id": "mit-technology-review-technologyreview-com-2026-11-19-1148979-the-download-liver-ke-3irnz0",
+    "retrievedAt": "2026-11-19T20:04:42.768Z"
+  },
+  {
+    "sourceId": "mit-technology-review",
+    "title": "A human liver has been kept alive outside the body for a record seven weeks",
+    "url": "https://www.technologyreview.com/2026/11/19/1148934/a-human-liver-has-been-kept-alive-outside-the-body-for-seven-weeks-setting-a-record/",
+    "publishedAt": "Thu, 19 Nov 2026 12:00:00 +0000",
+    "author": "Antonio Regalado",
+    "excerpt": "Researchers in Australia claim they’ve kept a human liver alive, on life support, outside the body for seven weeks, opening up speculative new possibilities in biomedical engineering. The feat, whose details are pending publication, was carried out in Sydney after a team led by surgeon and inventor Carlo Pulitano connected a donated liver to a…",
+    "evidence": "excerpt",
+    "id": "mit-technology-review-technologyreview-com-2026-11-19-1148934-a-human-liver-has-bee-gq1pz5",
+    "retrievedAt": "2026-11-19T20:04:42.768Z"
   }
 ]
