@@ -28477,5 +28477,60 @@
     "evidence": "excerpt",
     "id": "figma-figma-com-blog-source-material-chase-rutherford",
     "retrievedAt": "2026-11-19T02:20:05.964Z"
+  },
+  {
+    "sourceId": "awwwards",
+    "title": "Carter Ogunsola",
+    "url": "https://www.awwwards.com/sites/carter-ogunsola",
+    "publishedAt": "Thu, 19 Nov 2026 00:00:00 +0000",
+    "author": "",
+    "excerpt": "My portfolio, built like a print shop. A two-wheel press for projects, a lanyard badge, a typed letter and a lab.",
+    "evidence": "excerpt",
+    "id": "awwwards-awwwards-com-sites-carter-ogunsola",
+    "retrievedAt": "2026-11-19T11:13:37.635Z"
+  },
+  {
+    "sourceId": "langchain",
+    "title": "Catch production failures early with LangSmith Alerts",
+    "url": "https://www.langchain.com/blog/langsmith-alerts",
+    "publishedAt": "Wed, 18 Nov 2026 19:33:12 GMT",
+    "author": "",
+    "excerpt": "Set up real‑time notifications on error rates, run latency & feedback scores to spot failures before your customers do.",
+    "evidence": "excerpt",
+    "id": "langchain-langchain-com-blog-langsmith-alerts",
+    "retrievedAt": "2026-11-19T11:13:37.635Z"
+  },
+  {
+    "sourceId": "langchain",
+    "title": "Your coding agent bill doubled. Here’s how to fix it.",
+    "url": "https://www.langchain.com/blog/fix-your-coding-agent-bill",
+    "publishedAt": "Wed, 18 Nov 2026 19:33:12 GMT",
+    "author": "",
+    "excerpt": "Learn why coding agent bills spiral out of control — and how to trace, compare, and govern spend across Claude Code, Cursor, Copilot, and more in one place.",
+    "evidence": "excerpt",
+    "id": "langchain-langchain-com-blog-fix-your-coding-agent-bill",
+    "retrievedAt": "2026-11-19T11:13:37.635Z"
+  },
+  {
+    "sourceId": "langchain",
+    "title": "Announcing Data Annotation Queues",
+    "url": "https://www.langchain.com/blog/announcing-data-annotation-queue",
+    "publishedAt": "Wed, 18 Nov 2026 19:33:12 GMT",
+    "author": "",
+    "excerpt": "Review logs, annotate data, and build datasets with LangSmith's Data Annotation Queues. Improve LLM app performance from prototype to production.",
+    "evidence": "excerpt",
+    "id": "langchain-langchain-com-blog-announcing-data-annotation-queue",
+    "retrievedAt": "2026-11-19T11:13:37.635Z"
+  },
+  {
+    "sourceId": "mit-technology-review",
+    "title": "What a billion-dollar deal says about the US battery market",
+    "url": "https://www.technologyreview.com/2026/11/19/1148922/sila-panasonic-battery-deal/",
+    "publishedAt": "Thu, 19 Nov 2026 11:00:00 +0000",
+    "author": "Casey Crownhart",
+    "excerpt": "After a tough few years littered with some high-profile failures, there’s some positive news for next-generation batteries in the US. Sila just signed an agreement with Panasonic Energy, a global battery manufacturer, to supply silicon-carbon anode material, a possible key to smaller, lighter batteries. It’s a deal that Sila says could be worth more than…",
+    "evidence": "excerpt",
+    "id": "mit-technology-review-technologyreview-com-2026-11-19-1148922-sila-panasonic-battery-deal",
+    "retrievedAt": "2026-11-19T11:13:37.635Z"
   }
 ]
