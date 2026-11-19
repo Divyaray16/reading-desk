@@ -28433,5 +28433,49 @@
     "evidence": "excerpt",
     "id": "mit-technology-review-technologyreview-com-2026-11-18-1148845-the-download-ai-learn-lqsogm",
     "retrievedAt": "2026-11-18T20:05:08.950Z"
+  },
+  {
+    "sourceId": "ux-collective",
+    "title": "If AI works from anywhere, why are we commuting to watch it?",
+    "url": "https://uxdesign.cc/if-ai-works-from-anywhere-why-are-we-commuting-to-watch-it-f903012aaa86?source=rss----138adf9c44c---4",
+    "publishedAt": "Wed, 18 Nov 2026 20:17:39 GMT",
+    "author": "Dan Maccarone",
+    "excerpt": "The collaboration they promised, in practice. Companies say it’s about collaboration. That’s garbage. The reality is a room full of people in headphones, doing alone what they could’ve done at home. The recent post from Alexa von Tobel on LinkedIn. Alexa von Tobel, who runs an early-stage fund and has backed a long list of founders, posted a small, honest question. She hadn’t been pitched a single remote-only company in six months, and she wanted to know if anyone else was seeing it. The replies were a mix. A few pushed back. One said she had landed a remote role just fine and that nobody had to pitch her anything. Another figured the remote crowd was mostly off building their own companies now. The reply that stuck with me came from a CEO, who said being fully remote would be harder, and less fun. It resonated because he is half right. Something real does get lost when everyone is",
+    "evidence": "excerpt",
+    "id": "ux-collective-uxdesign-cc-if-ai-works-from-anywhere-why-are-we-commuting-to-watch-i-bps3f2",
+    "retrievedAt": "2026-11-19T02:20:05.964Z"
+  },
+  {
+    "sourceId": "ux-collective",
+    "title": "Too Claudified",
+    "url": "https://uxdesign.cc/too-claudified-9af067298b2a?source=rss----138adf9c44c---4",
+    "publishedAt": "Wed, 18 Nov 2026 20:17:05 GMT",
+    "author": "Takuma Kakehi",
+    "excerpt": "A client rejected my motion work for looking machine-made. I’d published the diagnosis five months earlier. Continue reading on UX Collective »",
+    "evidence": "excerpt",
+    "id": "ux-collective-uxdesign-cc-too-claudified-9af067298b2a-source-rss-138adf9c44c-4",
+    "retrievedAt": "2026-11-19T02:20:05.964Z"
+  },
+  {
+    "sourceId": "ux-planet",
+    "title": "CLAUDE.md NEW Best Practices",
+    "url": "https://uxplanet.org/claude-md-new-best-practices-c48a1dbd5d5d?source=rss----819cc2aaeee0---4",
+    "publishedAt": "Wed, 18 Nov 2026 20:47:03 GMT",
+    "author": "Nick Babich",
+    "excerpt": "CLAUDE.md is a Markdown file that Claude Code loads every time it works on a project. Before the release of Opus 5.5 and Fable 5.2, this… Continue reading on UX Planet »",
+    "evidence": "excerpt",
+    "id": "ux-planet-uxplanet-org-claude-md-new-best-practices-c48a1dbd5d5d-source-rss-819cc2aaeee0-4",
+    "retrievedAt": "2026-11-19T02:20:05.964Z"
+  },
+  {
+    "sourceId": "figma",
+    "title": "Source material: Creative Director Chase Rutherford on what makes something iconic",
+    "url": "https://www.figma.com/blog/source-material-chase-rutherford/",
+    "publishedAt": "2026-11-18T19:43:00.000Z",
+    "author": "",
+    "excerpt": "From internet ephemera and fashion to found images, objects, and cultural oddities, Chase explores how the things around us can be pulled apart, recontextualized, and turned into something new.",
+    "evidence": "excerpt",
+    "id": "figma-figma-com-blog-source-material-chase-rutherford",
+    "retrievedAt": "2026-11-19T02:20:05.964Z"
   }
 ]
