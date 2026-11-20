@@ -28664,5 +28664,38 @@
     "evidence": "excerpt",
     "id": "mit-technology-review-technologyreview-com-2026-11-19-1148934-a-human-liver-has-bee-gq1pz5",
     "retrievedAt": "2026-11-19T20:04:42.768Z"
+  },
+  {
+    "sourceId": "ux-collective",
+    "title": "Everyone’s got the tools. Not everyone’s got the tricks.",
+    "url": "https://uxdesign.cc/everyones-got-the-tools-not-everyone-s-got-the-tricks-986a5c154924?source=rss----138adf9c44c---4",
+    "publishedAt": "Thu, 19 Nov 2026 21:36:22 GMT",
+    "author": "Raphael Dias",
+    "excerpt": "What skateboarding history can remind designers about tools, repertoire and improvisation. Continue reading on UX Collective »",
+    "evidence": "excerpt",
+    "id": "ux-collective-uxdesign-cc-everyones-got-the-tools-not-everyone-s-got-the-tricks-986-879cej",
+    "retrievedAt": "2026-11-20T02:03:14.921Z"
+  },
+  {
+    "sourceId": "stripe",
+    "title": "Give your agents controlled access to analyze your data and move funds",
+    "url": "https://stripe.com/blog/give-your-agents-controlled-access-to-analyze-your-data-and-move-funds",
+    "publishedAt": "Thu, 19 Nov 2026 00:00:00 +0000",
+    "author": "",
+    "excerpt": "Stripe Treasury now lets agents transfer funds, convert currencies, and pay vendors within limits you set. Give agents the access they need to help run your business, with customizable controls and human approvals.",
+    "evidence": "excerpt",
+    "id": "stripe-stripe-com-blog-give-your-agents-controlled-access-to-analyze-your-data-and-i3jyjz",
+    "retrievedAt": "2026-11-20T02:03:14.921Z"
+  },
+  {
+    "sourceId": "nvidia",
+    "title": "Reducing Rollout Bottlenecks in Reinforcement Learning with NVIDIA Dynamo",
+    "url": "https://developer.nvidia.com/blog/reducing-rollout-bottlenecks-in-reinforcement-learning-with-nvidia-dynamo/",
+    "publishedAt": "2026-11-19T20:28:13Z",
+    "author": "Amr Elmeleegy",
+    "excerpt": "Reinforcement learning (RL) uses rewards to train models to solve problems and complete tasks more successfully. Inference drives this process. Workers generate...",
+    "evidence": "excerpt",
+    "id": "nvidia-developer-nvidia-com-blog-reducing-rollout-bottlenecks-in-reinforcement-lear-a659me",
+    "retrievedAt": "2026-11-20T02:03:14.921Z"
   }
 ]
