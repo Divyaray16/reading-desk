@@ -28697,5 +28697,27 @@
     "evidence": "excerpt",
     "id": "nvidia-developer-nvidia-com-blog-reducing-rollout-bottlenecks-in-reinforcement-lear-a659me",
     "retrievedAt": "2026-11-20T02:03:14.921Z"
+  },
+  {
+    "sourceId": "awwwards",
+    "title": "197 Historias Ilustradas",
+    "url": "https://www.awwwards.com/sites/197-historias-ilustradas",
+    "publishedAt": "Fri, 20 Nov 2026 00:00:00 +0000",
+    "author": "",
+    "excerpt": "A digital space for memory. Extending \"197 historias ilustradas\", stories of citizens who were disappeared by Uruguay's civic-military dictatorship.",
+    "evidence": "excerpt",
+    "id": "awwwards-awwwards-com-sites-197-historias-ilustradas",
+    "retrievedAt": "2026-11-20T10:59:30.885Z"
+  },
+  {
+    "sourceId": "deque",
+    "title": "Axe MCP Server now has a free plan",
+    "url": "https://www.deque.com/blog/axe-mcp-server-now-has-a-free-plan/",
+    "publishedAt": "Mon, 16 Nov 2026 14:02:00 +0000",
+    "author": "Harris Schneiderman",
+    "excerpt": "Deque is thrilled to announce that Axe MCP Server now has a free plan! The Axe MCP Server is a Model Context Protocol (MCP) server that integrates enterprise-grade accessibility testing directly into your development workflow. The post Axe MCP Server now has a free plan appeared first on Deque .",
+    "evidence": "excerpt",
+    "id": "deque-deque-com-blog-axe-mcp-server-now-has-a-free-plan",
+    "retrievedAt": "2026-11-20T10:59:30.885Z"
   }
 ]
