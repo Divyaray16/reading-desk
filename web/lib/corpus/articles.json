@@ -28719,5 +28719,71 @@
     "evidence": "excerpt",
     "id": "deque-deque-com-blog-axe-mcp-server-now-has-a-free-plan",
     "retrievedAt": "2026-11-20T10:59:30.885Z"
+  },
+  {
+    "sourceId": "ux-planet",
+    "title": "This Experimental Feature Is Claude Code’s BIGGEST Recent Improvement",
+    "url": "https://uxplanet.org/this-experimental-feature-is-claude-codes-biggest-recent-improvement-884219219b43?source=rss----819cc2aaeee0---4",
+    "publishedAt": "Fri, 20 Nov 2026 13:13:13 GMT",
+    "author": "Nick Babich",
+    "excerpt": "I’ve asked Claude to do the same work twice. The first time it cost 10k tokens, and the second time it took only 6k tokens. What was the… Continue reading on UX Planet »",
+    "evidence": "excerpt",
+    "id": "ux-planet-uxplanet-org-this-experimental-feature-is-claude-codes-biggest-recent-imp-0axag9",
+    "retrievedAt": "2026-11-20T19:03:12.729Z"
+  },
+  {
+    "sourceId": "lukew",
+    "title": "Crazy Agent Scale: Companies All-in on AI",
+    "url": "https://www.lukew.com/ff/2173/crazy-agent-scale-companies-all-in-on-ai",
+    "publishedAt": "Fri, 20 Nov 2026 14:00:00 +0000",
+    "author": "info@lukew.com (Luke Wroblewski)",
+    "excerpt": "At the Crazy Agent Scale event at Sutter Hill Ventures, Clement Pang, David Cramer, Shawn Wang, Quinn Slack, and John Hayes demonstrated what pushing agents to their limits looks like today. To kick things off, I shared an Alan Kay quote: \"you can live in the future if you're willing to pay for it\". In the 70s, Xerox PARC gave everyone a ridiculously expensive Alto computer and, as a result, lived ten to fifteen years in the future. The goal of this event was to see what living in the future looks like with agents at crazy scale. Here's my notes: Clement Pang: Lessons from Building Intent Clement Pang (co-founder of Wavefront) shared lessons from six months building Intent , an open source system for large-scale agent orchestration. He of course gave the caveat that tips and tricks in AI age poorly. Give agents a spec that lives outside their context window, somewhere they can read,",
+    "evidence": "excerpt",
+    "id": "lukew-lukew-com-ff-2173-crazy-agent-scale-companies-all-in-on-ai",
+    "retrievedAt": "2026-11-20T19:03:12.729Z"
+  },
+  {
+    "sourceId": "css-tricks",
+    "title": "Andy Clarke answers six questions about Standout Designs for the Web",
+    "url": "https://css-tricks.com/andy-clarke-standout-designs-for-the-web-interview/",
+    "publishedAt": "Fri, 20 Nov 2026 15:03:47 +0000",
+    "author": "Geoff Graham",
+    "excerpt": "Web designer, author, and Stuff & Nonsense founder Andy Clarke has released Standout Designs for the Web , a new e-book that encourages designers to move beyond familiar templates and conventional layouts to create more personality-driven websites. The book draws … Andy Clarke answers six questions about Standout Designs for the Web originally handwritten and published with love on CSS-Tricks . You should really get the newsletter as well.",
+    "evidence": "excerpt",
+    "id": "css-tricks-css-tricks-com-andy-clarke-standout-designs-for-the-web-interview",
+    "retrievedAt": "2026-11-20T19:03:12.729Z"
+  },
+  {
+    "sourceId": "voiceflow",
+    "title": "WISMO Explained: The Deflection Metrics That Actually Matter",
+    "url": "https://www.voiceflow.com/blog/wismo/",
+    "publishedAt": "Fri, 20 Nov 2026 00:00:00 GMT",
+    "author": "",
+    "excerpt": "WISMO deflection numbers lie: track resolution accuracy and re-contact rate too, or you're paying for a bot that just delays the same contact.",
+    "evidence": "excerpt",
+    "id": "voiceflow-voiceflow-com-blog-wismo",
+    "retrievedAt": "2026-11-20T19:03:12.729Z"
+  },
+  {
+    "sourceId": "mit-technology-review",
+    "title": "The most misunderstood graph in AI just got a major update",
+    "url": "https://www.technologyreview.com/2026/11/20/1149399/the-most-misunderstood-graph-in-ai-just-got-a-major-update/",
+    "publishedAt": "Fri, 20 Nov 2026 18:15:15 +0000",
+    "author": "Grace Huckins",
+    "excerpt": "A new report from the AI evaluation nonprofit METR finds that some AI capabilities are continuing to improve along an exponential trajectory—but it also indicates that models aren’t quite as good at tasks that require judgment as they are at coding. The report is an update to the organization’s time horizon plot, which was widely…",
+    "evidence": "excerpt",
+    "id": "mit-technology-review-technologyreview-com-2026-11-20-1149399-the-most-misunderstoo-s3l3vs",
+    "retrievedAt": "2026-11-20T19:03:12.729Z"
+  },
+  {
+    "sourceId": "mit-technology-review",
+    "title": "The Download: inside the quest to make our minds immortal",
+    "url": "https://www.technologyreview.com/2026/11/20/1149371/the-download-quest-to-make-minds-immortal/",
+    "publishedAt": "Fri, 20 Nov 2026 13:10:00 +0000",
+    "author": "Thomas Macaulay",
+    "excerpt": "This is today’s edition of The Download, our weekday newsletter that provides a daily dose of what’s going on in the world of technology. What we learned when our Roundtables explored the quest to make minds immortal To preserve our sense of self, some scientists are working on ways to keep our brains going—even beyond…",
+    "evidence": "excerpt",
+    "id": "mit-technology-review-technologyreview-com-2026-11-20-1149371-the-download-quest-to-z6tm1g",
+    "retrievedAt": "2026-11-20T19:03:12.729Z"
   }
 ]
