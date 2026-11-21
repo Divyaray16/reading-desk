@@ -42931,5 +42931,16 @@
     "evidence": "excerpt",
     "id": "deque-deque-com-blog-axe-con-2027-agenda-reveal",
     "retrievedAt": "2026-11-21T01:08:57.386Z"
+  },
+  {
+    "sourceId": "awwwards",
+    "title": "Night Drive Racing Game",
+    "url": "https://www.awwwards.com/sites/night-drive-racing-game",
+    "publishedAt": "Sat, 21 Nov 2026 00:00:00 +0000",
+    "author": "",
+    "excerpt": "A free-to-play racing game built with Three.js and WebGPU, featuring 50+ missions, realistic visuals, dynamic rain, physics, collectibles, and a huge city.",
+    "evidence": "excerpt",
+    "id": "awwwards-awwwards-com-sites-night-drive-racing-game",
+    "retrievedAt": "2026-11-21T09:18:21.087Z"
   }
 ]
