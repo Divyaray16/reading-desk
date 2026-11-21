@@ -42942,5 +42942,38 @@
     "evidence": "excerpt",
     "id": "awwwards-awwwards-com-sites-night-drive-racing-game",
     "retrievedAt": "2026-11-21T09:18:21.087Z"
+  },
+  {
+    "sourceId": "ux-collective",
+    "title": "The judge used to be the user",
+    "url": "https://uxdesign.cc/the-judge-used-to-be-the-user-0a958f24bb32?source=rss----138adf9c44c---4",
+    "publishedAt": "Sat, 21 Nov 2026 14:34:16 GMT",
+    "author": "Wira Indra Kusuma",
+    "excerpt": "AI collapsed the slow middle of building models. The people who once defined correct went with it. Continue reading on UX Collective »",
+    "evidence": "excerpt",
+    "id": "ux-collective-uxdesign-cc-the-judge-used-to-be-the-user-0a958f24bb32-source-rss-138-2menq2",
+    "retrievedAt": "2026-11-21T17:10:19.216Z"
+  },
+  {
+    "sourceId": "lenny",
+    "title": "🧠 Community Wisdom: Handling context switching with multiple agents, giving feedback on AI-generated designs, getting AI to write less like AI, why PMs don’t share what they’re really working on",
+    "url": "https://www.lennysnewsletter.com/p/community-wisdom-handling-context",
+    "publishedAt": "Sat, 21 Nov 2026 16:49:56 GMT",
+    "author": "Kiyani",
+    "excerpt": "👋 Hello and welcome to this week’s edition of ✨ Community Wisdom ✨ a subscriber-only email, delivered every Saturday, highlighting the most helpful conversations in our members-only Slack community . Read more",
+    "evidence": "excerpt",
+    "id": "lenny-lennysnewsletter-com-p-community-wisdom-handling-context",
+    "retrievedAt": "2026-11-21T17:10:19.216Z"
+  },
+  {
+    "sourceId": "langchain",
+    "title": "How to build a knowledge factory for AI agents",
+    "url": "https://www.langchain.com/blog/knowledge-factory",
+    "publishedAt": "Sat, 21 Nov 2026 16:45:08 GMT",
+    "author": "",
+    "excerpt": "The knowledge factory is how LangChain keeps its agents' company knowledge current: agents flag what's missing, and a curator agent fixes it in the background.",
+    "evidence": "excerpt",
+    "id": "langchain-langchain-com-blog-knowledge-factory",
+    "retrievedAt": "2026-11-21T17:10:19.216Z"
   }
 ]
