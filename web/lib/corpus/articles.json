@@ -42986,5 +42986,49 @@
     "evidence": "excerpt",
     "id": "awwwards-awwwards-com-sites-artemii-lebedev-1",
     "retrievedAt": "2026-11-22T10:48:29.549Z"
+  },
+  {
+    "sourceId": "ux-collective",
+    "title": "The attack of the giant AI design slop monster: a survivor’s guide",
+    "url": "https://uxdesign.cc/the-attack-of-the-giant-ai-design-slop-monster-a-survivors-guide-55f5918f78f4?source=rss----138adf9c44c---4",
+    "publishedAt": "Sun, 22 Nov 2026 11:36:59 GMT",
+    "author": "Tania Ostanina",
+    "excerpt": "In 2026, AI has transformed UX design in unpredictable and scary ways The attack of the giant AI design slop monster: a survivor’s guide. (Image credit: me + Midjourney) In September this year, I was once again speaking at City St George’s, University of London annual conference on Human-Computer Interaction Design, entitled “ Rage Against the Machine ”. This story expands upon my talk at that conference. (Some images that accompany this story are AI-generated, including the dummy product example — as stated in the image descriptions. That’s kind of the whole point. The text, however, is 100% written with my own bare hands.) AI for UX design (a dark twist) Re-reading my writing on the subject of AI in UX from last year , I laugh at how outdated it appears today. While every prediction I had made last year has come true, we’re well into a territory I could not have anticipated in my",
+    "evidence": "excerpt",
+    "id": "ux-collective-uxdesign-cc-the-attack-of-the-giant-ai-design-slop-monster-a-survivor-bjcl1o",
+    "retrievedAt": "2026-11-22T18:16:45.132Z"
+  },
+  {
+    "sourceId": "ux-collective",
+    "title": "Prototypes have always been the most effective specification-especially with AI",
+    "url": "https://uxdesign.cc/prototypes-have-always-been-the-most-effective-specification-10162107b2ee?source=rss----138adf9c44c---4",
+    "publishedAt": "Sun, 22 Nov 2026 11:36:31 GMT",
+    "author": "Patrick Neeman",
+    "excerpt": "A working prototype open on a laptop in a meeting room, the printed requirements document still closed beside it. Prototypes have always been the most effective specification—especially with AI When building a working version costs an afternoon, the artifact that used to precede the work now falls out of it instead. Somebody on your team has a working version of the feature, and the requirements review is still three days out. They built it between meetings and did not mention it, because the plan said write the requirements, get sign-off, then build. Then it lands in Slack and the room changes. Three open questions in the document answer themselves once you can click the thing, and two more turn out to be the wrong ones. Most teams would call that working backwards. I have watched it often enough to stop calling it a failure, because the document written afterward beats the one that",
+    "evidence": "excerpt",
+    "id": "ux-collective-uxdesign-cc-prototypes-have-always-been-the-most-effective-specificat-xbgph8",
+    "retrievedAt": "2026-11-22T18:16:45.132Z"
+  },
+  {
+    "sourceId": "lenny",
+    "title": "First principles: What it takes to be a great product manager in the AI era | Sherif Mansour",
+    "url": "https://www.lennysnewsletter.com/p/first-principles-what-it-takes-to",
+    "publishedAt": "Sun, 22 Nov 2026 13:31:53 GMT",
+    "author": "Lenny Rachitsky",
+    "excerpt": "Sherif Mansour on why PMs are thriving in the AI era, the artist PM advantage, and why juniors are your secret weapon now",
+    "evidence": "excerpt",
+    "id": "lenny-lennysnewsletter-com-p-first-principles-what-it-takes-to",
+    "retrievedAt": "2026-11-22T18:16:45.132Z"
+  },
+  {
+    "sourceId": "openai-news",
+    "title": "Perplexity and Intelligence",
+    "url": "https://openai.com/index/perplexity-and-intelligence",
+    "publishedAt": "Sun, 22 Nov 2026 00:00:00 GMT",
+    "author": "",
+    "excerpt": "How perplexity measures progress in AI models, and why it could help developers establish a shared approach to evaluating emerging capabilities.",
+    "evidence": "excerpt",
+    "id": "openai-news-openai-com-index-perplexity-and-intelligence",
+    "retrievedAt": "2026-11-22T18:16:45.132Z"
   }
 ]
