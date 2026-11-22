@@ -42975,5 +42975,16 @@
     "evidence": "excerpt",
     "id": "langchain-langchain-com-blog-knowledge-factory",
     "retrievedAt": "2026-11-21T17:10:19.216Z"
+  },
+  {
+    "sourceId": "awwwards",
+    "title": "Artemii Lebedev",
+    "url": "https://www.awwwards.com/sites/artemii-lebedev-1",
+    "publishedAt": "Sun, 22 Nov 2026 00:00:00 +0000",
+    "author": "",
+    "excerpt": "An independent art director and designer’s portfolio featuring selected websites, motion experiments, and 3D visuals.",
+    "evidence": "excerpt",
+    "id": "awwwards-awwwards-com-sites-artemii-lebedev-1",
+    "retrievedAt": "2026-11-22T10:48:29.549Z"
   }
 ]
