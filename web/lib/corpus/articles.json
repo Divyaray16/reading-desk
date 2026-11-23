@@ -43030,5 +43030,38 @@
     "evidence": "excerpt",
     "id": "openai-news-openai-com-index-perplexity-and-intelligence",
     "retrievedAt": "2026-11-22T18:16:45.132Z"
+  },
+  {
+    "sourceId": "ux-collective",
+    "title": "Lessons from 3D scanning St John’s Co-Cathedral",
+    "url": "https://uxdesign.cc/lessons-from-3d-scanning-st-johns-co-cathedral-700911d61cfe?source=rss----138adf9c44c---4",
+    "publishedAt": "Sun, 22 Nov 2026 23:18:37 GMT",
+    "author": "Dylan Seychell",
+    "excerpt": "Seven nights, 99,000 photographs and 25 billion triangles showed us where photogrammetry works and where gold, marble and fabric still beat it, as we reported at SIGGRAPH 2026. Summary Over seven nights of evening-only access, we digitised St John’s Co-Cathedral in Valletta, Malta, a UNESCO World Heritage site holding two Caravaggio paintings. The result is a photogrammetric reconstruction of 25 to 30 billion triangles, built from 99,000 photographs and 43 laser scans, alongside an experimental Gaussian splatting reconstruction of one chapel. I served as the external technical expert for St John’s Co-Cathedral Foundation, leading this project. Andre Grima, Peter Pullicino and Matthew Pullicino from Stargate Studios Malta carried out the digitisation and production. Matthew Kenely from SeyTravel and Mark Bugeja from the University of Malta handled the documentation. This project was",
+    "evidence": "excerpt",
+    "id": "ux-collective-uxdesign-cc-lessons-from-3d-scanning-st-johns-co-cathedral-700911d61c-rz9a1r",
+    "retrievedAt": "2026-11-23T00:00:55.555Z"
+  },
+  {
+    "sourceId": "ux-collective",
+    "title": "Seven things AI killed while you were measuring productivity",
+    "url": "https://uxdesign.cc/seven-things-ai-killed-while-you-were-measuring-productivity-b4499232ac3d?source=rss----138adf9c44c---4",
+    "publishedAt": "Sun, 22 Nov 2026 23:17:56 GMT",
+    "author": "Adrian Levy",
+    "excerpt": "Why 80% of executives see no AI impact — and why they’re looking in the wrong place. Continue reading on UX Collective »",
+    "evidence": "excerpt",
+    "id": "ux-collective-uxdesign-cc-seven-things-ai-killed-while-you-were-measuring-productiv-0kcb2e",
+    "retrievedAt": "2026-11-23T00:00:55.555Z"
+  },
+  {
+    "sourceId": "ux-collective",
+    "title": "How to write great skills",
+    "url": "https://uxdesign.cc/how-to-write-great-skills-91635bc45ada?source=rss----138adf9c44c---4",
+    "publishedAt": "Sun, 22 Nov 2026 23:17:32 GMT",
+    "author": "Sen Lin",
+    "excerpt": "An advanced and practical guide to agent skills, learning from Matt Pocock, Nate Herk, Addy Osmani and Anthropic Continue reading on UX Collective »",
+    "evidence": "excerpt",
+    "id": "ux-collective-uxdesign-cc-how-to-write-great-skills-91635bc45ada-source-rss-138adf9c44c-4",
+    "retrievedAt": "2026-11-23T00:00:55.555Z"
   }
 ]
