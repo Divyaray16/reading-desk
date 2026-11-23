@@ -43063,5 +43063,170 @@
     "evidence": "excerpt",
     "id": "ux-collective-uxdesign-cc-how-to-write-great-skills-91635bc45ada-source-rss-138adf9c44c-4",
     "retrievedAt": "2026-11-23T00:00:55.555Z"
+  },
+  {
+    "sourceId": "ux-collective",
+    "title": "Decision theater, Human.MD, What is a researcher’s worth",
+    "url": "https://uxdesign.cc/decision-theater-human-md-what-is-a-researchers-worth-d7687978bd26?source=rss----138adf9c44c---4",
+    "publishedAt": "Mon, 23 Nov 2026 12:18:14 GMT",
+    "author": "Fabricio Teixeira",
+    "excerpt": "Weekly curated resources for designers — thinkers and makers. “Conversing with a machine has no built-in friction. It does not hesitate. It just answers. It does not search for the right word, or wonder how the question will land, or brace for how the answer will be received. It simply responds.” The Discipline of Hesitation → 16 little UI design tips that make a big impact → [Sponsored] Your design looks off, but you’re not sure why. This step-by-step redesign of a real app screen shows the 16 small details that usually cause it, and exactly how to fix each one. Editor picks AI is the new old design material → Models as the next material. By Patrick Neeman Decision theatre or decision design? → From building knowledge to owning decisions. By Patrizia Bertini Why bother paying for software anymore? → And why design is the answer AI bros didn’t expect. By Ed Orozco The UX Collective is",
+    "evidence": "excerpt",
+    "id": "ux-collective-uxdesign-cc-decision-theater-human-md-what-is-a-researchers-worth-d76-d0bqz0",
+    "retrievedAt": "2026-11-23T20:56:02.212Z"
+  },
+  {
+    "sourceId": "ux-planet",
+    "title": "Anthropic Just Dropped 4 MASSIVE Claude Features",
+    "url": "https://uxplanet.org/anthropic-just-dropped-4-massive-claude-features-f79b130118f4?source=rss----819cc2aaeee0---4",
+    "publishedAt": "Mon, 23 Nov 2026 14:52:49 GMT",
+    "author": "Nick Babich",
+    "excerpt": "Anthropic recently added a major set of new features to Claude Code that change how it works. Continue reading on UX Planet »",
+    "evidence": "excerpt",
+    "id": "ux-planet-uxplanet-org-anthropic-just-dropped-4-massive-claude-features-f79b130118f-ycft69",
+    "retrievedAt": "2026-11-23T20:56:02.212Z"
+  },
+  {
+    "sourceId": "nvidia",
+    "title": "Accelerating Direct Sparse Solvers for Computational Engineering with NVIDIA cuDSS 1.0",
+    "url": "https://developer.nvidia.com/blog/accelerating-direct-sparse-solvers-for-computational-engineering-with-nvidia-cudss-1-0/",
+    "publishedAt": "2026-11-23T19:59:40Z",
+    "author": "Azi Riahi",
+    "excerpt": "Sparse linear systems are at the core of nearly every engineering and scientific simulation, from structural mechanics and computational fluid dynamics to...",
+    "evidence": "excerpt",
+    "id": "nvidia-developer-nvidia-com-blog-accelerating-direct-sparse-solvers-for-computation-xs25f1",
+    "retrievedAt": "2026-11-23T20:56:02.212Z"
+  },
+  {
+    "sourceId": "nvidia",
+    "title": "Get Started with GPU-Accelerated DuckDB Analytics Using the Sirius Core Extension",
+    "url": "https://developer.nvidia.com/blog/get-started-with-gpu-accelerated-duckdb-analytics-using-the-sirius-core-extension/",
+    "publishedAt": "2026-11-23T17:09:28Z",
+    "author": "Allison Ding",
+    "excerpt": "As datasets grow, analytical queries can take longer to run, slowing down data exploration, pipelines, and applications. For developers using DuckDB, reducing...",
+    "evidence": "excerpt",
+    "id": "nvidia-developer-nvidia-com-blog-get-started-with-gpu-accelerated-duckdb-analytics-w8wyir",
+    "retrievedAt": "2026-11-23T20:56:02.212Z"
+  },
+  {
+    "sourceId": "nvidia",
+    "title": "Connecting Energy Use to Scientific Output with Science per Joule",
+    "url": "https://developer.nvidia.com/blog/connecting-energy-use-to-scientific-output-with-science-per-joule/",
+    "publishedAt": "2026-11-18T21:26:33Z",
+    "author": "Kibibi Moseley",
+    "excerpt": "For high-performance computing (HPC) centers operating under a fixed power budget, every joule spent computing needs to translate into useful scientific work....",
+    "evidence": "excerpt",
+    "id": "nvidia-developer-nvidia-com-blog-connecting-energy-use-to-scientific-output-with-sc-zwdl5k",
+    "retrievedAt": "2026-11-23T20:56:02.212Z"
+  },
+  {
+    "sourceId": "builder",
+    "title": "Meet the Agent-Native hackathon winners",
+    "url": "https://www.builder.io/blog/agent-native-hackathon-winners",
+    "publishedAt": "Mon, 23 Nov 2026 19:00:00 GMT",
+    "author": "",
+    "excerpt": "The Agent-Native hackathon winners, from bookkeeping in five Nigerian languages to chess by voice in Hindi, plus more apps we loved.",
+    "evidence": "excerpt",
+    "id": "builder-builder-io-blog-agent-native-hackathon-winners",
+    "retrievedAt": "2026-11-23T20:56:02.212Z"
+  },
+  {
+    "sourceId": "css-tricks",
+    "title": "Using Fallbacks for a Robust Front-End",
+    "url": "https://css-tricks.com/using-frontend-fallbacks/",
+    "publishedAt": "Mon, 23 Nov 2026 14:21:44 +0000",
+    "author": "Steve Frenzel",
+    "excerpt": "It’s important to use fallbacks to build a robust front end, either to quietly and discreetly avoid the error or to communicate it to our users. Using Fallbacks for a Robust Front-End originally handwritten and published with love on CSS-Tricks . You should really get the newsletter as well.",
+    "evidence": "excerpt",
+    "id": "css-tricks-css-tricks-com-using-frontend-fallbacks",
+    "retrievedAt": "2026-11-23T20:56:02.212Z"
+  },
+  {
+    "sourceId": "css-tricks",
+    "title": "Dev Material Archive",
+    "url": "https://css-tricks.com/dev-material-archive/",
+    "publishedAt": "Mon, 23 Nov 2026 14:18:50 +0000",
+    "author": "Geoff Graham",
+    "excerpt": "A new resource resurrecting lost web-dev articles and posts : This is an archive of written articles about web development, web design, and web accessibility that once existed on the World Wide Web and which would otherwise be lost to … Dev Material Archive originally handwritten and published with love on CSS-Tricks . You should really get the newsletter as well.",
+    "evidence": "excerpt",
+    "id": "css-tricks-css-tricks-com-dev-material-archive",
+    "retrievedAt": "2026-11-23T20:56:02.212Z"
+  },
+  {
+    "sourceId": "awwwards",
+    "title": "La boite à slides",
+    "url": "https://www.awwwards.com/sites/la-boite-a-slide",
+    "publishedAt": "Mon, 23 Nov 2026 00:00:00 +0000",
+    "author": "",
+    "excerpt": "A modern, story-driven redesign blending immersive 3D, strong SEO foundations and seamless content migration to create a richer digital experience.",
+    "evidence": "excerpt",
+    "id": "awwwards-awwwards-com-sites-la-boite-a-slide",
+    "retrievedAt": "2026-11-23T20:56:02.212Z"
+  },
+  {
+    "sourceId": "lenny",
+    "title": "🎙️ How I AI: OpenClaw for executives: Automate every 1% annoyance",
+    "url": "https://www.lennysnewsletter.com/p/how-i-ai-openclaw-for-executives",
+    "publishedAt": "Mon, 23 Nov 2026 16:01:48 GMT",
+    "author": "Lenny Rachitsky",
+    "excerpt": "Your weekly listens from How I AI, part of the Lenny’s Podcast Network",
+    "evidence": "excerpt",
+    "id": "lenny-lennysnewsletter-com-p-how-i-ai-openclaw-for-executives",
+    "retrievedAt": "2026-11-23T20:56:02.212Z"
+  },
+  {
+    "sourceId": "lenny",
+    "title": "OpenClaw for executives: Automate every 1% annoyance | Ankit Maheshwari (Innovaccer)",
+    "url": "https://www.lennysnewsletter.com/p/openclaw-for-executives-automate",
+    "publishedAt": "Mon, 23 Nov 2026 13:04:43 GMT",
+    "author": "Claire Vo",
+    "excerpt": "Watch now (31 mins) | 🎙️ Ankit Maheshwari (CTO, Innovaccer) walks me through the OpenClaw Jarvis he runs on a Mac Mini to clear every 1% annoyance in his life",
+    "evidence": "excerpt",
+    "id": "lenny-lennysnewsletter-com-p-openclaw-for-executives-automate",
+    "retrievedAt": "2026-11-23T20:56:02.212Z"
+  },
+  {
+    "sourceId": "openai-news",
+    "title": "Connected intelligence for in-house legal",
+    "url": "https://openai.com/business/learn/connected-intelligence-for-in-house-legal",
+    "publishedAt": "Mon, 23 Nov 2026 08:00:00 GMT",
+    "author": "",
+    "excerpt": "Watch OpenAI’s Stacey Wang and Craig Bruney, Mary O’Carroll of LECG, and Cooley’s Richard Segal explore how AI can help in-house legal teams connect business context, build reusable workflows and get more from outside counsel.",
+    "evidence": "excerpt",
+    "id": "openai-news-openai-com-business-learn-connected-intelligence-for-in-house-legal",
+    "retrievedAt": "2026-11-23T20:56:02.212Z"
+  },
+  {
+    "sourceId": "mit-technology-review",
+    "title": "A legendary philosopher isn’t buying Anthropic’s consciousness argument",
+    "url": "https://www.technologyreview.com/2026/11/23/1149569/a-legendary-philosopher-isnt-buying-anthropics-consciousness-argument/",
+    "publishedAt": "Mon, 23 Nov 2026 17:36:08 +0000",
+    "author": "James O'Donnell",
+    "excerpt": "This story originally appeared in The Algorithm, our weekly newsletter on AI. To get stories like this in your inbox first, sign up here. Before going public last week, Anthropic named the possibility that AI could be conscious or sentient as a risk factor for anyone investing. Given “the way we approach model sentience and moral…",
+    "evidence": "excerpt",
+    "id": "mit-technology-review-technologyreview-com-2026-11-23-1149569-a-legendary-philosoph-u4axhv",
+    "retrievedAt": "2026-11-23T20:56:02.212Z"
+  },
+  {
+    "sourceId": "mit-technology-review",
+    "title": "The Download: AI’s judgment problem and carbon removal’s crop threat",
+    "url": "https://www.technologyreview.com/2026/11/23/1149548/the-download-ai-judgment-problem-carbon-removal-crop-threat/",
+    "publishedAt": "Mon, 23 Nov 2026 13:10:00 +0000",
+    "author": "Thomas Macaulay",
+    "excerpt": "This is today’s edition of The Download, our weekday newsletter that provides a daily dose of what’s going on in the world of technology. The most misunderstood graph in AI just got a major update A new report from the AI evaluation nonprofit METR finds that some capabilities are improving exponentially—but models aren’t as good…",
+    "evidence": "excerpt",
+    "id": "mit-technology-review-technologyreview-com-2026-11-23-1149548-the-download-ai-judgm-ranx14",
+    "retrievedAt": "2026-11-23T20:56:02.212Z"
+  },
+  {
+    "sourceId": "mit-technology-review",
+    "title": "Why using rocks for carbon removal could eventually reduce crop growth",
+    "url": "https://www.technologyreview.com/2026/11/23/1149392/why-using-rocks-for-carbon-removal-could-eventually-reduce-crop-growth/",
+    "publishedAt": "Mon, 23 Nov 2026 11:00:00 +0000",
+    "author": "James Temple",
+    "excerpt": "Tech companies are investing a lot of hope and money in rocks. Google, Microsoft, and others have committed hundreds of millions of dollars to get startups to spread crushed basalt, olivine, or other alkaline materials across farms, in an effort to capture carbon from the air and lock it away. A number of influential models…",
+    "evidence": "excerpt",
+    "id": "mit-technology-review-technologyreview-com-2026-11-23-1149392-why-using-rocks-for-c-do64wz",
+    "retrievedAt": "2026-11-23T20:56:02.212Z"
   }
 ]
