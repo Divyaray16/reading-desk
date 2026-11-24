@@ -43294,5 +43294,115 @@
     "evidence": "excerpt",
     "id": "openai-news-openai-com-business-customer-stories-richpanel-ai-customer-support",
     "retrievedAt": "2026-11-24T05:10:54.782Z"
+  },
+  {
+    "sourceId": "ux-planet",
+    "title": "5 Custom Themes You Should Try for Claude Code",
+    "url": "https://uxplanet.org/5-custom-themes-you-should-try-for-claude-code-d39ec7a47561?source=rss----819cc2aaeee0---4",
+    "publishedAt": "Tue, 24 Nov 2026 12:57:55 GMT",
+    "author": "Nick Babich",
+    "excerpt": "Custom themes are one of the easiest ways to personalize Claude Code and change how it looks & feels. A custom theme allows you to change… Continue reading on UX Planet »",
+    "evidence": "excerpt",
+    "id": "ux-planet-uxplanet-org-5-custom-themes-you-should-try-for-claude-code-d39ec7a47561-if77y2",
+    "retrievedAt": "2026-11-24T17:05:02.156Z"
+  },
+  {
+    "sourceId": "ibm-research",
+    "title": "Celebrating the Genesis Mission's First Anniversary",
+    "url": "https://research.ibm.com/blog/genesis-first-anniversary",
+    "publishedAt": "Tue, 24 Nov 2026 05:00:00 GMT",
+    "author": "",
+    "excerpt": "One year after the launch of the Genesis Mission, IBM and its partners are advancing quantum-centric supercomputing for science, energy, and discovery.",
+    "evidence": "excerpt",
+    "id": "ibm-research-research-ibm-com-blog-genesis-first-anniversary",
+    "retrievedAt": "2026-11-24T17:05:02.156Z"
+  },
+  {
+    "sourceId": "nvidia",
+    "title": "Prepare Market Data for Forecasting with NVIDIA Megatron Core",
+    "url": "https://developer.nvidia.com/blog/prepare-market-data-for-forecasting-with-nvidia-megatron-core/",
+    "publishedAt": "2026-11-24T17:00:00Z",
+    "author": "Liana Mikaelyan",
+    "excerpt": "Market data arrives as a stream of trades and quotes: every execution, bid, and ask, timestamped to the microsecond. Preparing this data for AI-based market...",
+    "evidence": "excerpt",
+    "id": "nvidia-developer-nvidia-com-blog-prepare-market-data-for-forecasting-with-nvidia-me-umakrr",
+    "retrievedAt": "2026-11-24T17:05:02.156Z"
+  },
+  {
+    "sourceId": "nvidia",
+    "title": "What’s New for Game Developers: AI Animation and RTX Tools",
+    "url": "https://developer.nvidia.com/blog/whats-new-for-game-developers-ai-animation-and-rtx-tools/",
+    "publishedAt": "2026-11-24T17:00:00Z",
+    "author": "Phillip Singh",
+    "excerpt": "This month’s NVIDIA game development updates help teams bring new graphics, animation, and local AI capabilities into their engines while balancing image...",
+    "evidence": "excerpt",
+    "id": "nvidia-developer-nvidia-com-blog-whats-new-for-game-developers-ai-animation-and-rtx-tools",
+    "retrievedAt": "2026-11-24T17:05:02.156Z"
+  },
+  {
+    "sourceId": "nvidia",
+    "title": "Q&A: How Everstone Brings Where Winds Meet to Life with NVIDIA DLSS 5",
+    "url": "https://developer.nvidia.com/blog/qa-how-everstone-brings-where-winds-meet-to-life-with-nvidia-dlss-5/",
+    "publishedAt": "2026-11-24T14:00:00Z",
+    "author": "Phillip Singh",
+    "excerpt": "Where Winds Meet moves between distant mountain landscapes, bustling streets, and quiet moments with its characters. For Everstone Studio, bringing more...",
+    "evidence": "excerpt",
+    "id": "nvidia-developer-nvidia-com-blog-qa-how-everstone-brings-where-winds-meet-to-life-w-geldxp",
+    "retrievedAt": "2026-11-24T17:05:02.156Z"
+  },
+  {
+    "sourceId": "microsoft-design",
+    "title": "The art of playing a supporting role",
+    "url": "https://microsoft.design/articles/the-art-of-playing-a-supporting-role/",
+    "publishedAt": "Tue, 24 Nov 2026 14:00:00 +0000",
+    "author": "",
+    "excerpt": "How character, motion, and expression help people stay oriented and in control The post The art of playing a supporting role appeared first on Microsoft Design .",
+    "evidence": "excerpt",
+    "id": "microsoft-design-microsoft-design-articles-the-art-of-playing-a-supporting-role",
+    "retrievedAt": "2026-11-24T17:05:02.156Z"
+  },
+  {
+    "sourceId": "product-talk",
+    "title": "Bugs - All Things Product Podcast with Teresa Torres & Petra Wille",
+    "url": "https://www.producttalk.org/bugs-all-things-product-podcast-with-teresa-torres-petra-wille/",
+    "publishedAt": "Tue, 24 Nov 2026 14:00:00 GMT",
+    "author": "Teresa Torres",
+    "excerpt": "Listen to this episode on: Spotify | Apple Podcasts In a world of AI products, what even counts as a “bug” — and can you still promise to fix it? Petra Wille and Teresa Torres take on a word that’s quietly breaking down in the age of",
+    "evidence": "excerpt",
+    "id": "product-talk-producttalk-org-bugs-all-things-product-podcast-with-teresa-torres-pet-2sw1cp",
+    "retrievedAt": "2026-11-24T17:05:02.156Z"
+  },
+  {
+    "sourceId": "mit-technology-review",
+    "title": "Raising the stakes for enterprise networks with AI modernization",
+    "url": "https://www.technologyreview.com/2026/11/24/1148091/raising-the-stakes-for-enterprise-networks-with-ai-modernization/",
+    "publishedAt": "Tue, 24 Nov 2026 15:15:16 +0000",
+    "author": "MIT Technology Review Insights",
+    "excerpt": "Enterprise networks are under severe strain. As companies rush to deploy artificial intelligence, the technology is quickly becoming the biggest source of demand on the network. Now, agentic AI is adding to the load. Tasks conducted by AI agents generate an estimated 450% more network traffic than the same tasks done by human workers. As…",
+    "evidence": "excerpt",
+    "id": "mit-technology-review-technologyreview-com-2026-11-24-1148091-raising-the-stakes-fo-awjw73",
+    "retrievedAt": "2026-11-24T17:05:02.156Z"
+  },
+  {
+    "sourceId": "mit-technology-review",
+    "title": "The Download: AI’s gas power boom and a consciousness reality check",
+    "url": "https://www.technologyreview.com/2026/11/24/1149669/the-download-data-centers-gas-ai-consciousness/",
+    "publishedAt": "Tue, 24 Nov 2026 13:10:00 +0000",
+    "author": "Thomas Macaulay",
+    "excerpt": "This is today’s edition of The Download, our weekday newsletter that provides a daily dose of what’s going on in the world of technology. Data centers are getting their own natural gas power plants One of the biggest obstacles to building a data center is getting approval to connect to the grid, a wait that…",
+    "evidence": "excerpt",
+    "id": "mit-technology-review-technologyreview-com-2026-11-24-1149669-the-download-data-cen-35wqp9",
+    "retrievedAt": "2026-11-24T17:05:02.156Z"
+  },
+  {
+    "sourceId": "mit-technology-review",
+    "title": "Data centers are getting their own natural gas power plants",
+    "url": "https://www.technologyreview.com/2026/11/24/1149622/data-centers-natural-gas/",
+    "publishedAt": "Tue, 24 Nov 2026 11:00:00 +0000",
+    "author": "Casey Crownhart",
+    "excerpt": "One of the biggest roadblocks to starting up a data center is getting approval to connect to the electric grid—a wait that could last as long as a decade. Some developers aren’t willing to wait and are instead opting to build their own off-grid, or behind-the-meter, gas power plants to fuel the AI boom. xAI’s…",
+    "evidence": "excerpt",
+    "id": "mit-technology-review-technologyreview-com-2026-11-24-1149622-data-centers-natural-gas",
+    "retrievedAt": "2026-11-24T17:05:02.156Z"
   }
 ]
