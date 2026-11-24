@@ -43228,5 +43228,71 @@
     "evidence": "excerpt",
     "id": "mit-technology-review-technologyreview-com-2026-11-23-1149392-why-using-rocks-for-c-do64wz",
     "retrievedAt": "2026-11-23T20:56:02.212Z"
+  },
+  {
+    "sourceId": "ux-collective",
+    "title": "Is product design a people industry or a tech industry?",
+    "url": "https://uxdesign.cc/is-product-design-a-people-industry-or-a-tech-industry-b8f9acc8cb6d?source=rss----138adf9c44c---4",
+    "publishedAt": "Mon, 23 Nov 2026 22:40:34 GMT",
+    "author": "Dora Czerna",
+    "excerpt": "The field talks about users and hires for prototyping. When money runs short, one half gets treated as optional. Continue reading on UX Collective »",
+    "evidence": "excerpt",
+    "id": "ux-collective-uxdesign-cc-is-product-design-a-people-industry-or-a-tech-industry-b8-daw6l6",
+    "retrievedAt": "2026-11-24T05:10:54.782Z"
+  },
+  {
+    "sourceId": "ux-collective",
+    "title": "Don’t make me read",
+    "url": "https://uxdesign.cc/dont-make-me-read-a6821e418bb1?source=rss----138adf9c44c---4",
+    "publishedAt": "Mon, 23 Nov 2026 22:40:01 GMT",
+    "author": "Rita Kind-Envy",
+    "excerpt": "These newest findings on how people (don’t) read on the internet can help you build your next great thing. Continue reading on UX Collective »",
+    "evidence": "excerpt",
+    "id": "ux-collective-uxdesign-cc-dont-make-me-read-a6821e418bb1-source-rss-138adf9c44c-4",
+    "retrievedAt": "2026-11-24T05:10:54.782Z"
+  },
+  {
+    "sourceId": "ux-planet",
+    "title": "Fable 5.2 as Claude AI Model Advisor",
+    "url": "https://uxplanet.org/fable-5-2-as-claude-ai-model-advisor-d0d342a19db3?source=rss----819cc2aaeee0---4",
+    "publishedAt": "Mon, 23 Nov 2026 21:06:20 GMT",
+    "author": "Nick Babich",
+    "excerpt": "Claude Fable 5.2 is the most advanced Claude AI model available for general use. This model demonstrates amazing results across various… Continue reading on UX Planet »",
+    "evidence": "excerpt",
+    "id": "ux-planet-uxplanet-org-fable-5-2-as-claude-ai-model-advisor-d0d342a19db3-source-rss-qwte82",
+    "retrievedAt": "2026-11-24T05:10:54.782Z"
+  },
+  {
+    "sourceId": "stripe",
+    "title": "Custom software, specialized workflows, and other new growth paths from SaaS Platform Summit",
+    "url": "https://stripe.com/blog/custom-software-specialized-workflows-and-other-new-growth-paths-from-saas-platform-summit",
+    "publishedAt": "Mon, 23 Nov 2026 00:00:00 +0000",
+    "author": "",
+    "excerpt": "SaaS platforms have long built for specific verticals. Now AI makes it practical to build for one merchant. At Stripe’s SaaS Platform Summit, founders and operators shared how custom software and embedded finance can open new revenue streams.",
+    "evidence": "excerpt",
+    "id": "stripe-stripe-com-blog-custom-software-specialized-workflows-and-other-new-growth-p-x3xy6h",
+    "retrievedAt": "2026-11-24T05:10:54.782Z"
+  },
+  {
+    "sourceId": "openai-news",
+    "title": "OpenAI and Cisco introduce Shirudo",
+    "url": "https://openai.com/index/introducing-shirudo",
+    "publishedAt": "Mon, 23 Nov 2026 21:20:00 GMT",
+    "author": "",
+    "excerpt": "OpenAI and Cisco introduce Shirudo, an open-source runtime for Linux. It helps teams protect running systems while they roll out patches.",
+    "evidence": "excerpt",
+    "id": "openai-news-openai-com-index-introducing-shirudo",
+    "retrievedAt": "2026-11-24T05:10:54.782Z"
+  },
+  {
+    "sourceId": "openai-news",
+    "title": "Richpanel helps companies automate 50% of support in 30 days",
+    "url": "https://openai.com/business/customer-stories/richpanel-ai-customer-support",
+    "publishedAt": "Mon, 23 Nov 2026 08:00:00 GMT",
+    "author": "",
+    "excerpt": "Richpanel uses GPT-6 Astra and GPT-6.1 Sol to equip its AI support agents with tools and procedures, and GPT-6 Luna for their conversations.",
+    "evidence": "excerpt",
+    "id": "openai-news-openai-com-business-customer-stories-richpanel-ai-customer-support",
+    "retrievedAt": "2026-11-24T05:10:54.782Z"
   }
 ]
