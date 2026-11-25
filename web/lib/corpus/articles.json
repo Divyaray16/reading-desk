@@ -43756,5 +43756,137 @@
     "evidence": "excerpt",
     "id": "mit-technology-review-technologyreview-com-2026-11-25-1149702-ai-is-straining-ameri-82l2jl",
     "retrievedAt": "2026-11-25T11:06:02.526Z"
+  },
+  {
+    "sourceId": "ux-planet",
+    "title": "Claude Ship Can Ship Your Product",
+    "url": "https://uxplanet.org/claude-ship-can-ship-your-product-05c316808de5?source=rss----819cc2aaeee0---4",
+    "publishedAt": "Wed, 25 Nov 2026 18:41:48 GMT",
+    "author": "Nick Babich",
+    "excerpt": "AI has dramatically reduced the amount of time it takes to write code. But writing code is only one part of shipping a product. Continue reading on UX Planet »",
+    "evidence": "excerpt",
+    "id": "ux-planet-uxplanet-org-claude-ship-can-ship-your-product-05c316808de5-source-rss-81-7akio3",
+    "retrievedAt": "2026-11-25T21:11:48.265Z"
+  },
+  {
+    "sourceId": "ux-planet",
+    "title": "RIGHT Way to Create a New Skill for Claude Code",
+    "url": "https://uxplanet.org/right-way-to-create-a-new-skill-for-claude-code-0bbd93e40082?source=rss----819cc2aaeee0---4",
+    "publishedAt": "Wed, 25 Nov 2026 12:41:56 GMT",
+    "author": "Nick Babich",
+    "excerpt": "A skill is a very powerful way to improve Claude Code’s performance when it completes a particular task for you. Continue reading on UX Planet »",
+    "evidence": "excerpt",
+    "id": "ux-planet-uxplanet-org-right-way-to-create-a-new-skill-for-claude-code-0bbd93e40082-o5mzq4",
+    "retrievedAt": "2026-11-25T21:11:48.265Z"
+  },
+  {
+    "sourceId": "nvidia",
+    "title": "How to Optimize NVFP4 Attention on NVIDIA RTX Blackwell Through Register Recycling",
+    "url": "https://developer.nvidia.com/blog/how-to-optimize-nvfp4-attention-on-nvidia-rtx-blackwell-through-register-recycling/",
+    "publishedAt": "2026-11-25T19:30:00Z",
+    "author": "Atharva Joshi",
+    "excerpt": "Attention can be a major bottleneck when serving world foundation models, where long sequences make inference computationally demanding. On NVIDIA Hopper and...",
+    "evidence": "excerpt",
+    "id": "nvidia-developer-nvidia-com-blog-how-to-optimize-nvfp4-attention-on-nvidia-rtx-blac-x2mn7d",
+    "retrievedAt": "2026-11-25T21:11:48.265Z"
+  },
+  {
+    "sourceId": "codrops",
+    "title": "Brice Deguigne ’26: A Three.js and WebGPU 3D Portfolio Built Like a Simulation",
+    "url": "https://tympanus.net/codrops/2026/11/25/brice-deguigne-3d-portfolio/",
+    "publishedAt": "Wed, 25 Nov 2026 14:35:39 +0000",
+    "author": "Brice Deguigne",
+    "excerpt": "A 3D portfolio built like a simulation, from baked lighting and a wireframe reveal to particle rain in Three.js.",
+    "evidence": "excerpt",
+    "id": "codrops-tympanus-net-codrops-2026-11-25-brice-deguigne-3d-portfolio",
+    "retrievedAt": "2026-11-25T21:11:48.265Z"
+  },
+  {
+    "sourceId": "css-tricks",
+    "title": "RSS Club: Preview Art-Directed Scrollytelling Article",
+    "url": "https://css-tricks.com/rss-club-preview-art-directed-scrollytelling-article/",
+    "publishedAt": "Wed, 25 Nov 2026 15:32:42 +0000",
+    "author": "Geoff Graham",
+    "excerpt": "Hey folks! I’m just so dang excited about this little project I’m working on with long-time author Lee Meyer that I had to share it with you before it goes out. We’re going full 2013-meets-2026 with an art-directed piece that … RSS Club: Preview Art-Directed Scrollytelling Article originally handwritten and published with love on CSS-Tricks . You should really get the newsletter as well.",
+    "evidence": "excerpt",
+    "id": "css-tricks-css-tricks-com-rss-club-preview-art-directed-scrollytelling-article",
+    "retrievedAt": "2026-11-25T21:11:48.265Z"
+  },
+  {
+    "sourceId": "css-tricks",
+    "title": "Style Queries as Conditional Modifiers",
+    "url": "https://css-tricks.com/css-style-queries-as-conditional-modifiers/",
+    "publishedAt": "Wed, 25 Nov 2026 14:06:34 +0000",
+    "author": "Kevin Powell",
+    "excerpt": "Where style queries shine is when the condition and the styles need to live in different places, or when one condition needs to affect several things at once: components that keep working, and adapt sensibly, no matter where they end up. Style Queries as Conditional Modifiers originally handwritten and published with love on CSS-Tricks . You should really get the newsletter as well.",
+    "evidence": "excerpt",
+    "id": "css-tricks-css-tricks-com-css-style-queries-as-conditional-modifiers",
+    "retrievedAt": "2026-11-25T21:11:48.265Z"
+  },
+  {
+    "sourceId": "awwwards",
+    "title": "Polpharma Biologics",
+    "url": "https://www.awwwards.com/sites/polpharma-biologics",
+    "publishedAt": "Wed, 25 Nov 2026 00:00:00 +0000",
+    "author": "",
+    "excerpt": "Biosimilars are not identical to their reference — only equivalent within defined tolerances. That rule became the design system: controlled variation, never off-system.",
+    "evidence": "excerpt",
+    "id": "awwwards-awwwards-com-sites-polpharma-biologics",
+    "retrievedAt": "2026-11-25T21:11:48.265Z"
+  },
+  {
+    "sourceId": "lenny",
+    "title": "Gemini 4 Neon beat GPT-6.2 and Claude in my 25-task AI benchmark",
+    "url": "https://www.lennysnewsletter.com/p/gemini-4-neon-beat-gpt-62-and-claude",
+    "publishedAt": "Wed, 25 Nov 2026 13:04:21 GMT",
+    "author": "Claire Vo",
+    "excerpt": "Watch now (32 mins) | 🎙️ My late-2026 How I AI bench: GPT-6.2 disappointed me, Opus 5.5 is my least annoying daily driver, and Gemini 4 Neon is now my top pick",
+    "evidence": "excerpt",
+    "id": "lenny-lennysnewsletter-com-p-gemini-4-neon-beat-gpt-62-and-claude",
+    "retrievedAt": "2026-11-25T21:11:48.265Z"
+  },
+  {
+    "sourceId": "voiceflow",
+    "title": "Agentic AI Customer Service: Tier Actions, Then Scale",
+    "url": "https://www.voiceflow.com/blog/agentic-ai-customer-service/",
+    "publishedAt": "Wed, 25 Nov 2026 00:00:00 GMT",
+    "author": "",
+    "excerpt": "Agentic customer service pays off only when you tier which actions agents can take alone, not when the model improves.",
+    "evidence": "excerpt",
+    "id": "voiceflow-voiceflow-com-blog-agentic-ai-customer-service",
+    "retrievedAt": "2026-11-25T21:11:48.265Z"
+  },
+  {
+    "sourceId": "voiceflow",
+    "title": "Call Routing: A Pilot Plan for AI Intent Routing",
+    "url": "https://www.voiceflow.com/blog/call-routing/",
+    "publishedAt": "Tue, 24 Nov 2026 00:00:00 GMT",
+    "author": "",
+    "excerpt": "Compare skills, intent, and AI call routing, then pilot intent routing before you replace the menu tree.",
+    "evidence": "excerpt",
+    "id": "voiceflow-voiceflow-com-blog-call-routing",
+    "retrievedAt": "2026-11-25T21:11:48.265Z"
+  },
+  {
+    "sourceId": "mit-technology-review",
+    "title": "How data centers are driving a US natural-gas boom",
+    "url": "https://www.technologyreview.com/2026/11/25/1149836/data-centers-gas-power-plants/",
+    "publishedAt": "Wed, 25 Nov 2026 17:00:00 +0000",
+    "author": "Casey Crownhart",
+    "excerpt": "In May 2025, my colleague David Rotman wrote a feature story describing how AI could keep us dependent on natural gas. Just 18 months later, I’ve lost count of how many times he’s already been proved right. Sure, it’s technically possible to meet the world’s rising electricity demand with other power sources, including renewables like…",
+    "evidence": "excerpt",
+    "id": "mit-technology-review-technologyreview-com-2026-11-25-1149836-data-centers-gas-powe-0wjhj5",
+    "retrievedAt": "2026-11-25T21:11:48.265Z"
+  },
+  {
+    "sourceId": "mit-technology-review",
+    "title": "The Download: AI swamping open records, and firefighting for permafrost",
+    "url": "https://www.technologyreview.com/2026/11/25/1149808/the-download-ai-open-records-permafrost-fires/",
+    "publishedAt": "Wed, 25 Nov 2026 13:10:00 +0000",
+    "author": "Thomas Macaulay",
+    "excerpt": "This is today’s edition of The Download, our weekday newsletter that provides a daily dose of what’s going on in the world of technology. AI is straining America’s open records systems AI has intensified investors’ interest in public records. Over the last few years, venture-backed startups have raised upwards of $100 million to collect data…",
+    "evidence": "excerpt",
+    "id": "mit-technology-review-technologyreview-com-2026-11-25-1149808-the-download-ai-open-8vf2hp",
+    "retrievedAt": "2026-11-25T21:11:48.265Z"
   }
 ]
