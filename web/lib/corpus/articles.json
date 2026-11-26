@@ -43976,5 +43976,38 @@
     "evidence": "excerpt",
     "id": "mit-technology-review-technologyreview-com-2026-11-26-1149923-the-next-generation-o-mxnfx0",
     "retrievedAt": "2026-11-26T13:45:14.001Z"
+  },
+  {
+    "sourceId": "ux-planet",
+    "title": "MCP 2.0: The BIGGEST MCP Upgrade Yet Just Dropped",
+    "url": "https://uxplanet.org/mcp-2-0-the-biggest-mcp-upgrade-yet-just-dropped-e295e32b687a?source=rss----819cc2aaeee0---4",
+    "publishedAt": "Thu, 26 Nov 2026 14:04:25 GMT",
+    "author": "Nick Babich",
+    "excerpt": "Model Context Protocol (MCP) just got a major upgrade, more than two years after its original release. Continue reading on UX Planet »",
+    "evidence": "excerpt",
+    "id": "ux-planet-uxplanet-org-mcp-2-0-the-biggest-mcp-upgrade-yet-just-dropped-e295e32b687-c9ws7o",
+    "retrievedAt": "2026-11-26T22:51:04.793Z"
+  },
+  {
+    "sourceId": "codrops",
+    "title": "A Year, One Sphere, Many Shapes: Houmahani Kane’s Portfolio",
+    "url": "https://tympanus.net/codrops/2026/11/26/houmahani-kane-portfolio/",
+    "publishedAt": "Thu, 26 Nov 2026 15:00:56 +0000",
+    "author": "Houmahani Kane",
+    "excerpt": "A portfolio built on one morphing sphere, with contour lines inspired by West African wax prints, in Three.js and custom shaders.",
+    "evidence": "excerpt",
+    "id": "codrops-tympanus-net-codrops-2026-11-26-houmahani-kane-portfolio",
+    "retrievedAt": "2026-11-26T22:51:04.793Z"
+  },
+  {
+    "sourceId": "voiceflow",
+    "title": "Conversational AI Platform: The Enterprise Buyer's Checklist",
+    "url": "https://www.voiceflow.com/blog/conversational-ai-platform/",
+    "publishedAt": "Thu, 26 Nov 2026 00:00:00 GMT",
+    "author": "",
+    "excerpt": "A buyer's framework for scoring conversational AI platforms on control and verifiability, not vendor-reported resolution rates.",
+    "evidence": "excerpt",
+    "id": "voiceflow-voiceflow-com-blog-conversational-ai-platform",
+    "retrievedAt": "2026-11-26T22:51:04.793Z"
   }
 ]
