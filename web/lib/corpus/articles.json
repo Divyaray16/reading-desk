@@ -43888,5 +43888,49 @@
     "evidence": "excerpt",
     "id": "mit-technology-review-technologyreview-com-2026-11-25-1149808-the-download-ai-open-8vf2hp",
     "retrievedAt": "2026-11-25T21:11:48.265Z"
+  },
+  {
+    "sourceId": "ux-collective",
+    "title": "Things you’re not supposed to say on LinkedIn",
+    "url": "https://uxdesign.cc/things-youre-not-supposed-to-say-on-linkedin-a9c2ec2a0185?source=rss----138adf9c44c---4",
+    "publishedAt": "Wed, 25 Nov 2026 22:34:52 GMT",
+    "author": "Rita Kind-Envy",
+    "excerpt": "What happens to how people write about work when readers can hire (or fire) them? Continue reading on UX Collective »",
+    "evidence": "excerpt",
+    "id": "ux-collective-uxdesign-cc-things-youre-not-supposed-to-say-on-linkedin-a9c2ec2a0185-r26qe4",
+    "retrievedAt": "2026-11-26T03:59:04.984Z"
+  },
+  {
+    "sourceId": "ux-collective",
+    "title": "Future-proofing is dead and AI killed it",
+    "url": "https://uxdesign.cc/future-proofing-is-dead-and-ai-killed-it-23368ce3cc02?source=rss----138adf9c44c---4",
+    "publishedAt": "Wed, 25 Nov 2026 22:34:12 GMT",
+    "author": "Dan Maccarone",
+    "excerpt": "France built the most future-proofed thing on the planet and then opposition circumvented it. We have always tried to build things that outlast whatever comes next. AI makes that impossible. The solution is the opposite of what you think. When creating products, the goal is often to try and future-proof it. Create a tool that won’t be obsolete in a few years. Learn the skill the machines can’t take. Build the architecture flexible enough to survive whatever comes next. Draw the roadmap that still makes sense down the line. It’s been the sensible approach for decades, the thing you do so you’re not betting the company on something that could kill. That’s an understandable fear. S. Patrick Viguerie and his colleagues at Innosight actually found the average lifespan of a company on the S&P 500 has collapsed from sixty-one years in the late 1950s to under twenty, with roughly half the index",
+    "evidence": "excerpt",
+    "id": "ux-collective-uxdesign-cc-future-proofing-is-dead-and-ai-killed-it-23368ce3cc02-sou-hbsq8t",
+    "retrievedAt": "2026-11-26T03:59:04.984Z"
+  },
+  {
+    "sourceId": "bradfrost",
+    "title": "❂ PSYCHOSCRᚺᛊᛞ",
+    "url": "https://bradfrost.com/links/post/psychoscr/",
+    "publishedAt": "2026-11-25T00:00:00Z",
+    "author": "",
+    "excerpt": "<p>Just holy shit. <a href=\"https://psychoscript.com/\">❂ PSYCHOSCRᚺᛊᛞ</a></p>",
+    "evidence": "excerpt",
+    "id": "bradfrost-bradfrost-com-links-post-psychoscr",
+    "retrievedAt": "2026-11-26T03:59:04.984Z"
+  },
+  {
+    "sourceId": "nvidia",
+    "title": "Manage Liquid-Cooled AI Factories with NVIDIA Mission Control",
+    "url": "https://developer.nvidia.com/blog/manage-liquid-cooled-ai-factories-with-nvidia-mission-control/",
+    "publishedAt": "2026-11-19T22:02:30Z",
+    "author": "Ryan Prout",
+    "excerpt": "Managing AI infrastructure such as NVIDIA Vera Rubin NVL72 requires coordinated operation of compute, power, and cooling systems. In liquid-cooled AI factories,...",
+    "evidence": "excerpt",
+    "id": "nvidia-developer-nvidia-com-blog-manage-liquid-cooled-ai-factories-with-nvidia-miss-6k8yug",
+    "retrievedAt": "2026-11-26T03:59:04.984Z"
   }
 ]
