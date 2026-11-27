@@ -44075,5 +44075,49 @@
     "evidence": "excerpt",
     "id": "mit-technology-review-technologyreview-com-2026-11-27-1149946-cutting-edge-prosthet-atng2c",
     "retrievedAt": "2026-11-27T14:45:20.578Z"
+  },
+  {
+    "sourceId": "baymard",
+    "title": "UX Tips to Help Reduce Ecommerce Return Rates: Pre-Purchase Best Practices",
+    "url": "https://baymard.com/blog/ux-tips-reduce-ecommerce-return-rates",
+    "publishedAt": "Fri, 27 Nov 2026 14:46:29 GMT",
+    "author": "Carl MacDonald",
+    "excerpt": "How to slash return rates with pre-purchase UX best practices for imagery, descriptions, sizing, and delivery communication.",
+    "evidence": "excerpt",
+    "id": "baymard-baymard-com-blog-ux-tips-reduce-ecommerce-return-rates",
+    "retrievedAt": "2026-11-27T23:15:11.096Z"
+  },
+  {
+    "sourceId": "css-tricks",
+    "title": "Using light-dark() without getting caught out",
+    "url": "https://css-tricks.com/using-light-dark-without-getting-caught-out/",
+    "publishedAt": "Fri, 27 Nov 2026 16:01:31 +0000",
+    "author": "Geoff Graham",
+    "excerpt": "I honestly hadn't thought about \"getting caught\" by light-dark() — particularly when leaning heavily on it for this site — but Martin Underhill explains the user and rendering considerations, making me reflect on my choices as well. Using light-dark() without getting caught out originally handwritten and published with love on CSS-Tricks . You should really get the newsletter as well.",
+    "evidence": "excerpt",
+    "id": "css-tricks-css-tricks-com-using-light-dark-without-getting-caught-out",
+    "retrievedAt": "2026-11-27T23:15:11.096Z"
+  },
+  {
+    "sourceId": "awwwards",
+    "title": "Prägen Hätlen",
+    "url": "https://www.awwwards.com/sites/pragen-hatlen",
+    "publishedAt": "Fri, 27 Nov 2026 00:00:00 +0000",
+    "author": "",
+    "excerpt": "Prägen Hätlen is a Swiss watchmaking brand operating at the intersection of fine horology and Web3 Technology.",
+    "evidence": "excerpt",
+    "id": "awwwards-awwwards-com-sites-pragen-hatlen",
+    "retrievedAt": "2026-11-27T23:15:11.096Z"
+  },
+  {
+    "sourceId": "voiceflow",
+    "title": "Customer Support Automation: What to Automate First",
+    "url": "https://www.voiceflow.com/blog/customer-support-automation/",
+    "publishedAt": "Fri, 27 Nov 2026 00:00:00 GMT",
+    "author": "",
+    "excerpt": "Tier your support interactions by risk, gate expansion on resolution and deflection data, and launch voice only after chat proves out.",
+    "evidence": "excerpt",
+    "id": "voiceflow-voiceflow-com-blog-customer-support-automation",
+    "retrievedAt": "2026-11-27T23:15:11.096Z"
   }
 ]
